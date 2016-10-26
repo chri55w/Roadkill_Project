@@ -85,7 +85,7 @@ namespace Controllers
             Vector3 l_FowardForce = l_DirectionOfAcceleration * l_Acceleration /* m_Rigidbody.mass*/;        
             //Debug.Log(l_FowardForce);
             m_Rigidbody.AddForceAtPosition(l_FowardForce * Time.deltaTime, PointOfAcceleration.position);
-
+            Debug.Log("Hello SourceTree");
 
             //Turning
             float l_SteeringAngle = l_HorizontalInput * MaxRotationAngle;
