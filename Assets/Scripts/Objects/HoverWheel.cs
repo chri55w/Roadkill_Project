@@ -18,10 +18,17 @@ namespace Objects
         //Serialized Variables for Access in Editor
         public Transform RaycastPosition;
         public Transform WheelMeshTransform;
+        [Range(0.1f, float.MaxValue)]
         public float WheelRadius;
 
-        public HoverWheel()
+        private float m_WheelCircumference;
+        private float m_WheelSpinAngle;
+        
+        public void CalculateWheelCircumference()
         {
+            m_WheelCircumference = 2 * Mathf.PI * WheelRadius;
+
+            Debug.Log(m_WheelCircumference);
         }
 
         public void Update()
@@ -36,8 +43,15 @@ namespace Objects
                 UpForceModifier = 1.0f - (GroundHitPoint.distance / SuspensionLength);
 
             WheelMeshTransform.localPosition = new Vector3(WheelMeshTransform.localPosition.x, (-SuspensionLength * CompressionRatio) + WheelRadius, WheelMeshTransform.localPosition.z);
+        }
 
+        public float SetWheelRotation(float p_SteeringAngle, float p_WheelDistanceTravelled)
+        {
+            m_WheelSpinAngle = (m_WheelSpinAngle + ((p_WheelDistanceTravelled / m_WheelCircumference) * 360f)) % 360f;
+            
+            WheelMeshTransform.localEulerAngles = new Vector3(m_WheelSpinAngle, p_SteeringAngle, 0);
 
+            return m_WheelSpinAngle;
         }
     }
 }

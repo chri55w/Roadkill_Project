@@ -7,42 +7,51 @@ namespace Controllers
 {
     public class KartController : MonoBehaviour
     {
+        //Hover Wheel Points
         public HoverWheel FrontLeftHoverWheel;
         public HoverWheel FrontRightHoverWheel;
         public HoverWheel RearLeftHoverWheel;
         public HoverWheel RearRightHoverWheel;
-
-        //public float Force;
+        
+        //Speed & Turning Settings
         public float MaxSpeed;
         public float MaxAccelerationForce;
-        public float TurnSpeed;
         public float MaxRotationAngle;
-
+        public float TurnForce;
         public Bezier AccelerationCurve = new Bezier(new Vector2(0, 1), new Vector2(0.7f, 1), new Vector2(1, 0.9f), new Vector2(1, 0));
 
+        //Force Application Transforms
         public Transform CenterOfGravity;
         public Transform PointOfAcceleration;
 
+        //Hover Physics Settings
         public float SuspensionLength;
         public float UpwardForce;
         
         private Rigidbody m_Rigidbody;
         private List<HoverWheel> m_HoverWheels = new List<HoverWheel>();
-        private float m_CurrentSpeed = 0f;
-        private string m_DebugAcceleration;
+        private Dictionary<string, string> DebugParameters = new Dictionary<string, string>();
 
         public void Start()
         {
             m_Rigidbody = GetComponent<Rigidbody>();
 
+            //            Add all Hover Wheels to a List for Quicker Processing 
+            //                   then Setup the Suspension Length on all Wheels
             m_HoverWheels.Add(FrontLeftHoverWheel);
             m_HoverWheels.Add(FrontRightHoverWheel);
             m_HoverWheels.Add(RearLeftHoverWheel);
             m_HoverWheels.Add(RearRightHoverWheel);
 
             foreach (HoverWheel l_HoverWheel in m_HoverWheels)
+            {
                 l_HoverWheel.SuspensionLength = SuspensionLength;
-            
+                l_HoverWheel.CalculateWheelCircumference();
+            }
+
+
+            //   Offset the Center of Gravity on the Rigidbody to help the kart
+            //                                to always land the right side up.
             m_Rigidbody.centerOfMass = CenterOfGravity.localPosition;
         }
         
@@ -53,7 +62,9 @@ namespace Controllers
 
             Vector3 l_AverageGroundNormal = new Vector3(0,0,0);
 
-            //Suspension/Hover physics
+            // Suspension (Hover) physics - Applies a Force at each Hover Point 
+            // to keep the Kart at the distance specified in 'SuspensionLength'
+            //                           from the Ground below each Hover Point
             foreach (HoverWheel l_HoverWheel in m_HoverWheels)
             {
                 l_HoverWheel.Update();
@@ -70,105 +81,65 @@ namespace Controllers
 
             Vector3 l_DirectionOfAcceleration = (l_FrontGroundHitAveragePoint - l_RearGroundHitAveragePoint).normalized;
 
+            //     Calculate the current percentage of the speed in a 0-1 value 
+            //     and use it to get required accelleration force to be applied
+            //                                                    to the object
             float l_SpeedPercentage = (Mathf.Abs(m_Rigidbody.velocity.magnitude) / MaxSpeed);
 
             float l_AccelerationRate = AccelerationCurve.GetPoint(l_SpeedPercentage).y;
 
             float l_Acceleration = ((l_AccelerationRate * MaxAccelerationForce) * l_VerticalInput);
 
-            //if(m_CurrentSpeed != MaxSpeed)
-            //    m_CurrentSpeed += l_Acceleration * Time.deltaTime;
+            var l_LocalVelocity = transform.InverseTransformDirection(m_Rigidbody.velocity);
 
-            float l_AccelerationForce =  m_Rigidbody.velocity.magnitude/ Time.deltaTime;
-            m_DebugAcceleration = l_Acceleration.ToString("n2");
+            float l_DistanceTravelled = l_LocalVelocity.z * Time.deltaTime;
 
-            Vector3 l_FowardForce = l_DirectionOfAcceleration * l_Acceleration /* m_Rigidbody.mass*/;        
-            //Debug.Log(l_FowardForce);
-            m_Rigidbody.AddForceAtPosition(l_FowardForce * Time.deltaTime, PointOfAcceleration.position);
-            Debug.Log("Hello SourceTree");
+            Debug.Log(l_DistanceTravelled);
 
-            //Turning
+            //                 Apply the acceleration force in the direction of 
+            //                                  acceleration (ground direction)
+            m_Rigidbody.AddForceAtPosition((l_DirectionOfAcceleration * l_Acceleration) * Time.deltaTime, PointOfAcceleration.position);
+
+            //          Calculate Steering angle from Input and apply Torque to
+            //                       the Kart using the Averaged Ground Normal.
             float l_SteeringAngle = l_HorizontalInput * MaxRotationAngle;
-
+            
             l_AverageGroundNormal /= m_HoverWheels.Count;
 
-            m_Rigidbody.AddTorque(l_AverageGroundNormal * l_SteeringAngle /*TurnSpeed*/ * Time.deltaTime);
+            m_Rigidbody.AddTorque(l_AverageGroundNormal * l_SteeringAngle * TurnForce * Time.deltaTime);
+            
+            //                Apply Anti-Slip Force to reduce sliding on Track.
+            m_Rigidbody.AddForce(- (Vector3.Project(m_Rigidbody.velocity, transform.right) * 2), ForceMode.Acceleration);
 
-            //Debug.Log(Vector3.Project(m_Rigidbody.velocity, transform.right));
+            string WheelSpinAngles = "";
 
-            m_Rigidbody.AddForce(- (Vector3.Project(m_Rigidbody.velocity, transform.right) * 2), ForceMode.Acceleration);                   
+            //                Set the Wheel Mesh Rotations to Simulate Movement
+            WheelSpinAngles += FrontLeftHoverWheel.SetWheelRotation(l_SteeringAngle, l_DistanceTravelled);
+            WheelSpinAngles += FrontRightHoverWheel.SetWheelRotation(l_SteeringAngle, l_DistanceTravelled);
+            WheelSpinAngles += RearLeftHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
+            WheelSpinAngles += RearRightHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
+
+            //                 Update Debug Parameters for Printing on the GUI.
+            UpdateDebugVariables(l_Acceleration, m_Rigidbody.velocity, WheelSpinAngles);
+        }
+
+        private void UpdateDebugVariables(float p_AccelerationForce, Vector3 p_Velocity, string p_WheelSpinAngles)
+        {
+            DebugParameters["Acceleration"] = p_AccelerationForce.ToString("n2");
+            DebugParameters["Velocity"] = p_Velocity.ToString();
+            DebugParameters["Wheel Spin Angles"] = p_WheelSpinAngles;
         }
 
         public void OnGUI()
         {
             GUI.backgroundColor = Color.black;
-            GUI.TextField(new Rect(10, 10, 100, 20), m_Rigidbody.velocity.ToString());
-            GUI.TextField(new Rect(10, 30, 100, 20), m_DebugAcceleration);
+            int l_YOffset = 10;
+            foreach (KeyValuePair<string, string> DebugParameter in DebugParameters)
+            {
+                GUI.TextField(new Rect(10, l_YOffset, 170, 20), string.Format("{0}: {1}", DebugParameter.Key, DebugParameter.Value));
+                    
+                l_YOffset += 25;
+            }
         }
     }
-
-    /*
-    public class KartController : MonoBehaviour
-    {
-        public float MaxSpeed = 50.0f;
-        public float MaxAcceleration = 1.5f;
-        public Bezier AccelerationCurve = new Bezier(new Vector2(0, 1), new Vector2(0.7f, 1), new Vector2(1, 0.9f), new Vector2(1, 0));
-        public float TurnSpeed = 180f;
-
-        private float m_CurrentSpeed = 0f;
-        private Rigidbody m_Rigidbody;
-        private string m_VerticalAxisName;
-        private float m_VerticalInputValue;
-        private string m_HorizontalAxisName;
-        private float m_HorizontalInputValue;
-        
-        private void Awake()
-        {
-            m_Rigidbody = GetComponent<Rigidbody>();
-        }
-        
-        private void Start()
-        {
-            m_VerticalAxisName = "Vertical";
-            m_HorizontalAxisName = "Horizontal";
-        }
-
-
-        private void Update()
-        {
-            m_VerticalInputValue = Input.GetAxis(m_VerticalAxisName);
-            m_HorizontalInputValue = Input.GetAxis(m_HorizontalAxisName);
-        }
-
-        private void FixedUpdate()
-        {
-            Move();
-            Turn();
-        }
-
-        private void Move()
-        {
-            float l_SpeedPercentage = Mathf.Abs(m_CurrentSpeed) / MaxSpeed;
-
-            float l_AccelerationRate = AccelerationCurve.GetPoint(l_SpeedPercentage).y;
-
-            float l_Acceleration = (l_AccelerationRate * MaxAcceleration) * m_VerticalInputValue;
-
-            m_CurrentSpeed += l_Acceleration * Time.deltaTime;
-
-            Vector3 l_CalculatedMovement = transform.forward * (m_CurrentSpeed * Time.deltaTime);
-
-            m_Rigidbody.MovePosition(m_Rigidbody.position + l_CalculatedMovement);
-        }
-
-        private void Turn()
-        {
-            float l_TurnAngle = m_HorizontalInputValue * TurnSpeed * Time.deltaTime;
-            
-            Quaternion l_TurnRotation = Quaternion.Euler(0f, l_TurnAngle, 0f);
-            
-            m_Rigidbody.MoveRotation(m_Rigidbody.rotation * l_TurnRotation);
-        }
-    }
-    */
 }
