@@ -45,13 +45,11 @@ namespace Objects
             WheelMeshTransform.localPosition = new Vector3(WheelMeshTransform.localPosition.x, (-SuspensionLength * CompressionRatio) + WheelRadius, WheelMeshTransform.localPosition.z);
         }
 
-        public float SetWheelRotation(float p_SteeringAngle, float p_WheelDistanceTravelled)
+        public void SetWheelRotation(float p_SteeringAngle, float p_WheelDistanceTravelled)
         {
             m_WheelSpinAngle = (m_WheelSpinAngle + ((p_WheelDistanceTravelled / m_WheelCircumference) * 360f)) % 360f;
             
             WheelMeshTransform.localEulerAngles = new Vector3(m_WheelSpinAngle, p_SteeringAngle, 0);
-
-            return m_WheelSpinAngle;
         }
     }
 }

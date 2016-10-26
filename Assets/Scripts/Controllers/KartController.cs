@@ -93,9 +93,7 @@ namespace Controllers
             var l_LocalVelocity = transform.InverseTransformDirection(m_Rigidbody.velocity);
 
             float l_DistanceTravelled = l_LocalVelocity.z * Time.deltaTime;
-
-            Debug.Log(l_DistanceTravelled);
-
+            
             //                 Apply the acceleration force in the direction of 
             //                                  acceleration (ground direction)
             m_Rigidbody.AddForceAtPosition((l_DirectionOfAcceleration * l_Acceleration) * Time.deltaTime, PointOfAcceleration.position);
@@ -110,24 +108,21 @@ namespace Controllers
             
             //                Apply Anti-Slip Force to reduce sliding on Track.
             m_Rigidbody.AddForce(- (Vector3.Project(m_Rigidbody.velocity, transform.right) * 2), ForceMode.Acceleration);
-
-            string WheelSpinAngles = "";
-
+            
             //                Set the Wheel Mesh Rotations to Simulate Movement
-            WheelSpinAngles += FrontLeftHoverWheel.SetWheelRotation(l_SteeringAngle, l_DistanceTravelled);
-            WheelSpinAngles += FrontRightHoverWheel.SetWheelRotation(l_SteeringAngle, l_DistanceTravelled);
-            WheelSpinAngles += RearLeftHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
-            WheelSpinAngles += RearRightHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
+            FrontLeftHoverWheel.SetWheelRotation(l_SteeringAngle, l_DistanceTravelled);
+            FrontRightHoverWheel.SetWheelRotation(l_SteeringAngle, l_DistanceTravelled);
+            RearLeftHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
+            RearRightHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
 
             //                 Update Debug Parameters for Printing on the GUI.
-            UpdateDebugVariables(l_Acceleration, m_Rigidbody.velocity, WheelSpinAngles);
+            UpdateDebugVariables(l_Acceleration, m_Rigidbody.velocity);
         }
 
-        private void UpdateDebugVariables(float p_AccelerationForce, Vector3 p_Velocity, string p_WheelSpinAngles)
+        private void UpdateDebugVariables(float p_AccelerationForce, Vector3 p_Velocity)
         {
             DebugParameters["Acceleration"] = p_AccelerationForce.ToString("n2");
             DebugParameters["Velocity"] = p_Velocity.ToString();
-            DebugParameters["Wheel Spin Angles"] = p_WheelSpinAngles;
         }
 
         public void OnGUI()
