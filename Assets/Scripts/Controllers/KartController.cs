@@ -57,10 +57,15 @@ namespace Controllers
         
         public void FixedUpdate()
         {
-            float l_VerticalInput = Input.GetAxis("Vertical");
-            float l_HorizontalInput = Input.GetAxis("Horizontal");
+            
+        }
 
-            Vector3 l_AverageGroundNormal = new Vector3(0,0,0);
+        public void Move(float p_VerticalInput, float p_HorizontalInput)
+        {
+            float l_VerticalInput = p_VerticalInput;
+            float l_HorizontalInput = p_HorizontalInput;
+
+            Vector3 l_AverageGroundNormal = new Vector3(0, 0, 0);
 
             // Suspension (Hover) physics - Applies a Force at each Hover Point 
             // to keep the Kart at the distance specified in 'SuspensionLength'
@@ -94,8 +99,6 @@ namespace Controllers
 
             float l_DistanceTravelled = l_LocalVelocity.z * Time.deltaTime;
 
-            Debug.Log(l_DistanceTravelled);
-
             //                 Apply the acceleration force in the direction of 
             //                                  acceleration (ground direction)
             m_Rigidbody.AddForceAtPosition((l_DirectionOfAcceleration * l_Acceleration) * Time.deltaTime, PointOfAcceleration.position);
@@ -103,13 +106,13 @@ namespace Controllers
             //          Calculate Steering angle from Input and apply Torque to
             //                       the Kart using the Averaged Ground Normal.
             float l_SteeringAngle = l_HorizontalInput * MaxRotationAngle;
-            
+
             l_AverageGroundNormal /= m_HoverWheels.Count;
 
             m_Rigidbody.AddTorque(l_AverageGroundNormal * l_SteeringAngle * TurnForce * Time.deltaTime);
-            
+
             //                Apply Anti-Slip Force to reduce sliding on Track.
-            m_Rigidbody.AddForce(- (Vector3.Project(m_Rigidbody.velocity, transform.right) * 2), ForceMode.Acceleration);
+            m_Rigidbody.AddForce(-(Vector3.Project(m_Rigidbody.velocity, transform.right) * 2), ForceMode.Acceleration);
 
             string WheelSpinAngles = "";
 

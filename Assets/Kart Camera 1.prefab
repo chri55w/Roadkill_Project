@@ -84,7 +84,7 @@ AudioListener:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013853783376}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!92 &92000010420746506
 Behaviour:
   m_ObjectHideFlags: 1
@@ -103,8 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfc88c632c39e7840a1d9cd9025ed17f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ForwardTarget: {fileID: 0}
-  RearTarget: {fileID: 0}
+  PlayerFollowing: {fileID: 0}
   CurrentTarget: {fileID: 0}
   Distance: 10
   Height: 5
