@@ -12,6 +12,9 @@ namespace Controllers
         [System.NonSerialized]
         public Transform RearTarget;
         public GameObject CurrentTarget;
+        public bool FacingForward = true;
+        [System.NonSerialized]
+        public Camera CameraComponent;
 
         // The distance in the x-z plane to the target
         public float Distance = 10.0f;
@@ -35,10 +38,7 @@ namespace Controllers
                 return;
 
             CurrentTarget = ForwardTarget.gameObject;
-
-            setSplitScreenPosition();
-            // FacingFowards = true;
-
+            CameraComponent = GetComponent<Camera>();
         }
 
         // Update is called once per frame
@@ -47,28 +47,6 @@ namespace Controllers
             // Early out if we don't have a target
             //if (!ForwardTarget)
             //     return;
-
-            if (Input.GetButtonDown("FlipCamera"))
-            {
-                CurrentTarget = RearTarget.gameObject;
-
-                transform.position = CurrentTarget.transform.position;
-                transform.position = Vector3.forward * Distance;
-                transform.position = Vector3.up * Height;
-
-                transform.LookAt(CurrentTarget.transform);
-            }
-
-            if (Input.GetButtonUp("FlipCamera"))
-            {
-                CurrentTarget = ForwardTarget.gameObject;
-
-                transform.position = CurrentTarget.transform.position;
-                transform.position -= Vector3.forward * Distance;
-                transform.position = Vector3.up * Height;
-
-                transform.LookAt(CurrentTarget.transform);
-            }
 
             // Calculate the current rotation angles
             float l_WantedRotationAngle = CurrentTarget.transform.eulerAngles.y;
@@ -94,18 +72,36 @@ namespace Controllers
             transform.LookAt(CurrentTarget.transform);
         }
 
-        void setSplitScreenPosition()
+        public void SetCameraScreenSize(Rect p_ScreenSize)
         {
-            Camera thisCamera = GetComponent<Camera>();
-            if (transform.parent.name.Contains("0"))
+            if (CameraComponent == null)
+                CameraComponent = GetComponent<Camera>();
+            CameraComponent.rect = p_ScreenSize;
+        }
+
+        public void FlipCamera()
+        {
+            if (FacingForward)
             {
-                Rect camRect = new Rect(0f, 0.5f, 1f, 0.5f);
-                thisCamera.rect = camRect;
+                CurrentTarget = RearTarget.gameObject;
+
+                transform.position = CurrentTarget.transform.position;
+                transform.position = Vector3.forward * Distance;
+                transform.position = Vector3.up * Height;
+
+                transform.LookAt(CurrentTarget.transform);
+                FacingForward = false;
             }
-            else if (transform.parent.name.Contains("1"))
+            else
             {
-                Rect camRect = new Rect(0f, 0f, 1f, 0.5f);
-                thisCamera.rect = camRect;
+                CurrentTarget = ForwardTarget.gameObject;
+
+                transform.position = CurrentTarget.transform.position;
+                transform.position -= Vector3.forward * Distance;
+                transform.position = Vector3.up * Height;
+
+                transform.LookAt(CurrentTarget.transform);
+                FacingForward = true;
             }
         }
     }
