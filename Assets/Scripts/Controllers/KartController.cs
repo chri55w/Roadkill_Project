@@ -62,6 +62,7 @@ namespace Controllers
 
         public void Move(float p_VerticalInput, float p_HorizontalInput)
         {
+            //Is this necessary?
             float l_VerticalInput = p_VerticalInput;
             float l_HorizontalInput = p_HorizontalInput;
 
@@ -81,10 +82,12 @@ namespace Controllers
             }
 
             //Moving Forward
-            Vector3 l_RearGroundHitAveragePoint = (RearLeftHoverWheel.GroundHitPoint.point + RearRightHoverWheel.GroundHitPoint.point) / 2;
-            Vector3 l_FrontGroundHitAveragePoint = (FrontLeftHoverWheel.GroundHitPoint.point + FrontRightHoverWheel.GroundHitPoint.point) / 2;
+            //Vector3 l_RearGroundHitAveragePoint = (RearLeftHoverWheel.GroundHitPoint.point + RearRightHoverWheel.GroundHitPoint.point) / 2;
+            //Vector3 l_FrontGroundHitAveragePoint = (FrontLeftHoverWheel.GroundHitPoint.point + FrontRightHoverWheel.GroundHitPoint.point) / 2;
 
-            Vector3 l_DirectionOfAcceleration = (l_FrontGroundHitAveragePoint - l_RearGroundHitAveragePoint).normalized;
+            //Vector3 l_DirectionOfAcceleration = (l_FrontGroundHitAveragePoint - l_RearGroundHitAveragePoint).normalized;
+
+            Vector3 l_DirectionOfAcceleration = GetDirectionOfFowardMovement();
 
             //     Calculate the current percentage of the speed in a 0-1 value 
             //     and use it to get required accelleration force to be applied
@@ -129,7 +132,7 @@ namespace Controllers
         private void UpdateDebugVariables(float p_AccelerationForce, Vector3 p_Velocity, string p_WheelSpinAngles)
         {
             DebugParameters["Acceleration"] = p_AccelerationForce.ToString("n2");
-            DebugParameters["Velocity"] = p_Velocity.ToString();
+            DebugParameters["Velocity"] = p_Velocity.magnitude.ToString();
             DebugParameters["Wheel Spin Angles"] = p_WheelSpinAngles;
         }
 
@@ -143,6 +146,21 @@ namespace Controllers
                     
                 l_YOffset += 25;
             }
+        }
+
+        public Vector3 GetDirectionOfFowardMovement()
+        {
+            Vector3 l_RearGroundHitAveragePoint = (RearLeftHoverWheel.GroundHitPoint.point + RearRightHoverWheel.GroundHitPoint.point) / 2;
+            Vector3 l_FrontGroundHitAveragePoint = (FrontLeftHoverWheel.GroundHitPoint.point + FrontRightHoverWheel.GroundHitPoint.point) / 2;
+
+            Vector3 l_DirectionOfForwardMovement = (l_FrontGroundHitAveragePoint - l_RearGroundHitAveragePoint).normalized;
+
+            return l_DirectionOfForwardMovement;
+        }
+
+        public void Boost(float p_BoostForce)
+        {
+            m_Rigidbody.AddForceAtPosition((GetDirectionOfFowardMovement() * p_BoostForce) * Time.deltaTime, PointOfAcceleration.position);
         }
     }
 }
