@@ -82,11 +82,6 @@ namespace Controllers
             }
 
             //Moving Forward
-            //Vector3 l_RearGroundHitAveragePoint = (RearLeftHoverWheel.GroundHitPoint.point + RearRightHoverWheel.GroundHitPoint.point) / 2;
-            //Vector3 l_FrontGroundHitAveragePoint = (FrontLeftHoverWheel.GroundHitPoint.point + FrontRightHoverWheel.GroundHitPoint.point) / 2;
-
-            //Vector3 l_DirectionOfAcceleration = (l_FrontGroundHitAveragePoint - l_RearGroundHitAveragePoint).normalized;
-
             Vector3 l_DirectionOfAcceleration = GetDirectionOfFowardMovement();
 
             //     Calculate the current percentage of the speed in a 0-1 value 
@@ -101,7 +96,6 @@ namespace Controllers
             var l_LocalVelocity = transform.InverseTransformDirection(m_Rigidbody.velocity);
 
             float l_DistanceTravelled = l_LocalVelocity.z * Time.deltaTime;
-
             //                 Apply the acceleration force in the direction of 
             //                                  acceleration (ground direction)
             m_Rigidbody.AddForceAtPosition((l_DirectionOfAcceleration * l_Acceleration) * Time.deltaTime, PointOfAcceleration.position);
@@ -115,25 +109,22 @@ namespace Controllers
             m_Rigidbody.AddTorque(l_AverageGroundNormal * l_SteeringAngle * TurnForce * Time.deltaTime);
 
             //                Apply Anti-Slip Force to reduce sliding on Track.
-            m_Rigidbody.AddForce(-(Vector3.Project(m_Rigidbody.velocity, transform.right) * 2), ForceMode.Acceleration);
-
-            string WheelSpinAngles = "";
-
+            m_Rigidbody.AddForce(- (Vector3.Project(m_Rigidbody.velocity, transform.right) * 2), ForceMode.Acceleration);
+            
             //                Set the Wheel Mesh Rotations to Simulate Movement
-            WheelSpinAngles += FrontLeftHoverWheel.SetWheelRotation(l_SteeringAngle, l_DistanceTravelled);
-            WheelSpinAngles += FrontRightHoverWheel.SetWheelRotation(l_SteeringAngle, l_DistanceTravelled);
-            WheelSpinAngles += RearLeftHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
-            WheelSpinAngles += RearRightHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
+            FrontLeftHoverWheel.SetWheelRotation(l_SteeringAngle, l_DistanceTravelled);
+            FrontRightHoverWheel.SetWheelRotation(l_SteeringAngle, l_DistanceTravelled);
+            RearLeftHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
+            RearRightHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
 
             //                 Update Debug Parameters for Printing on the GUI.
-            UpdateDebugVariables(l_Acceleration, m_Rigidbody.velocity, WheelSpinAngles);
+            UpdateDebugVariables(l_Acceleration, m_Rigidbody.velocity);
         }
 
-        private void UpdateDebugVariables(float p_AccelerationForce, Vector3 p_Velocity, string p_WheelSpinAngles)
+        private void UpdateDebugVariables(float p_AccelerationForce, Vector3 p_Velocity)
         {
             DebugParameters["Acceleration"] = p_AccelerationForce.ToString("n2");
             DebugParameters["Velocity"] = p_Velocity.magnitude.ToString();
-            DebugParameters["Wheel Spin Angles"] = p_WheelSpinAngles;
         }
 
         public void OnGUI()
