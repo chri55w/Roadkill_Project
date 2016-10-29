@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using Managers;
+
 namespace Objects
 {
     [System.Serializable]
@@ -10,20 +12,25 @@ namespace Objects
         //public Camera playerCamera;
         public string controllerID;
         public GameObject Kart;
+        private RaceManager m_RaceManager;
+        public string Name;
         
-        public void MakePlayer(GameObject p_Kart, string p_ControllerID, Transform p_StartPosition)
+        public void MakePlayer(GameObject p_Kart, string p_ControllerID, Transform p_StartPosition, RaceManager p_RaceManager)
         {
             Kart = p_Kart;
             controllerID = p_ControllerID;
             
             transform.position = p_StartPosition.position;
             transform.rotation = p_StartPosition.rotation;
+
+            m_RaceManager = p_RaceManager;
+
         }
 
         // Use this for initialization
         void Start()
         {
-        
+            Name = transform.root.gameObject.name;
         }
 
         // Update is called once per frame

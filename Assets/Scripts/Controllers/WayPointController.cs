@@ -1,47 +1,47 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 using Objects;
 
 namespace Controllers
 {
-    public delegate void PlayerTriggerExit(PlayerTriggerExitEventArgs EventArgs);
-
-    public class WayPointController : MonoBehaviour
+    public delegate void WaypointSetUnset(SetUnsetWaypointCollisionEventArgs e_EventArgs);
+    
+    public class WaypointController : MonoBehaviour
     {
-        public event PlayerTriggerExit OnPlayerTriggerExit;
+        public int ID;
 
+        public List<WaypointController> NextWaypoints;
+
+        public WaypointCollider SetterCollider;
+        public WaypointCollider UnSetterCollider;
+
+        public event WaypointSetUnset OnWaypointSetUnset;
+        
         // Use this for initialization
         void Start()
         {
+            SetterCollider.OnPlayerTriggerExit += SetterCollider_OnPlayerTriggerExit;
+            UnSetterCollider.OnPlayerTriggerExit += UnSetterCollider_OnPlayerTriggerExit;
+        }
 
+        private void UnSetterCollider_OnPlayerTriggerExit(PlayerTriggerExitEventArgs e_EventArgs)
+        {
+            if (OnWaypointSetUnset != null)
+                OnWaypointSetUnset(new SetUnsetWaypointCollisionEventArgs(e_EventArgs.e_Player, this, SetUnsetWayPointType.Unset));
+        }
+
+        private void SetterCollider_OnPlayerTriggerExit(PlayerTriggerExitEventArgs e_EventArgs)
+        {
+            if (OnWaypointSetUnset != null)
+                OnWaypointSetUnset(new SetUnsetWaypointCollisionEventArgs(e_EventArgs.e_Player, this, SetUnsetWayPointType.Set));
         }
 
         // Update is called once per frame
         void Update()
         {
 
-        }
-
-        public void OnTriggerExit(Collider p_OtherCollider)
-        {
-            if (p_OtherCollider.name == "PlayerTriggerCollider")
-            {
-                GameObject l_OtherGameObject = p_OtherCollider.gameObject;
-
-                /*
-                 * Need a method to access the Player object for the Player from the PlayerTriggerCollider??                 * 
-                 * 
-                 * Store a Reference in the Kart Collider and then you just have to work your way up to there? 
-                 * (Could always move the Collider up to the Top Level?)
-                 *  OR
-                 * Go to the Race Manager and Find the Player by the GameObject?
-                 * 
-                */
-
-                if (OnPlayerTriggerExit != null)
-                    OnPlayerTriggerExit(new PlayerTriggerExitEventArgs(this, /*l_Player,*/ DateTime.Now));
-            }
-        }
+        }        
     }
 }
