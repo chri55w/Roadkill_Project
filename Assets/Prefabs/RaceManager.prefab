@@ -288,6 +288,7 @@ MonoBehaviour:
   - {fileID: 4000013155513390}
   - {fileID: 4000012636977074}
   PlayerList: []
+  SelectedTrackInfo: {fileID: 0}
 --- !u!124 &124000012956418588
 Behaviour:
   m_ObjectHideFlags: 1

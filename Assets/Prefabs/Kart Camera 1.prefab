@@ -105,6 +105,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerFollowing: {fileID: 0}
   CurrentTarget: {fileID: 0}
+  FacingForward: 1
   Distance: 10
   Height: 5
   RotationDamping: 3.5

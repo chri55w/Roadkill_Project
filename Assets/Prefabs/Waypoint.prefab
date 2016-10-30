@@ -151,8 +151,8 @@ MonoBehaviour:
   ID: 0
   NextWaypoints: []
   PreviousWaypoints: []
-  SetterCollider: {fileID: 114000011767909500}
-  UnSetterCollider: {fileID: 114000013642838840}
+  SetterCollider: {fileID: 0}
+  UnSetterCollider: {fileID: 1088421888}
 --- !u!114 &114000013642838840
 MonoBehaviour:
   m_ObjectHideFlags: 1
