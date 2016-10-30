@@ -12,6 +12,7 @@ namespace Objects
         //public Camera playerCamera;
         public string controllerID;
         public GameObject Kart;
+        public GameObject CurrentPickup;
 
         private RaceManager m_RaceManager;
         public string Name;
@@ -46,6 +47,22 @@ namespace Objects
                 GetComponentInChildren<Controllers.CameraController>().FlipCamera();
             if(Input.GetButtonUp(controllerID + "FlipCamera"))
                 GetComponentInChildren<Controllers.CameraController>().FlipCamera();
+            if ((Input.GetButtonDown(controllerID + "UsePickup")))
+            {
+                CurrentPickup.GetComponent<Pickup>().UsePickup(gameObject);
+                Destroy(CurrentPickup);
+            }
+        }
+
+        void OnGUI()
+        {
+            GUI.backgroundColor = Color.black;
+
+            if (CurrentPickup)
+            {
+                GUI.TextField(new Rect(Screen.width - 300, 10, 200, 20), string.Format("Current Pickup Name: {0}", CurrentPickup.GetComponent<Pickup>().PickupName));
+                GUI.TextField(new Rect(Screen.width - 300, 35, 200, 20), string.Format("Current Pickup Level: {0}", CurrentPickup.GetComponent<Pickup>().PickupLevel));
+            }
         }
     }
 }
