@@ -20,9 +20,9 @@ namespace Objects
 
         void OnTriggerStay(Collider p_OtherCollider)
         {
-            if(p_OtherCollider.transform.root.name.Contains("Player"))
+            if (p_OtherCollider.name == "PlayerTriggerCollider")
             {
-               p_OtherCollider.transform.root.GetComponentInChildren<Controllers.KartController>().Boost(BoostForce);               
+                p_OtherCollider.transform.root.GetComponentInChildren<Controllers.KartController>().Boost(BoostForce);               
             }
         }
     }

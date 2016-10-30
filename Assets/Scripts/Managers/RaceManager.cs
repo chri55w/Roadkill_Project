@@ -14,7 +14,7 @@ namespace Managers
         public List<Transform> StartPositions;
 
         public List<GameObject> PlayerList = new List<GameObject>();
-        //Possible addition, code dictionary to be serializable thus removes need of above kart list   
+        //Possible addition, code dictionary to be serializable thus removes need of above kart list
         public Dictionary<string, GameObject> KartDictionary = new Dictionary<string, GameObject>();
 
         public TrackInfo SelectedTrackInfo;
@@ -97,7 +97,7 @@ namespace Managers
             string l_PlayerName = e_EventArgs.e_Player.Name;
             int l_LastTrackedWaypointIndex = TrackedWaypoints[l_PlayerName].Count - 1;
             WaypointController l_LastTrackedWaypoint = null;
-
+            
             try
             {
                 l_LastTrackedWaypoint = TrackedWaypoints[l_PlayerName][l_LastTrackedWaypointIndex];
@@ -209,9 +209,7 @@ namespace Managers
             PlayerLapCount.Add(l_Player.name, 0);
             TrackedWaypoints.Add(l_Player.name, new List<WaypointController>());
 
-            PlayerList.Add(l_Player);
-
-            Debug.Log(p_ControllerID);     
+            PlayerList.Add(l_Player);   
         }
         
         private bool DoesControllerIDExist(string p_controllerID)

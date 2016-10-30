@@ -145,14 +145,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000010838818804}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1d7bf759a3a5994f91b973d7c2ac514, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d7eb7af499cba64090ed2e80d9479b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 0
-  NextWaypoints: []
-  PreviousWaypoints: []
-  SetterCollider: {fileID: 0}
-  UnSetterCollider: {fileID: 1088421888}
+  NextWaypoints:
+  - {fileID: 0}
+  SetterCollider: {fileID: 114000011767909500}
+  UnSetterCollider: {fileID: 114000013642838840}
 --- !u!114 &114000013642838840
 MonoBehaviour:
   m_ObjectHideFlags: 1
