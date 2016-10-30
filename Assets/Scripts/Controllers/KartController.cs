@@ -62,10 +62,6 @@ namespace Controllers
 
         public void Move(float p_VerticalInput, float p_HorizontalInput)
         {
-            //Is this necessary?
-            float l_VerticalInput = p_VerticalInput;
-            float l_HorizontalInput = p_HorizontalInput;
-
             Vector3 l_AverageGroundNormal = new Vector3(0, 0, 0);
 
             // Suspension (Hover) physics - Applies a Force at each Hover Point 
@@ -91,7 +87,7 @@ namespace Controllers
 
             float l_AccelerationRate = AccelerationCurve.GetPoint(l_SpeedPercentage).y;
 
-            float l_Acceleration = ((l_AccelerationRate * MaxAccelerationForce) * l_VerticalInput);
+            float l_Acceleration = ((l_AccelerationRate * MaxAccelerationForce) * p_VerticalInput);
 
             var l_LocalVelocity = transform.InverseTransformDirection(m_Rigidbody.velocity);
 
@@ -102,7 +98,7 @@ namespace Controllers
 
             //          Calculate Steering angle from Input and apply Torque to
             //                       the Kart using the Averaged Ground Normal.
-            float l_SteeringAngle = l_HorizontalInput * MaxRotationAngle;
+            float l_SteeringAngle = p_HorizontalInput * MaxRotationAngle;
 
             l_AverageGroundNormal /= m_HoverWheels.Count;
 

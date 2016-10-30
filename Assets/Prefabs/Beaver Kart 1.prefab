@@ -337,7 +337,7 @@ GameObject:
   - 4: {fileID: 4000012318518996}
   - 65: {fileID: 65000011433147312}
   m_Layer: 2
-  m_Name: PlayerTriggerCollider
+  m_Name: DriverTriggerCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Controllers;
 using Objects;
+using Events;
 
 namespace Managers
 {
@@ -13,19 +14,18 @@ namespace Managers
         public List<GameObject> KartList;
         public List<Transform> StartPositions;
 
-        public List<GameObject> PlayerList = new List<GameObject>();
+        public List<GameObject> DriverList = new List<GameObject>();
         //Possible addition, code dictionary to be serializable thus removes need of above kart list
         public Dictionary<string, GameObject> KartDictionary = new Dictionary<string, GameObject>();
 
         public TrackInfo SelectedTrackInfo;
         public Dictionary<string, List<WaypointController>> TrackedWaypoints = new Dictionary<string, List<WaypointController>>();
-        public Dictionary<string, int> PlayerLapCount = new Dictionary<string, int>();
+        public Dictionary<string, int> DriverLapCount = new Dictionary<string, int>();
 
         private Dictionary<string, string> DebugParameters = new Dictionary<string, string>();
 
         void Awake()
         {
-            //s_PlayerPrefab = PlayerPrefab;
             foreach (GameObject kart in KartList)
                 KartDictionary.Add(kart.name, kart);
 
@@ -36,24 +36,24 @@ namespace Managers
                 l_Waypoint.OnWaypointSetUnset += Waypoint_OnWaypointSetUnset;
             }
 
-            foreach (GameObject l_GameObject in PlayerList)
+            foreach (GameObject l_GameObject in DriverList)
             {
-                Player l_Player = l_GameObject.GetComponent<Player>();
+                Driver l_Driver = l_GameObject.GetComponent<Driver>();
 
-                if (l_Player != null)
+                if (l_Driver != null)
                 {
-                    PlayerLapCount.Add(l_Player.Name, 0);
-                    TrackedWaypoints.Add(l_Player.Name, new List<WaypointController>());
+                    DriverLapCount.Add(l_Driver.Name, 0);
+                    TrackedWaypoints.Add(l_Driver.Name, new List<WaypointController>());
                 }
             }
         }
 
         void Update()
         {
-            //first check if any players exist
-            if (PlayerList.Count >= 0 && PlayerList.Count <= 4)
+            //first check if any Drivers exist
+            if (DriverList.Count >= 0 && DriverList.Count <= 4)
             {
-                //Check for players pressing start
+                //Check for Drivers pressing start
                 if (Input.GetButton("JS1Start"))
                 {
                     if (DoesControllerIDExist("JS1") == false)
@@ -94,13 +94,13 @@ namespace Managers
 
         private void Waypoint_OnWaypointSetUnset(SetUnsetWaypointCollisionEventArgs e_EventArgs)
         {
-            string l_PlayerName = e_EventArgs.e_Player.Name;
-            int l_LastTrackedWaypointIndex = TrackedWaypoints[l_PlayerName].Count - 1;
+            string l_DriverName = e_EventArgs.e_Driver.Name;
+            int l_LastTrackedWaypointIndex = TrackedWaypoints[l_DriverName].Count - 1;
             WaypointController l_LastTrackedWaypoint = null;
             
             try
             {
-                l_LastTrackedWaypoint = TrackedWaypoints[l_PlayerName][l_LastTrackedWaypointIndex];
+                l_LastTrackedWaypoint = TrackedWaypoints[l_DriverName][l_LastTrackedWaypointIndex];
             }
             catch { }
 
@@ -110,22 +110,22 @@ namespace Managers
                 {
                     if (e_EventArgs.e_Waypoint == l_LastTrackedWaypoint)
                     {
-                        PlayerLapCount[l_PlayerName] -= 1;
+                        DriverLapCount[l_DriverName] -= 1;
 
-                        TrackedWaypoints[l_PlayerName].Remove(e_EventArgs.e_Waypoint);
+                        TrackedWaypoints[l_DriverName].Remove(e_EventArgs.e_Waypoint);
                     }
                 }
                 else if (e_EventArgs.e_Type == SetUnsetWayPointType.Set)
                 {
-                    if (PlayerLapCount[l_PlayerName] == 0 || SelectedTrackInfo.ConfirmLap(TrackedWaypoints[l_PlayerName]))
+                    if (DriverLapCount[l_DriverName] == 0 || SelectedTrackInfo.ConfirmLap(TrackedWaypoints[l_DriverName]))
                     {
-                        PlayerLapCount[l_PlayerName] += 1;
+                        DriverLapCount[l_DriverName] += 1;
                     }
 
                     if (e_EventArgs.e_Waypoint != l_LastTrackedWaypoint)
                     {
                         if (l_LastTrackedWaypoint == null || l_LastTrackedWaypoint.NextWaypoints.Contains(e_EventArgs.e_Waypoint))
-                            TrackedWaypoints[l_PlayerName].Add(e_EventArgs.e_Waypoint);
+                            TrackedWaypoints[l_DriverName].Add(e_EventArgs.e_Waypoint);
                     }
                 }
             }
@@ -135,7 +135,7 @@ namespace Managers
                 {
                     if (e_EventArgs.e_Waypoint == l_LastTrackedWaypoint)
                     {
-                        TrackedWaypoints[l_PlayerName].Remove(e_EventArgs.e_Waypoint);
+                        TrackedWaypoints[l_DriverName].Remove(e_EventArgs.e_Waypoint);
                     }
                 }
                 else if (e_EventArgs.e_Type == SetUnsetWayPointType.Set)
@@ -143,18 +143,18 @@ namespace Managers
                     if (e_EventArgs.e_Waypoint != l_LastTrackedWaypoint)
                     {
                         if (l_LastTrackedWaypoint.NextWaypoints.Contains(e_EventArgs.e_Waypoint))
-                            TrackedWaypoints[l_PlayerName].Add(e_EventArgs.e_Waypoint);
+                            TrackedWaypoints[l_DriverName].Add(e_EventArgs.e_Waypoint);
                     }
                 }
             }
 
             // ****** Debug OnGui Information ******
 
-            l_LastTrackedWaypointIndex = TrackedWaypoints[l_PlayerName].Count - 1;
+            l_LastTrackedWaypointIndex = TrackedWaypoints[l_DriverName].Count - 1;
 
             try
             {
-                l_LastTrackedWaypoint = TrackedWaypoints[l_PlayerName][l_LastTrackedWaypointIndex];
+                l_LastTrackedWaypoint = TrackedWaypoints[l_DriverName][l_LastTrackedWaypointIndex];
             }
             catch { }
 
@@ -164,7 +164,7 @@ namespace Managers
                 foreach (WaypointController l_Waypoint in l_LastTrackedWaypoint.NextWaypoints)
                     NextPossibleWaypoints += l_Waypoint.ID.ToString() + ", ";
 
-                UpdateDebugVariables(NextPossibleWaypoints, PlayerLapCount[l_PlayerName].ToString());
+                UpdateDebugVariables(NextPossibleWaypoints, DriverLapCount[l_DriverName].ToString());
             }
         }
 
@@ -187,40 +187,60 @@ namespace Managers
 
                 l_YOffset -= 25;
             }
+            if (GUI.Button(new Rect(Screen.width - 150, Screen.height - 25, 125, 20), "Spawn AI Driver"))
+                AddAI("Beaver Kart 1");
+        }
+
+        public void AddAI(string p_KartName)
+        {
+            GameObject l_AIDriver = new GameObject();
+            GameObject l_kart = Instantiate(KartDictionary[p_KartName]);
+            l_kart.transform.SetParent(l_AIDriver.transform);
+            l_AIDriver.name = "Driver" + DriverList.Count;
+            l_AIDriver.AddComponent<AIController>();
+            
+            l_AIDriver.GetComponent<AIController>().MakeDriver(l_kart, StartPositions[DriverList.Count], this);
+            
+            DriverLapCount.Add(l_AIDriver.name, 0);
+            TrackedWaypoints.Add(l_AIDriver.name, new List<WaypointController>());
+
+            DriverList.Add(l_AIDriver);
         }
 
         public void AddPlayer(string p_KartName, string p_ControllerID)
         {
             GameObject l_Player = new GameObject();
-            //Instantiate(s_PlayerPrefab) as GameObject;
             GameObject l_kart = Instantiate(KartDictionary[p_KartName]);
             l_kart.transform.SetParent(l_Player.transform);
-            l_Player.name = "Player" + PlayerList.Count;
-            l_Player.AddComponent<Objects.Player>();
+            l_Player.name = "Driver" + DriverList.Count;
+            l_Player.AddComponent<PlayerController>();
 
             GameObject l_NewCamera = Instantiate(KartCameraPrefab);
             l_NewCamera.transform.SetParent(l_Player.transform);
-            l_NewCamera.GetComponent<CameraController>().PlayerFollowing = l_kart.gameObject;
+            l_NewCamera.GetComponent<CameraController>().DriverFollowing = l_kart.gameObject;
 
-            l_Player.GetComponent<Objects.Player>().MakePlayer(l_kart, p_ControllerID, StartPositions[PlayerList.Count], this);
+            l_Player.GetComponent<PlayerController>().MakeDriver(l_kart, StartPositions[DriverList.Count], this);
+
+            l_Player.GetComponent<PlayerController>().ControllerID = p_ControllerID;
     
-            l_Player.GetComponent<Objects.Player>().MakePlayer(l_kart, p_ControllerID, StartPositions[PlayerList.Count], this);
-
-            PlayerLapCount.Add(l_Player.name, 0);
+            DriverLapCount.Add(l_Player.name, 0);
             TrackedWaypoints.Add(l_Player.name, new List<WaypointController>());
 
-            PlayerList.Add(l_Player);   
+            DriverList.Add(l_Player);   
         }
         
         private bool DoesControllerIDExist(string p_controllerID)
         {
             bool l_IsControllerIDTaken = false;
-            foreach(GameObject l_player in PlayerList)
+            foreach(GameObject l_Driver in DriverList)
             {
-                if (l_player.GetComponent<Objects.Player>().controllerID.Trim().Equals(p_controllerID))
+                if (l_Driver.GetComponent<PlayerController>() != null)
                 {
-                    l_IsControllerIDTaken = true;
-                    return l_IsControllerIDTaken;
+                    if (l_Driver.GetComponent<PlayerController>().ControllerID.Trim().Equals(p_controllerID))
+                    {
+                        l_IsControllerIDTaken = true;
+                        return l_IsControllerIDTaken;
+                    }
                 }
                 else
                     l_IsControllerIDTaken = false;
@@ -231,7 +251,7 @@ namespace Managers
 
         private void SetCameras()
         {
-            switch(PlayerList.Count)
+            switch(DriverList.Count)
             {
                 case 0:
                     MapCamera.enabled = true;
@@ -239,28 +259,38 @@ namespace Managers
                     break;
                 case 1:
                     MapCamera.enabled = false;
-                    PlayerList[0].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 1f, 1f));
+                    DriverList[0].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 1f, 1f));
                     break;
                 case 2:
                     MapCamera.enabled = false;
-                    PlayerList[0].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, 1f, 0.5f));
-                    PlayerList[1].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 1f, 0.5f));
+                    DriverList[0].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, 1f, 0.5f));
+                    DriverList[1].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 1f, 0.5f));
                     break;
                 case 3:
                     MapCamera.enabled = true;
                     MapCamera.rect = new Rect(0.5f, 0f, 0.5f, 0.5f);
-                    PlayerList[0].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, 0.5f, 0.5f));
-                    PlayerList[1].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0.5f, 0.5f, 0.5f, 0.5f));
-                    PlayerList[2].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 0.5f, 0.5f));
+                    DriverList[0].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, 0.5f, 0.5f));
+                    DriverList[1].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0.5f, 0.5f, 0.5f, 0.5f));
+                    DriverList[2].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 0.5f, 0.5f));
                     break;
                 case 4:
                     MapCamera.enabled = false;                    
-                    PlayerList[0].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, 0.5f, 0.5f));
-                    PlayerList[1].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0.5f, 0.5f, 0.5f, 0.5f));
-                    PlayerList[2].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 0.5f, 0.5f));
-                    PlayerList[3].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0.5f, 0f, 0.5f, 0.5f));
+                    DriverList[0].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, 0.5f, 0.5f));
+                    DriverList[1].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0.5f, 0.5f, 0.5f, 0.5f));
+                    DriverList[2].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 0.5f, 0.5f));
+                    DriverList[3].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0.5f, 0f, 0.5f, 0.5f));
                     break;
             }
+        }
+
+        public WaypointController GetDriversNextWaypoint(string p_DriverName)
+        {
+            int l_DriversLastTrackedWaypointIndex = TrackedWaypoints[p_DriverName].Count - 1;
+
+            if (l_DriversLastTrackedWaypointIndex < 0)
+                return SelectedTrackInfo.StartFinishWaypoint;
+
+            return TrackedWaypoints[p_DriverName][l_DriversLastTrackedWaypointIndex].NextWaypoints[0];
         }
     }
 }
