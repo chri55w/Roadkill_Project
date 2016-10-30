@@ -2,14 +2,15 @@
 using UnityEngine;
 using System.Collections;
 
+using Events;
 
 namespace Objects
 {
-    public delegate void PlayerTriggerExit(PlayerTriggerExitEventArgs EventArgs);
+    public delegate void DriverTriggerExit(DriverTriggerExitEventArgs EventArgs);
 
     public class WaypointCollider : MonoBehaviour
     {
-        public event PlayerTriggerExit OnPlayerTriggerExit;
+        public event DriverTriggerExit OnDriverTriggerExit;
 
         // Use this for initialization
         void Start()
@@ -25,13 +26,13 @@ namespace Objects
 
         public void OnTriggerExit(Collider p_OtherCollider)
         {
-            if (p_OtherCollider.name == "PlayerTriggerCollider")
+            if (p_OtherCollider.name == "DriverTriggerCollider")
             {
-                Player l_Player = p_OtherCollider.transform.root.gameObject.GetComponent<Player>();
+                Driver l_Driver = p_OtherCollider.transform.root.gameObject.GetComponent<Driver>();
 
-                if (l_Player != null)
-                    if (OnPlayerTriggerExit != null)
-                        OnPlayerTriggerExit(new PlayerTriggerExitEventArgs(l_Player, DateTime.Now));
+                if (l_Driver != null)
+                    if (OnDriverTriggerExit != null)
+                        OnDriverTriggerExit(new DriverTriggerExitEventArgs(l_Driver, DateTime.Now));
             }
         }
     }

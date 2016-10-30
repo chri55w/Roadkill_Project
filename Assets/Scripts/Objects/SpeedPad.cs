@@ -20,7 +20,7 @@ namespace Objects
 
         void OnTriggerStay(Collider p_OtherCollider)
         {
-            if (p_OtherCollider.name == "PlayerTriggerCollider")
+            if (p_OtherCollider.name == "DriverTriggerCollider")
             {
                 p_OtherCollider.transform.root.GetComponentInChildren<Controllers.KartController>().Boost(BoostForce);               
             }

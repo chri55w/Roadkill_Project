@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Objects;
+using Events;
 
 namespace Controllers
 {
@@ -23,22 +24,22 @@ namespace Controllers
         void Start()
         {
             // Set Up Event Listeners
-            SetterCollider.OnPlayerTriggerExit += SetterCollider_OnPlayerTriggerExit;
-            UnSetterCollider.OnPlayerTriggerExit += UnSetterCollider_OnPlayerTriggerExit;
+            SetterCollider.OnDriverTriggerExit += SetterCollider_OnDriverTriggerExit;
+            UnSetterCollider.OnDriverTriggerExit += UnSetterCollider_OnDriverTriggerExit;
         }
 
-        private void UnSetterCollider_OnPlayerTriggerExit(PlayerTriggerExitEventArgs e_EventArgs)
+        private void UnSetterCollider_OnDriverTriggerExit(DriverTriggerExitEventArgs e_EventArgs)
         {
             if (OnWaypointSetUnset != null)
             {
-                OnWaypointSetUnset(new SetUnsetWaypointCollisionEventArgs(e_EventArgs.e_Player, this, SetUnsetWayPointType.Unset));
+                OnWaypointSetUnset(new SetUnsetWaypointCollisionEventArgs(e_EventArgs.e_Driver, this, SetUnsetWayPointType.Unset));
             }
         }
 
-        private void SetterCollider_OnPlayerTriggerExit(PlayerTriggerExitEventArgs e_EventArgs)
+        private void SetterCollider_OnDriverTriggerExit(DriverTriggerExitEventArgs e_EventArgs)
         {
             if (OnWaypointSetUnset != null)
-                OnWaypointSetUnset(new SetUnsetWaypointCollisionEventArgs(e_EventArgs.e_Player, this, SetUnsetWayPointType.Set));
+                OnWaypointSetUnset(new SetUnsetWaypointCollisionEventArgs(e_EventArgs.e_Driver, this, SetUnsetWayPointType.Set));
         }
 
         // Update is called once per frame

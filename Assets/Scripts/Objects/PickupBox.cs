@@ -36,21 +36,21 @@ namespace Objects
         void OnTriggerEnter(Collider p_OtherCollider)
         {
             GameObject l_OtherGameObject = p_OtherCollider.transform.root.gameObject;
-            if (l_OtherGameObject.name.Contains("Player"))
+            if (l_OtherGameObject.name.Contains("Driver"))
             {
-                if (l_OtherGameObject.GetComponent<Player>().CurrentPickup == null)
+                if (l_OtherGameObject.GetComponent<Driver>().CurrentPickup == null)
                 {
-                    //TODO: Set random range based on player position
+                    //TODO: Set random range based on Driver position
                     //This will be for when multipickups exist
                     //GameObject l_Pickup = Instantiate(AvailablePickups[(int)Random.Range(0, AvailablePickups.Count)]);
                     GameObject l_Pickup = Instantiate(Pickup);
-                    l_OtherGameObject.GetComponent<Player>().CurrentPickup = l_Pickup;
+                    l_OtherGameObject.GetComponent<Driver>().CurrentPickup = l_Pickup;
 
                     m_CooldownTimer = CooldownTimerLimit;
                 }
-                else if(l_OtherGameObject.GetComponent<Player>().CurrentPickup.GetComponent<Pickup>().PickupLevel < 3)
+                else if(l_OtherGameObject.GetComponent<Driver>().CurrentPickup.GetComponent<Pickup>().PickupLevel < 3)
                 {
-                    l_OtherGameObject.GetComponent<Player>().CurrentPickup.GetComponent<Pickup>().PickupLevel += 1;
+                    l_OtherGameObject.GetComponent<Driver>().CurrentPickup.GetComponent<Pickup>().PickupLevel += 1;
                 }
             }
         }

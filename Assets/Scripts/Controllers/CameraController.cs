@@ -6,7 +6,8 @@ namespace Controllers
 
     {
         // The target we are following
-        public GameObject PlayerFollowing;
+        public GameObject DriverFollowing;
+
         [System.NonSerialized]
         public Transform ForwardTarget;
         [System.NonSerialized]
@@ -30,8 +31,8 @@ namespace Controllers
 
         void Start()
         {
-            ForwardTarget = PlayerFollowing.transform.FindChild("CameraObjects/ForwardFacingFocalPoint").transform;
-            RearTarget = PlayerFollowing.transform.FindChild("CameraObjects/BackwardFacingFocalPoint").transform;
+            ForwardTarget = DriverFollowing.transform.FindChild("CameraObjects/ForwardFacingFocalPoint").transform;
+            RearTarget = DriverFollowing.transform.FindChild("CameraObjects/BackwardFacingFocalPoint").transform;
 
             // Early out if we don't have a target
             if (!ForwardTarget || !RearTarget)
