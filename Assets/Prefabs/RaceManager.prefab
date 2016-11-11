@@ -282,12 +282,15 @@ MonoBehaviour:
     type: 2}
   KartList:
   - {fileID: 1000011834032062, guid: f122fd8318584b2428e983d86e7e5a0a, type: 2}
+  - {fileID: 1000010488642588, guid: 9c3dc7550bc93b24a83955ac0f1b9180, type: 2}
+  - {fileID: 1000011338181026, guid: 02587e71a13d7a9409567c930d053611, type: 2}
+  - {fileID: 1000011839593600, guid: 062a2be3049ea1b448f893e41fc053c3, type: 2}
   StartPositions:
   - {fileID: 4000010280123506}
   - {fileID: 4000011681428396}
   - {fileID: 4000013155513390}
   - {fileID: 4000012636977074}
-  PlayerList: []
+  DriverList: []
   SelectedTrackInfo: {fileID: 0}
 --- !u!124 &124000012956418588
 Behaviour:
