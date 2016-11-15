@@ -10,7 +10,7 @@ namespace Objects
     {
         public string ControllerID;
         
-        void FixedUpdate()
+        void Update()
         {
             Kart.GetComponent<KartController>().Move(Input.GetAxis(ControllerID + "Vertical"), Input.GetAxis(ControllerID + "Horizontal"));
 

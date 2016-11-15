@@ -58,7 +58,7 @@ namespace Managers
                 {
                     if (DoesControllerIDExist("JS1") == false)
                     {
-                        AddPlayer("Fox Kart 1", "JS1");
+                        AddPlayer("Beaver Kart 1", "JS1");
                         SetCameras();
                     }
                 }
