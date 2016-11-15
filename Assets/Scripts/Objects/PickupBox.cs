@@ -15,11 +15,14 @@ namespace Objects
         public float CooldownTimerLimit;
 
         private float m_CooldownTimer = 0f;
+        private BoxCollider m_BoxCollider;
+        private MeshRenderer m_MeshRender;
 
         // Use this for initialization
         void Start()
         {
-
+            m_BoxCollider = gameObject.GetComponent<BoxCollider>();
+            m_MeshRender = gameObject.GetComponent<MeshRenderer>();
         }
 
         // Update is called once per frame
@@ -29,8 +32,8 @@ namespace Objects
             if (m_CooldownTimer > 0)
                 m_CooldownTimer -= Time.deltaTime;
 
-            gameObject.GetComponent<BoxCollider>().enabled = m_CooldownTimer > 0 ? false : true;
-            gameObject.GetComponent<MeshRenderer>().enabled = m_CooldownTimer > 0 ? false : true;
+            m_BoxCollider.enabled = m_CooldownTimer > 0 ? false : true;
+            m_MeshRender.enabled = m_CooldownTimer > 0 ? false : true;
         }
 
         void OnTriggerEnter(Collider p_OtherCollider)
