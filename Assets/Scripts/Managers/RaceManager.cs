@@ -58,7 +58,7 @@ namespace Managers
                 {
                     if (DoesControllerIDExist("JS1") == false)
                     {
-                        AddPlayer("Beaver Kart 1", "JS1");
+                        AddPlayer("Fox Kart 1", "JS1");
                         SetCameras();
                     }
                 }
@@ -66,7 +66,7 @@ namespace Managers
                 {
                     if (DoesControllerIDExist("JS2") == false)
                     { 
-                        AddPlayer("Beaver Kart 1", "JS2");
+                        AddPlayer("Fox Kart 1", "JS2");
                         SetCameras();
                     }
                 }
@@ -74,7 +74,7 @@ namespace Managers
                 {
                     if (DoesControllerIDExist("JS3") == false)
                     {
-                        AddPlayer("Beaver Kart 1", "JS3");
+                        AddPlayer("Fox Kart 1", "JS3");
                         SetCameras();
                     }
                 }
@@ -82,7 +82,7 @@ namespace Managers
                 {
                     if (DoesControllerIDExist("JS4") == false)
                     {
-                        AddPlayer("Beaver Kart 1", "JS4");
+                        AddPlayer("Fox Kart 1", "JS4");
                         SetCameras();
                     }
                 }
