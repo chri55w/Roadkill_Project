@@ -39,7 +39,7 @@ namespace Objects
         void OnTriggerEnter(Collider p_OtherCollider)
         {
             GameObject l_OtherGameObject = p_OtherCollider.transform.root.gameObject;
-            if (l_OtherGameObject.name.Contains("Driver"))
+            if (p_OtherCollider.name.Contains("Driver"))
             {
                 if (l_OtherGameObject.GetComponent<Driver>().CurrentPickup == null)
                 {
