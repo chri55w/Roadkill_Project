@@ -9,9 +9,9 @@ namespace Objects
     {
         //For when multiple pickups exist
         //TODO: Organise Pickup list in relation to position dependancy 
-        //public List<GameObject> AvailablePickups = new List<GameObject>();
+        public List<GameObject> Pickups = new List<GameObject>();
 
-        public GameObject Pickup;
+        //public GameObject Pickup;
         public float CooldownTimerLimit;
 
         private float m_CooldownTimer = 0f;
@@ -45,15 +45,18 @@ namespace Objects
                 {
                     //TODO: Set random range based on Driver position
                     //This will be for when multipickups exist
-                    //GameObject l_Pickup = Instantiate(AvailablePickups[(int)Random.Range(0, AvailablePickups.Count)]);
-                    GameObject l_Pickup = Instantiate(Pickup);
+                    GameObject l_Pickup = Instantiate(Pickups[Random.Range(0, Pickups.Count)]);
+                    l_Pickup.transform.parent = l_OtherGameObject.transform;
+                    //GameObject l_Pickup = Instantiate(Pickups);
                     l_OtherGameObject.GetComponent<Driver>().CurrentPickup = l_Pickup;
 
                     m_CooldownTimer = CooldownTimerLimit;
                 }
                 else if(l_OtherGameObject.GetComponent<Driver>().CurrentPickup.GetComponent<Pickup>().PickupLevel < 3)
                 {
-                    l_OtherGameObject.GetComponent<Driver>().CurrentPickup.GetComponent<Pickup>().PickupLevel += 1;
+                    //l_OtherGameObject.GetComponent<Driver>().CurrentPickup.GetComponent<Pickup>().PickupLevel += 1;
+                    l_OtherGameObject.GetComponent<Driver>().CurrentPickup.GetComponent<Pickup>().LevelUp(l_OtherGameObject);
+                    m_CooldownTimer = CooldownTimerLimit;
                 }
             }
         }

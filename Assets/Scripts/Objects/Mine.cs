@@ -1,0 +1,51 @@
+﻿using UnityEngine;
+using System.Collections;
+
+namespace Objects
+{
+    public class Mine : MonoBehaviour
+    {
+        public float radius = 5.0f;
+        public float power = 10.0f;
+        public float upwardModifer = 3.0f;
+
+        private Vector3 m_ExplosionPosition;
+        private SphereCollider m_SphereCollider;
+        private float m_ActivationTimer = 2.0f;
+        private bool m_Triggered = false;
+
+        void OnEnable()
+        {
+            m_ExplosionPosition = transform.position;
+            m_SphereCollider = GetComponent<SphereCollider>();
+            GetComponent<MeshRenderer>().enabled = true;
+        }
+
+        void FixedUpdate()
+        {
+            if (m_ActivationTimer > 0)
+                m_ActivationTimer -= Time.deltaTime;
+
+            m_SphereCollider.enabled = m_ActivationTimer > 0 ? false : true;
+
+        }
+
+        void OnTriggerEnter(Collider p_OtherCollider)
+        {
+            Collider[] l_colliders = Physics.OverlapSphere(m_ExplosionPosition, radius);
+
+            foreach (Collider l_hit in l_colliders)
+            {
+                if (l_hit.name.Contains("Driver"))
+                {
+                    l_hit.transform.root.gameObject.GetComponentInChildren<Rigidbody>().AddExplosionForce(power, m_ExplosionPosition, radius, upwardModifer);
+                    m_Triggered = true;
+                }
+            }
+
+            // Add explosion effect
+            if (m_Triggered)
+                Destroy(gameObject);
+        }
+    }
+}

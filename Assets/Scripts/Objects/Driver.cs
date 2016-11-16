@@ -24,8 +24,7 @@ namespace Objects
             m_RaceManager = p_RaceManager;
         }
 
-        /*
-        */
+
         public void Start()
         {
             Name = transform.root.gameObject.name;

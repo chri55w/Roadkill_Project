@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-using Controllers;
+using Objects;
 using Managers;
 
-namespace Objects
+namespace Controllers
 {
     public class PlayerController : Driver
     {
@@ -21,7 +21,8 @@ namespace Objects
             if ((Input.GetButtonDown(ControllerID + "UsePickup")))
             {
                 CurrentPickup.GetComponent<Pickup>().UsePickup(gameObject);
-                Destroy(CurrentPickup);
+                if(CurrentPickup.GetComponent<Pickup>().PickupUses <= 0)
+                    CurrentPickup.GetComponent<Pickup>().DeletePickup(gameObject);
             }
         }
 
