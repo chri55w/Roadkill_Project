@@ -36,7 +36,7 @@ GameObject:
   - 4: {fileID: 4000012112084336}
   - 33: {fileID: 33000014119975546}
   - 23: {fileID: 23000013287388770}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Driving_Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -159,7 +159,7 @@ GameObject:
   - 4: {fileID: 4000013320599336}
   - 33: {fileID: 33000012173877644}
   - 23: {fileID: 23000010559275926}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Wheels_Back_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +176,7 @@ GameObject:
   - 4: {fileID: 4000013127760950}
   - 33: {fileID: 33000012563392866}
   - 23: {fileID: 23000012459283060}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Kart_Body_Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,7 +193,7 @@ GameObject:
   - 4: {fileID: 4000014251156832}
   - 33: {fileID: 33000012333756156}
   - 23: {fileID: 23000013232521200}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Wheels_Front_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -226,7 +226,7 @@ GameObject:
   - 4: {fileID: 4000010187558398}
   - 54: {fileID: 54000010282075136}
   - 114: {fileID: 114000010442389322}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Fox Kart 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -304,7 +304,7 @@ GameObject:
   - 4: {fileID: 4000012373317700}
   - 33: {fileID: 33000010431987152}
   - 23: {fileID: 23000010878714570}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Wheels_Front_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -334,7 +334,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000010576377428}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -366,7 +366,7 @@ GameObject:
   - 4: {fileID: 4000011248656624}
   - 33: {fileID: 33000010413786494}
   - 23: {fileID: 23000012133746658}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Wheels_Back_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -383,7 +383,7 @@ GameObject:
   - 4: {fileID: 4000010047253712}
   - 33: {fileID: 33000011662601022}
   - 23: {fileID: 23000010058389152}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Kart_Lid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
