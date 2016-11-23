@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Planar Blend
+  m_Shader: {fileID: 4800000, guid: 6b5e85533bc3f9b41b4e73f980c71aca, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+    - first:
+        name: _BlueNormal
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _BlueSpecular
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _BlueTexture
+      second:
+        m_Texture: {fileID: 2800000, guid: c5dc171d2f79025418e791676e137e37, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _GreenNormal
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _GreenSpecular
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _GreenTexture
+      second:
+        m_Texture: {fileID: 2800000, guid: 83f96e8be4afcc64ba2b05597e99e974, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 2800000, guid: 6df4b6a414f2c3744bd58c9707ec8c8a, type: 3}
+        m_Scale: {x: 2, y: 2}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _NoiseTexture
+      second:
+        m_Texture: {fileID: 2800000, guid: 9f21b5f7fdcd53b4fac39152ccc95123, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _RedNormal
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _RedSpecular
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _RedTexture
+      second:
+        m_Texture: {fileID: 2800000, guid: 5dce6c8959e99234e9df7a5573b6fa78, type: 3}
+        m_Scale: {x: 0.1, y: 0.1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _TextTexture
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - first:
+        name: _BlendAmount
+      second: 20
+    - first:
+        name: _Cutoff
+      second: 0.5
+    - first:
+        name: _Gloss
+      second: 0
+    - first:
+        name: _Roughness
+      second: 0
+    - first:
+        name: _node_261
+      second: 1
+    - first:
+        name: _node_288
+      second: 20.3
+    - first:
+        name: _node_565
+      second: 0.1
+    m_Colors:
+    - first:
+        name: _AmbientOcclusionColor
+      second: {r: 1, g: 1, b: 1, a: 1}
+    - first:
+        name: _BlueChannelColor
+      second: {r: 1, g: 1, b: 1, a: 1}
+    - first:
+        name: _Color
+      second: {r: 1, g: 1, b: 1, a: 1}
+    - first:
+        name: _GreenChannelColor
+      second: {r: 1, g: 1, b: 1, a: 1}
+    - first:
+        name: _RedChannelColor
+      second: {r: 1, g: 1, b: 1, a: 1}
+    - first:
+        name: _node_576
+      second: {r: 1, g: 1, b: 1, a: 1}
