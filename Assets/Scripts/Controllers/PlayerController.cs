@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-using Controllers;
+using Objects;
 using Managers;
 
-namespace Objects
+namespace Controllers
 {
     public class PlayerController : Driver
     {
         public string ControllerID;
         
-        void FixedUpdate()
+        void Update()
         {
             Kart.GetComponent<KartController>().Move(Input.GetAxis(ControllerID + "Vertical"), Input.GetAxis(ControllerID + "Horizontal"));
 
@@ -21,7 +21,8 @@ namespace Objects
             if ((Input.GetButtonDown(ControllerID + "UsePickup")))
             {
                 CurrentPickup.GetComponent<Pickup>().UsePickup(gameObject);
-                Destroy(CurrentPickup);
+                if(CurrentPickup.GetComponent<Pickup>().PickupUses <= 0)
+                    CurrentPickup.GetComponent<Pickup>().DeletePickup(gameObject);
             }
         }
 

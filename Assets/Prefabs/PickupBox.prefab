@@ -102,5 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b1aa5b01af032e498a262b97d8dd760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Pickup: {fileID: 0}
+  Pickups:
+  - {fileID: 1000010924640904, guid: 40d17e4c614bcfb45b66211e6fca5860, type: 2}
+  - {fileID: 1000011547222678, guid: 20d822ebdbb263b4287299812743728a, type: 2}
   CooldownTimerLimit: 5

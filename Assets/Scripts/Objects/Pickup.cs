@@ -6,11 +6,15 @@ namespace Objects
     public class Pickup : MonoBehaviour
     {
         public int PickupLevel = 1;
+        public int PickupUses = 1;
         public string PickupName;
         //Pickup Image for GUI
 
         public void UsePickup(GameObject p_Driver)
         {
+            Effect(p_Driver);
+
+            /*
             switch (PickupLevel)
             {
                 case 1:
@@ -23,21 +27,38 @@ namespace Objects
                     LevelThreeEffect(p_Driver);
                     break;
             }
+            */
+        }
+
+        public virtual void LevelUp(GameObject p_Driver)
+        {
+            PickupLevel++;
+        }
+
+        protected virtual void Effect(GameObject p_Driver)
+        {
+            PickupUses--;
         }
 
         protected virtual void LevelOneEffect(GameObject p_Driver)
         {
-            Debug.Log("Do something");
+            PickupUses--;
         }
 
         protected virtual void LevelTwoEffect(GameObject p_Driver)
         {
-            Debug.Log("Do something cool");
+            PickupUses--;
         }
 
         protected virtual void LevelThreeEffect(GameObject p_Driver)
         {
-            Debug.Log("Do something awesome");
+            PickupUses--;
+        }
+
+        public virtual void DeletePickup(GameObject p_Driver)
+        {
+            p_Driver.GetComponent<Driver>().CurrentPickup = null;
+            Destroy(gameObject);
         }
     }
 }

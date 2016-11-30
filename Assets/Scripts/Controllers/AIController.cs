@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-using Controllers;
+using Objects;
 
-namespace Objects
+namespace Controllers
 {
     public class AIController : Driver
     {
