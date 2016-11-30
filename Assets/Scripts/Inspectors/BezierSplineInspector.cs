@@ -112,6 +112,16 @@ namespace Inspectors
         public override void OnInspectorGUI()
         {
             spline = target as BezierSpline;
+            
+            if (GUILayout.Button("Export Mesh"))
+            {
+                string thefile = EditorUtility.SaveFilePanel("Export Track Mesh", "", "Track.obj", "obj");
+                
+                if (!string.IsNullOrEmpty(thefile))
+                {
+                    spline.ExportMesh(thefile);
+                }
+            }
 
             EditorGUI.BeginChangeCheck();
             bool Locked = EditorGUILayout.Toggle("Lock Spline", spline.Locked);
