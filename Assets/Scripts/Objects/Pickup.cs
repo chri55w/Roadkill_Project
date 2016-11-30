@@ -13,21 +13,20 @@ namespace Objects
         public void UsePickup(GameObject p_Driver)
         {
             Effect(p_Driver);
-
-            /*
-            switch (PickupLevel)
-            {
-                case 1:
-                    LevelOneEffect(p_Driver);
-                    break;
-                case 2:
-                    LevelTwoEffect(p_Driver);
-                    break;
-                case 3:
-                    LevelThreeEffect(p_Driver);
-                    break;
-            }
-            */
+           
+            //switch (PickupLevel)
+            //{
+            //    case 1:
+            //        LevelOneEffect(p_Driver);
+            //        break;
+            //    case 2:
+            //        LevelTwoEffect(p_Driver);
+            //        break;
+            //    case 3:
+            //        LevelThreeEffect(p_Driver);
+            //        break;
+            //}
+           
         }
 
         public virtual void LevelUp(GameObject p_Driver)
@@ -40,25 +39,26 @@ namespace Objects
             PickupUses--;
         }
 
-        protected virtual void LevelOneEffect(GameObject p_Driver)
-        {
-            PickupUses--;
-        }
-
-        protected virtual void LevelTwoEffect(GameObject p_Driver)
-        {
-            PickupUses--;
-        }
-
-        protected virtual void LevelThreeEffect(GameObject p_Driver)
-        {
-            PickupUses--;
-        }
-
         public virtual void DeletePickup(GameObject p_Driver)
         {
+            transform.parent = null;
             p_Driver.GetComponent<Driver>().CurrentPickup = null;
-            Destroy(gameObject);
+            Destroy(this);
         }
+
+        //protected virtual void LevelOneEffect(GameObject p_Driver)
+        //{
+        //    PickupUses--;
+        //}
+
+        //protected virtual void LevelTwoEffect(GameObject p_Driver)
+        //{
+        //    PickupUses--;
+        //}
+
+        //protected virtual void LevelThreeEffect(GameObject p_Driver)
+        //{
+        //    PickupUses--;
+        //}
     }
 }
