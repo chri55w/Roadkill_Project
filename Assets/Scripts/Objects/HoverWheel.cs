@@ -27,22 +27,26 @@ namespace Objects
         public void CalculateWheelCircumference()
         {
             m_WheelCircumference = 2 * Mathf.PI * WheelRadius;
-
-            Debug.Log(m_WheelCircumference);
         }
 
-        public void Update()
+        public void Update(float DeltaTime)
         {
             Physics.Raycast(RaycastPosition.position, -RaycastPosition.up, out GroundHitPoint);
+            
+            if (GroundHitPoint.distance == 0)
+                return;
 
             CompressionRatio = (GroundHitPoint.distance / SuspensionLength);
 
             CompressionRatio = Mathf.Clamp(CompressionRatio, 0, 1);
 
             if (GroundHitPoint.distance < SuspensionLength)
-                UpForceModifier = 1.0f - (GroundHitPoint.distance / SuspensionLength);
-
+                UpForceModifier = 1f - (GroundHitPoint.distance / SuspensionLength);
+            else
+                UpForceModifier = 0;
+            
             WheelMeshTransform.localPosition = new Vector3(WheelMeshTransform.localPosition.x, (-SuspensionLength * CompressionRatio) + WheelRadius, WheelMeshTransform.localPosition.z);
+
         }
 
         public void SetWheelRotation(float p_SteeringAngle, float p_WheelDistanceTravelled)

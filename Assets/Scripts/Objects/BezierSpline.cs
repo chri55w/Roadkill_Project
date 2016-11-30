@@ -525,6 +525,7 @@ namespace Objects
             List<Vector3> vertices = new List<Vector3>();
             List<int> triangles = new List<int>();
             List<Vector3> normals = new List<Vector3>();
+            List<Vector2> UVs = new List<Vector2>();
 
             Vector3 Position = GetPoint(0f);
             Quaternion Rotation = GetRotation(0f);
@@ -533,12 +534,15 @@ namespace Objects
 
             float trackWidth = GetTrackWidth(0f);
             
-            foreach (Vector2 l_Point in MeshVertLayout)
+            for (int i = 0; i < MeshVertLayout.Count; i++)
             {
+                Vector2 l_Point = MeshVertLayout[i];
+
                 vertices.Add(Position + (right * (trackWidth * l_Point.x)) + (up * l_Point.y));
                 normals.Add(up);
-            }
 
+                UVs.Add(new Vector2( 1.0f * i / (MeshVertLayout.Count - 1), 0));
+            }
             int triIndex = 0;
 
             for (int l_Index = 0; l_Index <= MeshDetailLevel; l_Index++)
@@ -552,11 +556,14 @@ namespace Objects
                 right = Rotation * Vector3.right;
                 up = Rotation * Vector3.up;
 
-                foreach (Vector2 l_Point in MeshVertLayout)
+                for (int i = 0; i < MeshVertLayout.Count; i++)
                 {
+                    Vector2 l_Point = MeshVertLayout[i];
+                    
                     vertices.Add(Position + (right * (trackWidth * l_Point.x)) + (up * l_Point.y));
                     normals.Add(up);
 
+                    UVs.Add(new Vector2(1.0f * i / (MeshVertLayout.Count - 1), 3 * t));
                 }
 
                 for (int l_Index2 = 0; l_Index2 < MeshVertLayout.Count - 1; l_Index2++)
@@ -576,6 +583,7 @@ namespace Objects
             mesh.SetVertices(vertices);
             mesh.SetNormals(normals);
             mesh.SetTriangles(triangles, 0);
+            mesh.SetUVs(0, UVs);
 
             GetComponent<MeshFilter>().mesh = mesh;
             GetComponent<MeshCollider>().sharedMesh = mesh;
@@ -592,6 +600,33 @@ namespace Objects
                 foreach(Vector3 vert in mesh.vertices)
                     Gizmos.DrawWireSphere(vert, 0.5f);
                 
+        }
+        
+        public float GetClosestTimePointOnSpline(int SplineDetail, Vector3 Position)
+        {
+            float Interval = 1.0f / SplineDetail;
+            float ClosestTimePoint = 0f;
+            float ThisTimePoint = 0f;
+
+            Vector3 ClosestPoint = GetPoint(ThisTimePoint);
+            float ClosestPosDist = Vector3.Distance(ClosestPoint, Position);
+
+            for (int i = 1; i < SplineDetail; i++)
+            {
+                ThisTimePoint += Interval;
+
+                Vector3 thisPoint = GetPoint(ThisTimePoint);
+
+                float thisDistance = Vector3.Distance(thisPoint, Position);
+
+                if (thisDistance < ClosestPosDist)
+                {
+                    ClosestPosDist = thisDistance;
+                    ClosestPoint = thisPoint;
+                    ClosestTimePoint = ThisTimePoint;
+                }
+            }
+            return ClosestTimePoint;
         }
 
     }

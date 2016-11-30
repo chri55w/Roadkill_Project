@@ -49,7 +49,6 @@ namespace Controllers
                 l_HoverWheel.CalculateWheelCircumference();
             }
 
-
             //   Offset the Center of Gravity on the Rigidbody to help the kart
             //                                to always land the right side up.
             m_Rigidbody.centerOfMass = CenterOfGravity.localPosition;
@@ -60,8 +59,22 @@ namespace Controllers
             
         }
 
+        private int WheelsGrounded()
+        {
+            int GroundedWheels = 0;
+
+            foreach (HoverWheel l_HoverWheel in m_HoverWheels)
+                if (l_HoverWheel.GroundHitPoint.distance < 1.5f)
+                    GroundedWheels++;
+
+            return GroundedWheels;
+        }
+
         public void Move(float p_VerticalInput, float p_HorizontalInput)
         {
+            foreach (HoverWheel l_HoverWheel in m_HoverWheels)
+                l_HoverWheel.Update(Time.deltaTime);
+
             Vector3 l_AverageGroundNormal = new Vector3(0, 0, 0);
 
             // Suspension (Hover) physics - Applies a Force at each Hover Point 
@@ -69,17 +82,44 @@ namespace Controllers
             //                           from the Ground below each Hover Point
             foreach (HoverWheel l_HoverWheel in m_HoverWheels)
             {
-                l_HoverWheel.Update();
-
-                if (l_HoverWheel.GroundHitPoint.distance < l_HoverWheel.SuspensionLength)
-                    m_Rigidbody.AddForceAtPosition(Vector3.up * UpwardForce * l_HoverWheel.UpForceModifier, l_HoverWheel.RaycastPosition.position, ForceMode.Acceleration);
+                m_Rigidbody.AddForceAtPosition(l_HoverWheel.RaycastPosition.up * UpwardForce * l_HoverWheel.UpForceModifier, l_HoverWheel.RaycastPosition.position, ForceMode.Acceleration);
 
                 l_AverageGroundNormal += l_HoverWheel.GroundHitPoint.normal;
             }
 
+            Vector3 l_LocalVelocity = transform.InverseTransformDirection(m_Rigidbody.velocity);
+
+            float l_DistanceTravelled = l_LocalVelocity.z * Time.deltaTime;
+
+            float l_SteeringAngle = p_HorizontalInput * MaxRotationAngle;
+
+            //                Set the Wheel Mesh Rotations to Simulate Movement
+            FrontLeftHoverWheel.SetWheelRotation(l_SteeringAngle, l_DistanceTravelled);
+            FrontRightHoverWheel.SetWheelRotation(l_SteeringAngle, l_DistanceTravelled);
+            RearLeftHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
+            RearRightHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
+            
+            if (WheelsGrounded() < 3)
+            {
+                UpdateDebugVariables(0, m_Rigidbody.velocity);
+
+                if (WheelsGrounded() <= 0)
+                {
+                    m_Rigidbody.angularDrag = 0.25f;
+                    m_Rigidbody.drag = 0.25f;
+                }
+
+                return;
+            }
+            else
+            {
+                m_Rigidbody.angularDrag = 5f;
+                m_Rigidbody.drag = 1f;
+            }
+
             //Moving Forward
             Vector3 l_DirectionOfAcceleration = GetDirectionOfFowardMovement();
-
+            
             //     Calculate the current percentage of the speed in a 0-1 value 
             //     and use it to get required accelleration force to be applied
             //                                                    to the object
@@ -88,17 +128,13 @@ namespace Controllers
             float l_AccelerationRate = AccelerationCurve.GetPoint(l_SpeedPercentage).y;
 
             float l_Acceleration = ((l_AccelerationRate * MaxAccelerationForce) * p_VerticalInput);
-
-            var l_LocalVelocity = transform.InverseTransformDirection(m_Rigidbody.velocity);
-
-            float l_DistanceTravelled = l_LocalVelocity.z * Time.deltaTime;
+            
             //                 Apply the acceleration force in the direction of 
             //                                  acceleration (ground direction)
-            m_Rigidbody.AddForceAtPosition((l_DirectionOfAcceleration * l_Acceleration) * Time.deltaTime, PointOfAcceleration.position);
+            m_Rigidbody.AddForceAtPosition((l_DirectionOfAcceleration * l_Acceleration) * Time.deltaTime, PointOfAcceleration.position, ForceMode.Acceleration);
 
             //          Calculate Steering angle from Input and apply Torque to
             //                       the Kart using the Averaged Ground Normal.
-            float l_SteeringAngle = p_HorizontalInput * MaxRotationAngle;
 
             l_AverageGroundNormal /= m_HoverWheels.Count;
 
@@ -106,13 +142,9 @@ namespace Controllers
 
             //                Apply Anti-Slip Force to reduce sliding on Track.
             m_Rigidbody.AddForce(- (Vector3.Project(m_Rigidbody.velocity, transform.right) * 2), ForceMode.Acceleration);
-            
-            //                Set the Wheel Mesh Rotations to Simulate Movement
-            FrontLeftHoverWheel.SetWheelRotation(l_SteeringAngle, l_DistanceTravelled);
-            FrontRightHoverWheel.SetWheelRotation(l_SteeringAngle, l_DistanceTravelled);
-            RearLeftHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
-            RearRightHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
 
+            if (m_Rigidbody.velocity.magnitude < 0.5f)
+                m_Rigidbody.velocity = new Vector3(0, 0, 0);
             //                 Update Debug Parameters for Printing on the GUI.
             UpdateDebugVariables(l_Acceleration, m_Rigidbody.velocity);
         }
