@@ -1,7 +1,7 @@
 fileFormatVersion: 2
-guid: a2745b3a19ef6a143adf877af07893b6
-timeCreated: 1479895348
-licenseType: Pro
+guid: e98546e27908b264ca118fc03a543c63
+timeCreated: 1480521109
+licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: finished full body
+    4300000: Sphere001
     9500000: //RootNode
   materials:
     importMaterials: 1
