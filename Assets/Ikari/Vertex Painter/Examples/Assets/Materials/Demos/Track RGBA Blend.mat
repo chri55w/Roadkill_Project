@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: RGBA Blend
-  m_Shader: {fileID: 4800000, guid: 655a7f1cc36be604aa93db51d725ae27, type: 3}
+  m_Name: Track RGBA Blend
+  m_Shader: {fileID: 4800000, guid: 19e02846203818a499c16f8148ef6f5c, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
   m_CustomRenderQueue: -1
@@ -30,13 +30,13 @@ Material:
     - first:
         name: _BlueSpecular
       second:
-        m_Texture: {fileID: 2800000, guid: b45bcdc66256f7f45a3aa31d407e75c3, type: 3}
+        m_Texture: {fileID: 2800000, guid: 95afff387a55ec544b12e796effb8c11, type: 3}
         m_Scale: {x: 6, y: 2}
         m_Offset: {x: 0, y: 0}
     - first:
         name: _BlueTexture
       second:
-        m_Texture: {fileID: 2800000, guid: 2e0cf4819e859df4099cef60245f308c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 83f96e8be4afcc64ba2b05597e99e974, type: 3}
         m_Scale: {x: 10, y: 10}
         m_Offset: {x: 0, y: 0}
     - first:
@@ -55,7 +55,7 @@ Material:
         name: _GreenTexture
       second:
         m_Texture: {fileID: 2800000, guid: 65f91997f7060f747a07bc75a804e6c8, type: 3}
-        m_Scale: {x: 10, y: 10}
+        m_Scale: {x: 25, y: 70}
         m_Offset: {x: 0, y: 0}
     - first:
         name: _MainTex
@@ -126,8 +126,8 @@ Material:
     - first:
         name: _RedTexture
       second:
-        m_Texture: {fileID: 2800000, guid: c5dc171d2f79025418e791676e137e37, type: 3}
-        m_Scale: {x: 10, y: 10}
+        m_Texture: {fileID: 2800000, guid: 5dce6c8959e99234e9df7a5573b6fa78, type: 3}
+        m_Scale: {x: 25, y: 100}
         m_Offset: {x: 0, y: 0}
     - first:
         name: _node_407
@@ -157,6 +157,9 @@ Material:
     - first:
         name: _Gloss
       second: 1
+    - first:
+        name: _Roughness
+      second: 0
     - first:
         name: _node_222
       second: 1.5

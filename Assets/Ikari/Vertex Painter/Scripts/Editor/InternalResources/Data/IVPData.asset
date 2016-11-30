@@ -18,9 +18,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 55
   erase: 0
-  primaryColor: {r: 1, g: 0, b: 0, a: 1}
+  primaryColor: {r: 0, g: 0, b: 1, a: 1}
   secondaryColor: {r: 0, g: 0, b: 0, a: 0}
-  brushSize: 2.0997298
+  brushSize: 1
   brushHardness: 1
   brushStrength: 1
   brushAngleLimit: 180
