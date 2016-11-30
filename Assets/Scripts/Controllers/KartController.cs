@@ -56,8 +56,7 @@ namespace Controllers
         }
         
         public void FixedUpdate()
-        {
-            
+        { 
         }
 
         public void Move(float p_VerticalInput, float p_HorizontalInput)

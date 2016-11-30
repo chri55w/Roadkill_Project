@@ -1135,19 +1135,19 @@ MonoBehaviour:
   FrontLeftHoverWheel:
     RaycastPosition: {fileID: 4000012895201036}
     WheelMeshTransform: {fileID: 4000012349121072}
-    WheelRadius: 0.345
+    WheelRadius: 0.2
   FrontRightHoverWheel:
     RaycastPosition: {fileID: 4000010330105298}
     WheelMeshTransform: {fileID: 4000010205658758}
-    WheelRadius: 0.345
+    WheelRadius: 0.2
   RearLeftHoverWheel:
     RaycastPosition: {fileID: 4000014249942718}
     WheelMeshTransform: {fileID: 4000011260051884}
-    WheelRadius: 0.345
+    WheelRadius: 0.2
   RearRightHoverWheel:
     RaycastPosition: {fileID: 4000011874251338}
     WheelMeshTransform: {fileID: 4000012934400230}
-    WheelRadius: 0.345
+    WheelRadius: 0.2
   MaxSpeed: 80
   MaxAccelerationForce: 1800
   MaxRotationAngle: 35
@@ -1159,5 +1159,5 @@ MonoBehaviour:
     PointD: {x: 1, y: 0}
   CenterOfGravity: {fileID: 4000011519891286}
   PointOfAcceleration: {fileID: 4000011047184842}
-  SuspensionLength: 0.7
+  SuspensionLength: 0.6
   UpwardForce: 100
