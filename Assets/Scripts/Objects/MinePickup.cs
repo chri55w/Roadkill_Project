@@ -5,7 +5,6 @@ namespace Objects
 {
     public class MinePickup : Pickup
     {
-        //public GameObject Mine;
 
         public override void LevelUp(GameObject p_Driver)
         {
@@ -81,12 +80,7 @@ namespace Objects
 
         public override void DeletePickup(GameObject p_Driver)
         {
-            // Remove mine from Driver object
-            transform.parent = null;
-            p_Driver.GetComponent<Driver>().CurrentPickup = null;
-
-            // Destroy the pickup script thus leaving the mine  in the world unitl it is hit 
-            Destroy(this);
+            base.DeletePickup(p_Driver);
         }
     }
 }

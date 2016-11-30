@@ -103,6 +103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Pickups:
+  - {fileID: 1000013537250688, guid: de356dad02a5a924baee7278c0f6d969, type: 2}
+  - {fileID: 1000010385669522, guid: 96e6a8ad66bdc1d4d81a91b6a8054b79, type: 2}
   - {fileID: 1000010924640904, guid: 40d17e4c614bcfb45b66211e6fca5860, type: 2}
-  - {fileID: 1000011547222678, guid: 20d822ebdbb263b4287299812743728a, type: 2}
   CooldownTimerLimit: 5
