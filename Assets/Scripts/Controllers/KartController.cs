@@ -55,8 +55,7 @@ namespace Controllers
         }
         
         public void FixedUpdate()
-        {
-            
+        { 
         }
 
         private int WheelsGrounded()
