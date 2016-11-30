@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-
-using StaticObjects;
 
 namespace Objects
 {
@@ -579,7 +576,7 @@ namespace Objects
 
                 triIndex += MeshVertLayout.Count;
             }
-            
+
             mesh.SetVertices(vertices);
             mesh.SetNormals(normals);
             mesh.SetTriangles(triangles, 0);
@@ -587,6 +584,51 @@ namespace Objects
 
             GetComponent<MeshFilter>().mesh = mesh;
             GetComponent<MeshCollider>().sharedMesh = mesh;
+        }
+
+        public void ExportMesh(string FileName)
+        {
+            try
+            {
+                System.IO.StreamWriter writer = new System.IO.StreamWriter(FileName);
+
+                Mesh mesh = GetComponent<MeshFilter>().sharedMesh;
+
+                if( mesh.vertices.Length != mesh.uv.Length || mesh.vertices.Length != mesh.normals.Length )
+                {
+                    throw new System.Exception("Your data is missing.");
+                }
+
+
+                for (int i = 0; i < mesh.triangles.Length; i += 1)
+                {
+                    Vector3 pos = mesh.vertices[mesh.triangles[i]];
+                    writer.WriteLine(string.Format("v {0} {1} {2}", pos.x, pos.y, pos.z));
+                }
+
+                for (int i = 0; i < mesh.triangles.Length; i += 1)
+                {
+                    Vector2 uv = mesh.uv[mesh.triangles[i]];
+                    writer.WriteLine(string.Format("vt {0} {1}", uv.x, uv.y));
+                }
+
+                for (int i = 0; i < mesh.triangles.Length; i += 1)
+                {
+                    Vector3 nrm = mesh.normals[mesh.triangles[i]];
+                    writer.WriteLine(string.Format("vn {0} {1} {2}", nrm.x, nrm.y, nrm.z));
+                }
+
+                for (int i = 0; i < mesh.triangles.Length; i += 3)
+                {
+                    writer.WriteLine(string.Format("f {0}/{0}/{0} {1}/{1}/{1} {2}/{2}/{2}", i+1, i+2, i+3));
+                }
+
+                writer.Close();
+            }
+            catch (System.Exception e)
+            {
+                Debug.Log("Exception " + e.Message);
+            }
         }
         
         void OnDrawGizmos()
