@@ -8,7 +8,7 @@ namespace Objects
         public float radius = 5.0f;
         public float power = 10.0f;
         public float upwardModifer = 3.0f;
-        public List<MeshRenderer> m_Meshes = new List<MeshRenderer>();
+        public GameObject MeshObject;
 
         private Vector3 m_ExplosionPosition;
         private SphereCollider m_SphereCollider;        
@@ -19,8 +19,7 @@ namespace Objects
         {
             m_ExplosionPosition = transform.position;
             m_SphereCollider = GetComponent<SphereCollider>();
-            foreach(MeshRenderer l_mr in m_Meshes)
-                l_mr.enabled = true;
+            MeshObject.SetActive(true);
         }
 
         void FixedUpdate()
