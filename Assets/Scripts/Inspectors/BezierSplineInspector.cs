@@ -217,16 +217,17 @@ namespace Inspectors
                     spline.Loop = loop;
                 }
             }
-
+            /*
             if (selectedIndex >= 0 && selectedIndex < spline.ControlPointCount && (selectedIndex % 3 == 0))
             {
+            */
                 ShowSelectedPointProperties = EditorGUILayout.Foldout(ShowSelectedPointProperties, "Selected Point Properties");
 
                 if (ShowSelectedPointProperties)
                 {
                     DrawSelectedPointInspector();
                 }
-            }
+            //}
             if (serializedObject.ApplyModifiedProperties() || (Event.current.type == EventType.ValidateCommand && Event.current.commandName == "UndoRedoPerformed"))
             {
                 spline.DrawCurve();
