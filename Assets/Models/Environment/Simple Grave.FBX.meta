@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: b16a22a7b17ff6a4b96cdad1cadbff60
-timeCreated: 1481055867
+guid: 3102539f424ca42478c95221685c2f05
+timeCreated: 1481055178
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,8 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Capsule001
+    4300000: Simple_Grave
+    7400000: Take 001
     9500000: //RootNode
   materials:
     importMaterials: 1

@@ -20,7 +20,7 @@ MonoBehaviour:
   erase: 0
   primaryColor: {r: 0, g: 0, b: 1, a: 1}
   secondaryColor: {r: 0, g: 0, b: 0, a: 0}
-  brushSize: 1
+  brushSize: 2.6691892
   brushHardness: 1
   brushStrength: 1
   brushAngleLimit: 180
