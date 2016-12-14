@@ -7,26 +7,13 @@ namespace Objects
     {
         public int PickupLevel = 1;
         public int PickupUses = 1;
+        public int PickupDamage = 0;
         public string PickupName;
         //Pickup Image for GUI
 
         public void UsePickup(GameObject p_Driver)
         {
-            Effect(p_Driver);
-           
-            //switch (PickupLevel)
-            //{
-            //    case 1:
-            //        LevelOneEffect(p_Driver);
-            //        break;
-            //    case 2:
-            //        LevelTwoEffect(p_Driver);
-            //        break;
-            //    case 3:
-            //        LevelThreeEffect(p_Driver);
-            //        break;
-            //}
-           
+            Effect(p_Driver);           
         }
 
         public virtual void LevelUp(GameObject p_Driver)
@@ -45,20 +32,5 @@ namespace Objects
             p_Driver.GetComponent<Driver>().CurrentPickup = null;
             Destroy(this);
         }
-
-        //protected virtual void LevelOneEffect(GameObject p_Driver)
-        //{
-        //    PickupUses--;
-        //}
-
-        //protected virtual void LevelTwoEffect(GameObject p_Driver)
-        //{
-        //    PickupUses--;
-        //}
-
-        //protected virtual void LevelThreeEffect(GameObject p_Driver)
-        //{
-        //    PickupUses--;
-        //}
     }
 }
