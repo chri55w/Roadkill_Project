@@ -9,20 +9,29 @@ namespace Controllers
     public class PlayerController : Driver
     {
         public string ControllerID;
-        
+
+        new void Start()
+        {
+            base.Start();
+            Debug.Log("Player start");
+        }
+
         void Update()
         {
-            Kart.GetComponent<KartController>().Move(Input.GetAxis(ControllerID + "Vertical"), Input.GetAxis(ControllerID + "Horizontal"));
-
-            if (Input.GetButtonDown(ControllerID + "FlipCamera"))
-                GetComponentInChildren<CameraController>().FlipCamera();
-            if (Input.GetButtonUp(ControllerID + "FlipCamera"))
-                GetComponentInChildren<CameraController>().FlipCamera();
-            if ((Input.GetButtonDown(ControllerID + "UsePickup")))
+            if (DeathCheck() == false)
             {
-                CurrentPickup.GetComponent<Pickup>().UsePickup(gameObject);
-                if(CurrentPickup.GetComponent<Pickup>().PickupUses <= 0)
-                    CurrentPickup.GetComponent<Pickup>().DeletePickup(gameObject);
+                Kart.GetComponent<KartController>().Move(Input.GetAxis(ControllerID + "Vertical"), Input.GetAxis(ControllerID + "Horizontal"));
+
+                if (Input.GetButtonDown(ControllerID + "FlipCamera"))
+                    GetComponentInChildren<CameraController>().FlipCamera();
+                if (Input.GetButtonUp(ControllerID + "FlipCamera"))
+                    GetComponentInChildren<CameraController>().FlipCamera();
+                if ((Input.GetButtonDown(ControllerID + "UsePickup")))
+                {
+                    CurrentPickup.GetComponent<Pickup>().UsePickup(gameObject);
+                    if (CurrentPickup.GetComponent<Pickup>().PickupUses <= 0)
+                        CurrentPickup.GetComponent<Pickup>().DeletePickup(gameObject);
+                }
             }
         }
 

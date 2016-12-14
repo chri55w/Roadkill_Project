@@ -21,6 +21,9 @@ namespace Managers
         public TrackInfo SelectedTrackInfo;
         public Dictionary<string, List<WaypointController>> TrackedWaypoints = new Dictionary<string, List<WaypointController>>();
         public Dictionary<string, int> DriverLapCount = new Dictionary<string, int>();
+        public BezierSpline MainSpline;
+
+        public ObjectFadeController FadeController;
 
         private Dictionary<string, string> DebugParameters = new Dictionary<string, string>();
 
@@ -199,7 +202,7 @@ namespace Managers
             l_AIDriver.name = "Driver" + DriverList.Count;
             l_AIDriver.AddComponent<AIController>();
             
-            l_AIDriver.GetComponent<AIController>().MakeDriver(l_kart, StartPositions[DriverList.Count], this);
+            l_AIDriver.GetComponent<AIController>().MakeDriver(l_kart, StartPositions[DriverList.Count], this, MainSpline, FadeController);
             
             DriverLapCount.Add(l_AIDriver.name, 0);
             TrackedWaypoints.Add(l_AIDriver.name, new List<WaypointController>());
@@ -219,7 +222,7 @@ namespace Managers
             l_NewCamera.transform.SetParent(l_Player.transform);
             l_NewCamera.GetComponent<CameraController>().DriverFollowing = l_kart.gameObject;
 
-            l_Player.GetComponent<PlayerController>().MakeDriver(l_kart, StartPositions[DriverList.Count], this);
+            l_Player.GetComponent<PlayerController>().MakeDriver(l_kart, StartPositions[DriverList.Count], this, MainSpline, FadeController);
 
             l_Player.GetComponent<PlayerController>().ControllerID = p_ControllerID;
     
