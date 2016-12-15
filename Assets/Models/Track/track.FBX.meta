@@ -1,0 +1,150 @@
+fileFormatVersion: 2
+guid: f4abcd045463fca4f9318418db387b78
+timeCreated: 1481734512
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: '''s'' track'
+    100002: Bridge_Asset
+    100004: Bridge_Asset001
+    100006: cave
+    100008: Dam_Asset
+    100010: into cave jump
+    100012: jump002
+    100014: lead up to dam
+    100016: main cave
+    100018: out of cave
+    100020: s jump
+    100022: s shortcut
+    100024: shortcut 2 part 1
+    100026: shortcut 2 part 2
+    100028: straight
+    100030: //RootNode
+    400000: '''s'' track'
+    400002: Bridge_Asset
+    400004: Bridge_Asset001
+    400006: cave
+    400008: Dam_Asset
+    400010: into cave jump
+    400012: jump002
+    400014: lead up to dam
+    400016: main cave
+    400018: out of cave
+    400020: s jump
+    400022: s shortcut
+    400024: shortcut 2 part 1
+    400026: shortcut 2 part 2
+    400028: straight
+    400030: //RootNode
+    2300000: '''s'' track'
+    2300002: Bridge_Asset
+    2300004: Bridge_Asset001
+    2300006: cave
+    2300008: Dam_Asset
+    2300010: into cave jump
+    2300012: jump002
+    2300014: lead up to dam
+    2300016: main cave
+    2300018: out of cave
+    2300020: s jump
+    2300022: s shortcut
+    2300024: shortcut 2 part 1
+    2300026: shortcut 2 part 2
+    2300028: straight
+    3300000: '''s'' track'
+    3300002: Bridge_Asset
+    3300004: Bridge_Asset001
+    3300006: cave
+    3300008: Dam_Asset
+    3300010: into cave jump
+    3300012: jump002
+    3300014: lead up to dam
+    3300016: main cave
+    3300018: out of cave
+    3300020: s jump
+    3300022: s shortcut
+    3300024: shortcut 2 part 1
+    3300026: shortcut 2 part 2
+    3300028: straight
+    4300000: s shortcut
+    4300002: shortcut 2 part 1
+    4300004: main cave
+    4300006: shortcut 2 part 2
+    4300008: cave
+    4300010: s jump
+    4300012: Bridge_Asset001
+    4300014: straight
+    4300016: jump002
+    4300018: '''s'' track'
+    4300020: out of cave
+    4300022: into cave jump
+    4300024: lead up to dam
+    4300026: Bridge_Asset
+    4300028: Dam_Asset
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
