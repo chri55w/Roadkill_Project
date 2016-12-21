@@ -8,16 +8,17 @@ namespace Controllers
     public class AIController : Driver
     {
         public BezierSpline CenterPath;
-        public int SplineDetail = 200;
         float ClosestTimePointOnSpline = 0f;
         
         void FixedUpdate()
         {
+            int l_SplineDetail = CenterPath.MeshDetailLevel;
+
             Vector3 CurrentPosition = new Vector3(Kart.transform.position.x, Kart.transform.position.y, Kart.transform.position.z);
 
-            ClosestTimePointOnSpline = CenterPath.GetClosestTimePointOnSpline(SplineDetail, CurrentPosition);
+            ClosestTimePointOnSpline = CenterPath.GetClosestTimePointOnSpline(l_SplineDetail, CurrentPosition);
             
-            float TimePointAhead = (ClosestTimePointOnSpline + ((1.0f / SplineDetail) * 2)) % 1;
+            float TimePointAhead = (ClosestTimePointOnSpline + ((1.0f / l_SplineDetail) * 2)) % 1;
 
             Vector3 PointAhead = CenterPath.GetPoint(TimePointAhead);
 
@@ -25,7 +26,7 @@ namespace Controllers
 
             while (Vector3.Distance(PointAhead, CurrentPosition) < 10)
             {
-                TimePointAhead = (ClosestTimePointOnSpline + ((1.0f / SplineDetail) * (2 + increment))) % 1;
+                TimePointAhead = (ClosestTimePointOnSpline + ((1.0f / l_SplineDetail) * (2 + increment))) % 1;
 
                 PointAhead = CenterPath.GetPoint(TimePointAhead);
 
@@ -55,7 +56,9 @@ namespace Controllers
             Gizmos.color = Color.white;
             var transform = this.transform;
 
-            float TimePointAhead = (ClosestTimePointOnSpline + ((1.0f / SplineDetail) * 2)) % 1;
+            int l_SplineDetail = CenterPath.MeshDetailLevel;
+
+            float TimePointAhead = (ClosestTimePointOnSpline + ((1.0f / l_SplineDetail) * 2)) % 1;
 
             Vector3 PointAhead = CenterPath.GetPoint(TimePointAhead);
 
