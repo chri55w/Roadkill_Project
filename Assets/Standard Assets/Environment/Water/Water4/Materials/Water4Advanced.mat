@@ -67,7 +67,7 @@ Material:
         name: _ReflectionTex
       second:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 0, y: 0}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
         name: _ReflectiveColor
@@ -97,7 +97,7 @@ Material:
         name: _ShoreTex
       second:
         m_Texture: {fileID: 2800000, guid: 36dd0b22da8874ed38075789055ca664, type: 3}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 0, y: 0}
         m_Offset: {x: 0, y: 0}
     - first:
         name: _SpecialWavesTex
@@ -156,7 +156,7 @@ Material:
       second: 1.7931035
     - first:
         name: _FresnelScale
-      second: 2
+      second: 2.35
     - first:
         name: _GerstnerIntensity
       second: 0.1
@@ -183,7 +183,7 @@ Material:
       second: 1.4393286
     - first:
         name: _Shininess
-      second: 46
+      second: 153
     - first:
         name: _ShoreTiling
       second: 56.862743
@@ -217,13 +217,13 @@ Material:
       second: {r: 0.09558821, g: 0.8102632, b: 1, a: 0.82}
     - first:
         name: _BumpDirection
-      second: {r: -10, g: -10, b: 0, a: -10}
+      second: {r: 10, g: 10, b: 0, a: 10}
     - first:
         name: _BumpMap_ST
       second: {r: 1, g: 1, b: 0, a: 0}
     - first:
         name: _BumpTiling
-      second: {r: 0.015, g: 0.015, b: 0, a: 0.015}
+      second: {r: 0.1, g: 0.1, b: 0, a: 0.1}
     - first:
         name: _Color
       second: {r: 1, g: 1, b: 1, a: 1}
@@ -316,19 +316,19 @@ Material:
       second: {r: 1, g: 1, b: 0.1, a: 0.1}
     - first:
         name: _SpecularColor
-      second: {r: 0, g: 1, b: 0.95862055, a: 1}
+      second: {r: 0.5147059, g: 0.5147059, b: 0.5147059, a: 1}
     - first:
         name: _UnderwaterColor
       second: {r: 0.6950323, g: 0.89552236, b: 0.7502397, a: 1}
     - first:
         name: _WaveOffset
-      second: {r: -0, g: -0, b: -0, a: -0}
+      second: {r: 1, g: 1, b: -0.01, a: -0.01}
     - first:
         name: _WaveScale4
-      second: {r: 0, g: 0, b: 0, a: 0}
+      second: {r: 0.1, g: 0.1, b: 0.01, a: 0.01}
     - first:
         name: _WorldLightDir
-      second: {r: -0.33985412, g: -0.20139086, b: -0.9186631, a: 0}
+      second: {r: -0.030375138, g: -0.20139083, b: -0.97903997, a: 0}
 --- !u!1002 &2100001
 EditorExtensionImpl:
   serializedVersion: 6
