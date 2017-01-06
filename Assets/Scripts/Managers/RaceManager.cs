@@ -89,6 +89,14 @@ namespace Managers
                         SetCameras();
                     }
                 }
+                else if (Input.GetButton("KStart"))
+                {
+                    if(DoesControllerIDExist("K") == false)
+                    {
+                        AddPlayer("Bat Kart 1", "K");
+                        SetCameras();
+                    }
+                }
             }
 
             //Optimize, only needs to be called when a new player is added
