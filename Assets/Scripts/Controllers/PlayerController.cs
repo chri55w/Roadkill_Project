@@ -28,9 +28,15 @@ namespace Controllers
                     GetComponentInChildren<CameraController>().FlipCamera();
                 if ((Input.GetButtonDown(ControllerID + "UsePickup")))
                 {
-                    CurrentPickup.GetComponent<Pickup>().UsePickup(gameObject);
-                    if (CurrentPickup.GetComponent<Pickup>().PickupUses <= 0)
-                        CurrentPickup.GetComponent<Pickup>().DeletePickup(gameObject);
+                    if (CurrentPickup != null)
+                    {
+                        Pickup l_Pickup = CurrentPickup.GetComponent<Pickup>();
+                        if (l_Pickup != null)
+                            l_Pickup.UsePickup(gameObject);
+
+                        if (l_Pickup.PickupUses <= 0)
+                            l_Pickup.DeletePickup(gameObject);
+                    }
                 }
             }
         }
