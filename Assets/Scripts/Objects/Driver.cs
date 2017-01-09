@@ -9,15 +9,17 @@ namespace Objects
 {
     public abstract class Driver : MonoBehaviour
     {
+        public enum e_RespawnState { ALIVE, DYING, DEAD, RESPAWNING };
+
         public GameObject Kart;
         public GameObject CurrentPickup;
         public string Name;
 
         //Respawn variables
-        public float RespawnDistanceModifier = 1.5f;
+        public float RespawnDistanceModifier = 5;
         public BezierSpline RespawnCenterPath;
         public int RespawnSplineDetail = 200;
-        float ClosestTimeRespawnPointOnSpline = 0f;
+        float ClosestTimePointOnSpline = 0f;
 
         public ObjectFadeController m_FadeController;
         public bool Faded = false;
@@ -30,7 +32,7 @@ namespace Objects
         protected Dictionary<int, Material> m_KartMaterials = new Dictionary<int, Material>();
         protected int m_KartColorIDs = -1;
         protected List<GameObject> m_KartParts = new List<GameObject>();
- 
+        protected e_RespawnState m_RespawnState;        
 
         public void MakeDriver(GameObject p_Kart, Transform p_StartPosition, RaceManager p_RaceManager, BezierSpline p_StartingSpline, ObjectFadeController p_SidLordOfTheFade)
         {
@@ -72,8 +74,8 @@ namespace Objects
             }
 
             FadeIndex = new bool[m_KartMaterials.Count];
+            m_RespawnState = e_RespawnState.ALIVE;
         }
-
 
         public void Start()
         {
@@ -84,51 +86,57 @@ namespace Objects
         {
             if (m_KartHealth <= 0)
             {
-                //Debug.Log("Checking Respawn");
-                if (m_Respawning == false)
+                switch(m_RespawnState)
                 {
-                    // Die - Animation? Depends on what killed the player
-                    for (int i = 0; i < FadeIndex.Length; i++)
-                        FadeIndex[i] = false;
+                    case e_RespawnState.DYING:
+                        for (int i = 0; i < FadeIndex.Length; i++)
+                            FadeIndex[i] = false;
 
-                    Die();
-                    Debug.Log("I died RIP");
-                    // Start respawning if not still fading
-                    m_Respawning = true;
-                    return true;
-                }
-                else
-                {
-                    //Raise tombstone?
-                    // Check to see a material is faded
-                    // if faded increase fade count
-                    int FadedCount = 0;
-                    for (int i = 0; i < FadeIndex.Length; i++)
-                    {
-                        if (FadeIndex[i] == true)
-                            FadedCount++;
-                    }
+                        Die();
+                        m_RespawnState = e_RespawnState.DEAD;
+                        return true;
+                    case e_RespawnState.DEAD:
+                        // Check to see a material is faded
+                        // if faded increase fade count
+                        int FadedCount = 0;
+                        for (int i = 0; i < FadeIndex.Length; i++)
+                        {
+                            if (FadeIndex[i] == true)
+                                FadedCount++;
+                        }
 
-                    // if all fade indexes are true then object is faded
-                    if (FadedCount == FadeIndex.Length)
-                        Faded = true;
+                        // if all fade indexes are true then object is faded
+                        if (FadedCount == FadeIndex.Length)
+                            Faded = true;
 
-                    if (Faded)
-                        StartCoroutine(RespawnWithDelay(1));
-                    return true;
+                        if (Faded)
+                        {
+                            m_Respawning = true;
+                            StartCoroutine(RespawnWithDelay(1));
+                            m_RespawnState = e_RespawnState.RESPAWNING;
+                        }
+                        return true;
+                    case e_RespawnState.RESPAWNING:
+                        if (m_Respawning == false)
+                        {
+                            m_RespawnState = e_RespawnState.ALIVE;
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
                 }
             }
-            else
-            {
-                return false; // Congratulations your alive... for now...
-            }
+            return false;
         }
 
         public void TakeDamage(int p_damage)
         {
             m_KartHealth -= p_damage;
 
-            Debug.Log("They got me");
+            if (m_KartHealth <= 0)
+                m_RespawnState = e_RespawnState.DYING;
         }
 
         protected void Die()
@@ -143,24 +151,6 @@ namespace Objects
             //Remove current power-up
         }
 
-        //IEnumerator Fade(int p_MaterialIndex, float p_FadeTo, float p_FadeTime)
-        //{
-        //    p_FadeTo = Mathf.Clamp01(p_FadeTo);
-           
-        //    Color l_AkuAku = m_KartMaterials[p_MaterialIndex].GetColor(m_KartColorIDs);
-        //    //Debug.Log(string.Format("START Fading to {0} from {1}", p_FadeTo, l_AkuAku.a));
-        //    for (float t = 0.0f; t<1.0f; t += Time.deltaTime/p_FadeTime)
-        //    {
-        //        float l_NewAlpha = Mathf.Lerp(l_AkuAku.a, p_FadeTo, t);
-        //        //Debug.Log(l_NewAlpha + " at time " + t);
-        //        m_KartMaterials[p_MaterialIndex].SetColor(m_KartColorIDs, new Color(l_AkuAku.r, l_AkuAku.g, l_AkuAku.b, l_NewAlpha));
-        //        //m_KartMaterialColours[p_MaterialIndex] = new Color(m_KartMaterialColours[p_MaterialIndex].r, m_KartMaterialColours[p_MaterialIndex].g, m_KartMaterialColours[p_MaterialIndex].b, l_NewAlpha);
-        //        //m_KartMaterials[p_MaterialIndex].SetColor(Shader))
-        //    }
-        //    //Debug.Log("END FADING");
-        //    yield return null;
-        //}
-
         IEnumerator RespawnWithDelay(float p_TimeToWait)
         {
             yield return new WaitForSeconds(p_TimeToWait);
@@ -172,50 +162,68 @@ namespace Objects
             //Get respawn point
             Vector3 l_RespawnPoint = GetRespawnPoint();
             //Move Kart to respawn point - may need to add facing correct direction on respawn
+            // Change to Lerp? - wont pass through waypoints otherwise
             Kart.transform.position = l_RespawnPoint;
+            FaceForwards(l_RespawnPoint);
 
-            //Reveale kart
+            //Reveal kart
             bool l_FadedBack = false;
             for (int i = 0; i < FadeIndex.Length; i++)
                 FadeIndex[i] = false;
-            m_FadeController.StartMultiFade(gameObject, m_KartMaterials, m_KartColorIDs, 3.0f, 1);
+            m_FadeController.StartMultiFade(gameObject, m_KartMaterials, m_KartColorIDs, 1.0f, 1);
 
-            while (l_FadedBack == false)
+            int FadedCount = 0;
+            for (int i = 0; i < FadeIndex.Length; i++)
             {
-                int FadedCount = 0;
-                for (int i = 0; i < FadeIndex.Length; i++)
-                {
-                    if (FadeIndex[i] == true)
-                        FadedCount++;
-                }
-
-                // if all fade indexes are true then object is faded
-                if (FadedCount == FadeIndex.Length)
-                    l_FadedBack = true;
+                if (FadeIndex[i] == true)
+                    FadedCount++;
             }
 
+            // if all fade indexes are true then object is faded
+            if (FadedCount == FadeIndex.Length)
+                l_FadedBack = true;
+
+
             //Restore health
+            if (l_FadedBack == false)
+                yield return null;
+
             m_KartHealth = 3;
             m_Respawning = false;
             Faded = !l_FadedBack;
-
             yield return null;
         }
 
         protected Vector3 GetRespawnPoint()
         {
             Vector3 l_CurrentPosition = new Vector3(Kart.transform.position.x, Kart.transform.position.y, Kart.transform.position.z);
-
-            ClosestTimeRespawnPointOnSpline = RespawnCenterPath.GetClosestTimePointOnSpline(RespawnSplineDetail, l_CurrentPosition);
+            
+            ClosestTimePointOnSpline = RespawnCenterPath.GetClosestTimePointOnSpline(RespawnSplineDetail, l_CurrentPosition);
             
             // (+/-)(1.0f/SplineDetail) * x where x is how many steps ahead or behind you want the point to be 
-            float l_TimePointAhead = (ClosestTimeRespawnPointOnSpline - ((1.0f / RespawnSplineDetail) * RespawnDistanceModifier)) % 1;
+            float l_TimePointAhead = (ClosestTimePointOnSpline - ((1.0f / RespawnSplineDetail) * RespawnDistanceModifier)) % 1;
 
             Vector3 l_RespawnPoint = RespawnCenterPath.GetPoint(l_TimePointAhead);
-
-            l_RespawnPoint.y += 3.0f;
+            
+            l_RespawnPoint.y += 1.0f;
 
             return l_RespawnPoint;
+        }
+
+        protected void FaceForwards(Vector3 p_Postion)
+        {
+            ClosestTimePointOnSpline = RespawnCenterPath.GetClosestTimePointOnSpline(RespawnSplineDetail, p_Postion);
+
+            // (+/-)(1.0f/SplineDetail) * x where x is how many steps ahead or behind you want the point to be 
+            float l_TimePointAhead = (ClosestTimePointOnSpline + ((1.0f / RespawnSplineDetail))) % 1;
+
+            Kart.transform.LookAt(RespawnCenterPath.GetPoint(l_TimePointAhead));
+        }
+
+        public void ChangeSpline(BezierSpline p_NewSpline)
+        {
+            RespawnCenterPath = p_NewSpline;
+            Debug.Log(RespawnCenterPath.name);
         }
       }
   }
