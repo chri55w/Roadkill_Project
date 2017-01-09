@@ -10,6 +10,7 @@ namespace Objects
         public float power = 10.0f;
         public float upwardModifer = 3.0f;
         public GameObject MeshObject;
+        public ParticleSystem ExplosionEffect;
 
         private Vector3 m_ExplosionPosition;
         private SphereCollider m_SphereCollider;        
@@ -23,6 +24,18 @@ namespace Objects
             MeshObject.SetActive(true);
         }
 
+        void Update()
+        {
+            if(m_Triggered)
+            {
+                m_SphereCollider.enabled = false;
+
+                if(!ExplosionEffect.IsAlive(true))
+                    Destroy(gameObject);
+            }
+
+        }
+
         void FixedUpdate()
         {
             if (m_ActivationTimer > 0)
@@ -33,26 +46,31 @@ namespace Objects
 
         void OnTriggerEnter(Collider p_OtherCollider)
         {
-            Debug.Log("Mine Hit");
-            Collider[] l_Colliders = Physics.OverlapSphere(m_ExplosionPosition, radius);
-
-            GameObject l_HitObject = new GameObject();
-            
-            foreach (Collider l_hit in l_Colliders)
+            if (!m_Triggered)
             {
-                if (l_hit.name.Contains("Driver"))
+                Collider[] l_Colliders = Physics.OverlapSphere(m_ExplosionPosition, radius);
+
+                GameObject l_HitObject = new GameObject();
+
+                // TODO Change effect: disable current physics and apply new ones (launch in air) 
+                foreach (Collider l_hit in l_Colliders)
                 {
-                    l_HitObject = l_hit.transform.root.gameObject;
-                    l_HitObject.GetComponent<Driver>().TakeDamage(damage);
-                    l_HitObject.GetComponentInChildren<Rigidbody>().AddExplosionForce(power, m_ExplosionPosition, radius, upwardModifer);
-                    l_HitObject.GetComponentInChildren<Rigidbody>().AddForce((power/5) * -l_HitObject.transform.GetChild(0).transform.forward, ForceMode.Impulse);
-                    m_Triggered = true;
+                    if (l_hit.name.Contains("Driver"))
+                    {
+                        l_HitObject = l_hit.transform.root.gameObject;
+                        l_HitObject.GetComponent<Driver>().TakeDamage(damage);
+                        l_HitObject.GetComponentInChildren<Rigidbody>().AddExplosionForce(power, m_ExplosionPosition, radius, upwardModifer);
+                        l_HitObject.GetComponentInChildren<Rigidbody>().AddForce((power / 5) * -l_HitObject.transform.GetChild(0).transform.forward, ForceMode.Impulse);
+                        m_Triggered = true;
+                    }
+                }
+
+                if (m_Triggered)
+                {
+                    ExplosionEffect.Play(true);
+                    MeshObject.SetActive(false);
                 }
             }
-
-            // Add explosion effect
-            if (m_Triggered)
-                Destroy(gameObject);
         }
     }
 }

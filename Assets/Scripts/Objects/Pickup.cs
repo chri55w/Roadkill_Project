@@ -10,6 +10,12 @@ namespace Objects
         public int PickupDamage = 0;
         public string PickupName;
         //Pickup Image for GUI
+        [SerializeField]
+        protected Texture2D Level1Icon;
+        [SerializeField]
+        protected Texture2D Level2Icon;
+        [SerializeField]
+        protected Texture2D Level3Icon;
 
         public void UsePickup(GameObject p_Driver)
         {
@@ -24,6 +30,21 @@ namespace Objects
         protected virtual void Effect(GameObject p_Driver)
         {
             PickupUses--;
+        }
+
+        public Texture2D GetCurrentIcon()
+        {
+            switch(PickupLevel)
+            {
+                case 1:
+                    return Level1Icon;
+                case 2:
+                    return Level2Icon;
+                case 3:
+                    return Level3Icon;
+                default:
+                    return Level1Icon;
+            }
         }
 
         public virtual void DeletePickup(GameObject p_Driver)
