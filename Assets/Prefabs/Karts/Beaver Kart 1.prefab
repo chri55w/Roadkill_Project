@@ -83,11 +83,11 @@ GameObject:
   - 199: {fileID: 199000010524218764}
   m_Layer: 0
   m_Name: Forrest_Shield
-  m_TagString: Untagged
+  m_TagString: ShieldEffect
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1000010222722574
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,6 +137,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1000010728244130
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000014160817192}
+  m_Layer: 2
+  m_Name: Thrusters
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1000010871298154
 GameObject:
   m_ObjectHideFlags: 1
@@ -153,7 +168,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1000011089519970
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,11 +241,11 @@ GameObject:
   - 199: {fileID: 199000010367415510}
   m_Layer: 0
   m_Name: Thruster
-  m_TagString: Untagged
+  m_TagString: Thrusters
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1000011802750114
 GameObject:
   m_ObjectHideFlags: 0
@@ -663,8 +678,8 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000012699404348}
-  - {fileID: 4000013959031100}
   - {fileID: 4000011549072486}
+  - {fileID: 4000014160817192}
   m_Father: {fileID: 4000011405635832}
   m_RootOrder: 7
 --- !u!4 &4000011549072486
@@ -679,7 +694,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 180.819, y: -180, z: 0}
   m_Children: []
   m_Father: {fileID: 4000011531579208}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!4 &4000011659803020
 Transform:
   m_ObjectHideFlags: 1
@@ -957,8 +972,8 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_Children:
   - {fileID: 4000013117706678}
-  m_Father: {fileID: 4000011531579208}
-  m_RootOrder: 1
+  m_Father: {fileID: 4000014160817192}
+  m_RootOrder: 0
 --- !u!4 &4000013980175868
 Transform:
   m_ObjectHideFlags: 1
@@ -973,6 +988,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4000013426333490}
   m_RootOrder: 5
+--- !u!4 &4000014160817192
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010728244130}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children:
+  - {fileID: 4000013959031100}
+  m_Father: {fileID: 4000011531579208}
+  m_RootOrder: 2
 --- !u!23 &23000011599637438
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -1357,7 +1386,7 @@ ParticleSystem:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011752440110}
   serializedVersion: 4
-  lengthInSec: 5
+  lengthInSec: 1.5
   startDelay:
     scalar: 0
     maxCurve:
@@ -1394,13 +1423,13 @@ ParticleSystem:
       m_RotationOrder: 4
     minMaxState: 0
   speed: 1
-  looping: 1
+  looping: 0
   prewarm: 1
-  playOnAwake: 1
+  playOnAwake: 0
   moveWithTransform: 1
   autoRandomSeed: 1
   scalingMode: 1
-  randomSeed: 1482454964
+  randomSeed: -752894499
   InitialModule:
     serializedVersion: 2
     enabled: 1
@@ -3081,7 +3110,7 @@ ParticleSystem:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010498893706}
   serializedVersion: 4
-  lengthInSec: 5
+  lengthInSec: 1.5
   startDelay:
     scalar: 0
     maxCurve:
@@ -3118,13 +3147,13 @@ ParticleSystem:
       m_RotationOrder: 4
     minMaxState: 0
   speed: 1
-  looping: 1
+  looping: 0
   prewarm: 1
-  playOnAwake: 1
+  playOnAwake: 0
   moveWithTransform: 1
   autoRandomSeed: 1
   scalingMode: 1
-  randomSeed: -1763970598
+  randomSeed: -1839936464
   InitialModule:
     serializedVersion: 2
     enabled: 1
@@ -4854,11 +4883,11 @@ ParticleSystem:
   speed: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   moveWithTransform: 1
   autoRandomSeed: 1
   scalingMode: 1
-  randomSeed: 68759160
+  randomSeed: -109564300
   InitialModule:
     serializedVersion: 2
     enabled: 1
@@ -6523,11 +6552,11 @@ ParticleSystem:
   speed: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   moveWithTransform: 1
   autoRandomSeed: 1
   scalingMode: 2
-  randomSeed: 2004540371
+  randomSeed: 1369114682
   InitialModule:
     serializedVersion: 2
     enabled: 1
@@ -8246,7 +8275,7 @@ ParticleSystem:
   moveWithTransform: 1
   autoRandomSeed: 1
   scalingMode: 1
-  randomSeed: 337749745
+  randomSeed: 1744031850
   InitialModule:
     serializedVersion: 2
     enabled: 1

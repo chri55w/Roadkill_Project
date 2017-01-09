@@ -10,7 +10,7 @@ namespace Objects
         {
             base.LevelUp(p_Driver);
             //Level 2 damage boost
-            if(PickupLevel == 2)
+            if (PickupLevel == 2)
             {
                 PickupDamage = 2;
                 GetComponent<Mine>().damage = PickupDamage;
@@ -27,7 +27,8 @@ namespace Objects
 
         protected override void Effect(GameObject p_Driver)
         {
-            // Should only be called after level 3 (since that grants extra use), possibly need a check in
+            // TODO level 3 mine isn't allowing multiple uses, LevelUp function is okay
+            // Should only be called after level 3 (since that grants extra use)
             if (PickupUses > 1)
             {
                 base.Effect(p_Driver);

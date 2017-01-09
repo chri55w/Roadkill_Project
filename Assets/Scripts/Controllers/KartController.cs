@@ -179,6 +179,11 @@ namespace Controllers
         public void Boost(float p_BoostForce)
         {
             m_Rigidbody.AddForceAtPosition((GetDirectionOfFowardMovement() * p_BoostForce) * Time.deltaTime, PointOfAcceleration.position);
+            Transform l_Thrusters = transform.Find("VFX/Thrusters");
+            foreach(Transform l_Thruster in l_Thrusters.transform)
+            {
+                l_Thruster.gameObject.GetComponent<ParticleSystem>().Play(true);
+            }
         }
     }
 }
