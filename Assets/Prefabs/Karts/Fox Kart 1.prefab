@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000013931688932}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   - 4: {fileID: 4000012112084336}
   - 33: {fileID: 33000014119975546}
   - 23: {fileID: 23000013287388770}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Driving_Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -68,7 +68,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000013073490350}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Rear Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000011928364830}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: CameraObjects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,7 +98,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000013315215826}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Front Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000011585365762}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Thrusters
   m_TagString: Thrusters
   m_Icon: {fileID: 0}
@@ -145,7 +145,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000010382558554}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Raycast Points
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000012983283812}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Front Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210,7 +210,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000011954881254}
   - 65: {fileID: 65000013846196644}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: DriverTriggerCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -225,8 +225,23 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000011472961000}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: PointOfAcceleration
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1000011562686992
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000013721600898}
+  m_Layer: 0
+  m_Name: Kart Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -242,7 +257,7 @@ GameObject:
   - 4: {fileID: 4000013320599336}
   - 33: {fileID: 33000012173877644}
   - 23: {fileID: 23000010559275926}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Wheels_Back_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -259,7 +274,7 @@ GameObject:
   - 4: {fileID: 4000013127760950}
   - 33: {fileID: 33000012563392866}
   - 23: {fileID: 23000012459283060}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Kart_Body_Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -276,7 +291,7 @@ GameObject:
   - 4: {fileID: 4000014251156832}
   - 33: {fileID: 33000012333756156}
   - 23: {fileID: 23000013232521200}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Wheels_Front_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -291,7 +306,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000011794611248}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Exhaust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -324,7 +339,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000011204272736}
   - 108: {fileID: 108000011413976374}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Spotlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -341,7 +356,7 @@ GameObject:
   - 4: {fileID: 4000010187558398}
   - 54: {fileID: 54000010282075136}
   - 114: {fileID: 114000010442389322}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Fox Kart 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -374,7 +389,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000012572686642}
   - 65: {fileID: 65000012904089892}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Middle Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -389,7 +404,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000011628969804}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: BackwardFacingFocalPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -404,7 +419,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000011595542396}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: VFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -419,7 +434,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000012156250942}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: CenterOfGravity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -451,7 +466,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000013561704712}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -485,7 +500,7 @@ GameObject:
   - 4: {fileID: 4000012373317700}
   - 33: {fileID: 33000010431987152}
   - 23: {fileID: 23000010878714570}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Wheels_Front_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -500,7 +515,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000013712530462}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: ForwardFacingFocalPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -515,7 +530,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000010576377428}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -530,7 +545,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000010968619054}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Rear Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -564,7 +579,7 @@ GameObject:
   - 4: {fileID: 4000011248656624}
   - 33: {fileID: 33000010413786494}
   - 23: {fileID: 23000012133746658}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Wheels_Back_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -649,7 +664,7 @@ GameObject:
   - 4: {fileID: 4000010047253712}
   - 33: {fileID: 33000011662601022}
   - 23: {fileID: 23000010058389152}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Kart_Lid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -781,6 +796,7 @@ Transform:
   - {fileID: 4000013315215826}
   - {fileID: 4000013073490350}
   - {fileID: 4000010968619054}
+  - {fileID: 4000013721600898}
   m_Father: {fileID: 4000010187558398}
   m_RootOrder: 4
 --- !u!4 &4000010576377428
@@ -1226,6 +1242,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4000011928364830}
   m_RootOrder: 0
+--- !u!4 &4000013721600898
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011562686992}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.363}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 4000010382558554}
+  m_RootOrder: 4
 --- !u!4 &4000013931688932
 Transform:
   m_ObjectHideFlags: 1
@@ -1694,7 +1723,7 @@ ParticleSystem:
   moveWithTransform: 1
   autoRandomSeed: 1
   scalingMode: 1
-  randomSeed: -1531823063
+  randomSeed: -340509031
   InitialModule:
     serializedVersion: 2
     enabled: 1
@@ -2342,13 +2371,13 @@ ParticleSystem:
           rgba: 16777215
         key1:
           serializedVersion: 2
-          rgba: 4294967295
+          rgba: 1459617791
         key2:
           serializedVersion: 2
           rgba: 0
         key3:
           serializedVersion: 2
-          rgba: 0
+          rgba: 402653184
         key4:
           serializedVersion: 2
           rgba: 0
@@ -2370,9 +2399,9 @@ ParticleSystem:
         ctime6: 0
         ctime7: 0
         atime0: 0
-        atime1: 12336
-        atime2: 22166
-        atime3: 34117
+        atime1: 6361
+        atime2: 17348
+        atime3: 50886
         atime4: 0
         atime5: 0
         atime6: 0
@@ -4066,13 +4095,13 @@ ParticleSystem:
           rgba: 16777215
         key1:
           serializedVersion: 2
-          rgba: 4294967295
+          rgba: 1459617791
         key2:
           serializedVersion: 2
           rgba: 0
         key3:
           serializedVersion: 2
-          rgba: 0
+          rgba: 402653184
         key4:
           serializedVersion: 2
           rgba: 0
@@ -4094,9 +4123,9 @@ ParticleSystem:
         ctime6: 0
         ctime7: 0
         atime0: 0
-        atime1: 12336
-        atime2: 22166
-        atime3: 34117
+        atime1: 6361
+        atime2: 17348
+        atime3: 50886
         atime4: 0
         atime5: 0
         atime6: 0

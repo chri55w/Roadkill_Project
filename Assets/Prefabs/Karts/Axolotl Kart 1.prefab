@@ -53,7 +53,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000010482751062}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,7 +69,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000012899553310}
   - 108: {fileID: 108000013532039384}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Spotlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - 4: {fileID: 4000011260051884}
   - 33: {fileID: 33000011898370406}
   - 23: {fileID: 23000013414064814}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Kart_Back_Left_Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   - 4: {fileID: 4000013952716208}
   - 33: {fileID: 33000010829457798}
   - 23: {fileID: 23000010474390986}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Kart_Driving_Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000011645882020}
   - 65: {fileID: 65000013414942852}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: DriverTriggerCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   - 4: {fileID: 4000012934400230}
   - 33: {fileID: 33000012695984926}
   - 23: {fileID: 23000011596740644}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Kart_Back_Right_Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,8 +151,23 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000010330105298}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Front Right
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1000010555845992
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000010239358816}
+  m_Layer: 0
+  m_Name: Kart Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -183,7 +198,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000011423851564}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Thrusters
   m_TagString: Thrusters
   m_Icon: {fileID: 0}
@@ -215,7 +230,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000011047184842}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: PointOfAcceleration
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,7 +245,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000010201746378}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,7 +260,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000012565606010}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: 'Raycast Points '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,7 +276,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000011308633300}
   - 65: {fileID: 65000013802986286}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Top Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -278,7 +293,7 @@ GameObject:
   - 4: {fileID: 4000011233314514}
   - 54: {fileID: 54000012087088050}
   - 114: {fileID: 114000013857746230}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Axolotl Kart 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -327,7 +342,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000014249942718}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Rear Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -342,7 +357,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000012660223374}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Front Wheels
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -425,7 +440,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000010170245722}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: CameraObjects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -441,7 +456,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000011786675944}
   - 65: {fileID: 65000013202353720}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Middle Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -475,7 +490,7 @@ GameObject:
   - 4: {fileID: 4000013703859394}
   - 33: {fileID: 33000010213450884}
   - 23: {fileID: 23000011559651586}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Bath_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -490,7 +505,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000011874251338}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Rear Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -522,7 +537,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000012895201036}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Front Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -539,7 +554,7 @@ GameObject:
   - 4: {fileID: 4000011544402744}
   - 33: {fileID: 33000012575027348}
   - 23: {fileID: 23000013381321852}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Kart_Fan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -554,7 +569,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000013269067652}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: VFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -588,7 +603,7 @@ GameObject:
   - 4: {fileID: 4000012349121072}
   - 33: {fileID: 33000013191089926}
   - 23: {fileID: 23000012392117048}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Kart_Front_Left_Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -620,7 +635,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000012019123732}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -652,7 +667,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000011519891286}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: CenterOfGravity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -686,7 +701,7 @@ GameObject:
   - 4: {fileID: 4000010205658758}
   - 33: {fileID: 33000011137667704}
   - 23: {fileID: 23000011890147604}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Kart_Front_Right_Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -701,7 +716,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000011325692322}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: ForwardFacingFocalPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -716,7 +731,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000013739784934}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: BackwardFacingFocalPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -771,6 +786,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4000010201746378}
   m_RootOrder: 6
+--- !u!4 &4000010239358816
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010555845992}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.22}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 4000012565606010}
+  m_RootOrder: 4
 --- !u!4 &4000010330105298
 Transform:
   m_ObjectHideFlags: 1
@@ -1051,6 +1079,7 @@ Transform:
   - {fileID: 4000010330105298}
   - {fileID: 4000014249942718}
   - {fileID: 4000011874251338}
+  - {fileID: 4000010239358816}
   m_Father: {fileID: 4000011233314514}
   m_RootOrder: 3
 --- !u!4 &4000012571758706

@@ -17,8 +17,8 @@ namespace Objects
 
         //Respawn variables
         public float RespawnDistanceModifier = 5;
-        public BezierSpline RespawnCenterPath;
-        public int RespawnSplineDetail = 200;
+        public BezierSpline CurrentSpline;
+        public int SplineDetail;
         float ClosestTimePointOnSpline = 0f;
 
         public ObjectFadeController m_FadeController;
@@ -47,7 +47,8 @@ namespace Objects
 
             m_FadeController = p_SidLordOfTheFade;
 
-            RespawnCenterPath = p_StartingSpline;
+            CurrentSpline = p_StartingSpline;
+            SplineDetail = CurrentSpline.MeshDetailLevel;
 
             m_KartColorIDs = Shader.PropertyToID("_Color");
             Debug.Log("Shader ID for color: " + m_KartColorIDs);
@@ -147,6 +148,8 @@ namespace Objects
 
             m_FadeController.StartMultiFade(gameObject, m_KartMaterials, m_KartColorIDs, 2.0f, 0);
 
+            // LEWIS - Call death sounds here!
+
             //Turn off collision & physics ect
             //Remove current power-up
         }
@@ -160,7 +163,8 @@ namespace Objects
         protected IEnumerator Respawn()
         {
             //Get respawn point
-            Vector3 l_RespawnPoint = GetRespawnPoint();
+            Vector3 l_RespawnPoint = GetPointBehind(RespawnDistanceModifier);
+            l_RespawnPoint.y += 1.0f;
             //Move Kart to respawn point - may need to add facing correct direction on respawn
             // Change to Lerp? - wont pass through waypoints otherwise
             Kart.transform.position = l_RespawnPoint;
@@ -194,36 +198,48 @@ namespace Objects
             yield return null;
         }
 
-        protected Vector3 GetRespawnPoint()
+        protected Vector3 GetPointAhead(float p_Distance)
+        {
+            Vector3 l_CurrentPosition = new Vector3(Kart.transform.position.x, Kart.transform.position.y, Kart.transform.position.z);
+
+            ClosestTimePointOnSpline = CurrentSpline.GetClosestTimePointOnSpline(SplineDetail, l_CurrentPosition);
+
+            // (+/-)(1.0f/SplineDetail) * x where x is how many steps ahead or behind you want the point to be 
+            float l_TimePointAhead = (ClosestTimePointOnSpline + ((1.0f / SplineDetail) * p_Distance)) % 1;
+
+            Vector3 l_PointAhead = CurrentSpline.GetPoint(l_TimePointAhead);
+
+            return l_PointAhead;
+        }
+
+        protected Vector3 GetPointBehind(float p_Distance)
         {
             Vector3 l_CurrentPosition = new Vector3(Kart.transform.position.x, Kart.transform.position.y, Kart.transform.position.z);
             
-            ClosestTimePointOnSpline = RespawnCenterPath.GetClosestTimePointOnSpline(RespawnSplineDetail, l_CurrentPosition);
+            ClosestTimePointOnSpline = CurrentSpline.GetClosestTimePointOnSpline(SplineDetail, l_CurrentPosition);
             
             // (+/-)(1.0f/SplineDetail) * x where x is how many steps ahead or behind you want the point to be 
-            float l_TimePointAhead = (ClosestTimePointOnSpline - ((1.0f / RespawnSplineDetail) * RespawnDistanceModifier)) % 1;
+            float l_TimePointAhead = (ClosestTimePointOnSpline - ((1.0f / SplineDetail) * p_Distance)) % 1;
 
-            Vector3 l_RespawnPoint = RespawnCenterPath.GetPoint(l_TimePointAhead);
-            
-            l_RespawnPoint.y += 1.0f;
+            Vector3 l_PointBehind = CurrentSpline.GetPoint(l_TimePointAhead);
 
-            return l_RespawnPoint;
+            return l_PointBehind;
         }
 
         protected void FaceForwards(Vector3 p_Postion)
         {
-            ClosestTimePointOnSpline = RespawnCenterPath.GetClosestTimePointOnSpline(RespawnSplineDetail, p_Postion);
+            ClosestTimePointOnSpline = CurrentSpline.GetClosestTimePointOnSpline(SplineDetail, p_Postion);
 
             // (+/-)(1.0f/SplineDetail) * x where x is how many steps ahead or behind you want the point to be 
-            float l_TimePointAhead = (ClosestTimePointOnSpline + ((1.0f / RespawnSplineDetail))) % 1;
+            float l_TimePointAhead = (ClosestTimePointOnSpline + ((1.0f / SplineDetail))) % 1;
 
-            Kart.transform.LookAt(RespawnCenterPath.GetPoint(l_TimePointAhead));
+            Kart.transform.LookAt(CurrentSpline.GetPoint(l_TimePointAhead));
         }
 
         public void ChangeSpline(BezierSpline p_NewSpline)
         {
-            RespawnCenterPath = p_NewSpline;
-            Debug.Log(RespawnCenterPath.name);
+            CurrentSpline = p_NewSpline;
+            SplineDetail = CurrentSpline.MeshDetailLevel;
         }
       }
   }

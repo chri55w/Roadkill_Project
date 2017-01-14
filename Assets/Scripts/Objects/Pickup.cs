@@ -8,7 +8,9 @@ namespace Objects
         public int PickupLevel = 1;
         public int PickupUses = 1;
         public int PickupDamage = 0;
-        public string PickupName;
+
+        public enum e_PickupID { SPEED_BOOST,  LAND_MINE, THROWING_AXE, SHIELD, BLOOD_SLICK };
+        public e_PickupID PickupID;
         //Pickup Image for GUI
         [SerializeField]
         protected Texture2D Level1Icon;

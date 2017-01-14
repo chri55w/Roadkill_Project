@@ -14,6 +14,7 @@ namespace Objects
 
         protected override void Effect(GameObject p_Driver)
         {
+            Debug.Log("Thrown");
             //Sets the throwable position above the center kart (temporary, should go from charcter position
             Transform l_SpawnLocation = p_Driver.transform.GetChild(0);
             transform.position = new Vector3(l_SpawnLocation.position.x, l_SpawnLocation.position.y + 1.0f, l_SpawnLocation.position.z);
@@ -21,11 +22,9 @@ namespace Objects
             transform.parent = null;
             GetComponent<Throwable>().ThrowDirection = l_SpawnLocation.transform.forward;
             transform.rotation = l_SpawnLocation.transform.rotation;
-            Debug.Log(transform.localEulerAngles);
             Vector3 l_SpawnRotation = transform.localEulerAngles;
             l_SpawnRotation.z -= 45;
             transform.localEulerAngles = l_SpawnRotation;
-            Debug.Log(transform.localEulerAngles);
             
             GetComponent<Throwable>().enabled = true;
 

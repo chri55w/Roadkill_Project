@@ -58,7 +58,7 @@ namespace Controllers
         { 
         }
 
-        private int WheelsGrounded()
+        public int WheelsGrounded()
         {
             int GroundedWheels = 0;
 
@@ -108,6 +108,7 @@ namespace Controllers
                     m_Rigidbody.drag = 0.25f;
                 }
 
+                // Kart not considered on the ground therefore it cannot change current movement
                 return;
             }
             else
