@@ -13,7 +13,6 @@ namespace Controllers
         new void Start()
         {
             base.Start();
-            Debug.Log("Player start");
         }
 
         void Update()

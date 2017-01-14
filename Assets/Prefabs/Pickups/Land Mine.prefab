@@ -414,7 +414,7 @@ MonoBehaviour:
   PickupLevel: 1
   PickupUses: 1
   PickupDamage: 0
-  PickupName: Mine
+  PickupID: 1
   Level1Icon: {fileID: 2800000, guid: f4c508629a5ee2541a03a29cfbeeea0e, type: 3}
   Level2Icon: {fileID: 2800000, guid: a2e5c35496b2f384f88a9460c4029306, type: 3}
   Level3Icon: {fileID: 2800000, guid: 6d879c7924c8efd41b7ac30677f665b4, type: 3}
