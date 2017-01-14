@@ -54,7 +54,7 @@ namespace Controllers
             if ((m_PickupTimer <= 0) && (CurrentPickup != null))
             {
                 float UsePickupChance = Random.Range(0, 10);
-                if(UsePickupChance >= 0)
+                if(UsePickupChance >= 5)
                 {
                     Pickup l_LocalPickup = CurrentPickup.GetComponent<Pickup>();
                     switch (l_LocalPickup.PickupID)
