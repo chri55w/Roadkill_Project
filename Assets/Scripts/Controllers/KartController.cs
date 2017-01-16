@@ -7,6 +7,8 @@ namespace Controllers
 {
     public class KartController : MonoBehaviour
     {
+        public List<SkinnableObject> SkinnableKartPeices;
+
         //Hover Wheel Points
         public HoverWheel FrontLeftHoverWheel;
         public HoverWheel FrontRightHoverWheel;
@@ -54,8 +56,22 @@ namespace Controllers
             m_Rigidbody.centerOfMass = CenterOfGravity.localPosition;
         }
         
+        public void Update()
+        {
+        }
+
         public void FixedUpdate()
-        { 
+        {
+            foreach (HoverWheel l_HoverWheel in m_HoverWheels)
+                l_HoverWheel.Update(Time.fixedDeltaTime);
+
+            // Suspension (Hover) physics - Applies a Force at each Hover Point 
+            // to keep the Kart at the distance specified in 'SuspensionLength'
+            //                           from the Ground below each Hover Point
+            foreach (HoverWheel l_HoverWheel in m_HoverWheels)
+            {
+                m_Rigidbody.AddForceAtPosition(l_HoverWheel.RaycastPosition.up * UpwardForce * l_HoverWheel.UpForceModifier, l_HoverWheel.RaycastPosition.position, ForceMode.Acceleration);
+            }
         }
 
         public int WheelsGrounded()
@@ -68,21 +84,13 @@ namespace Controllers
 
             return GroundedWheels;
         }
-
+        
         public void Move(float p_VerticalInput, float p_HorizontalInput)
         {
-            foreach (HoverWheel l_HoverWheel in m_HoverWheels)
-                l_HoverWheel.Update(Time.deltaTime);
-
             Vector3 l_AverageGroundNormal = new Vector3(0, 0, 0);
-
-            // Suspension (Hover) physics - Applies a Force at each Hover Point 
-            // to keep the Kart at the distance specified in 'SuspensionLength'
-            //                           from the Ground below each Hover Point
+            
             foreach (HoverWheel l_HoverWheel in m_HoverWheels)
             {
-                m_Rigidbody.AddForceAtPosition(l_HoverWheel.RaycastPosition.up * UpwardForce * l_HoverWheel.UpForceModifier, l_HoverWheel.RaycastPosition.position, ForceMode.Acceleration);
-
                 l_AverageGroundNormal += l_HoverWheel.GroundHitPoint.normal;
             }
 
@@ -97,11 +105,9 @@ namespace Controllers
             FrontRightHoverWheel.SetWheelRotation(l_SteeringAngle, l_DistanceTravelled);
             RearLeftHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
             RearRightHoverWheel.SetWheelRotation(0, l_DistanceTravelled);
-            
+
             if (WheelsGrounded() < 3)
             {
-                UpdateDebugVariables(0, m_Rigidbody.velocity);
-
                 if (WheelsGrounded() <= 0)
                 {
                     m_Rigidbody.angularDrag = 0.25f;
@@ -145,28 +151,8 @@ namespace Controllers
 
             if (m_Rigidbody.velocity.magnitude < 0.5f)
                 m_Rigidbody.velocity = new Vector3(0, 0, 0);
-            //                 Update Debug Parameters for Printing on the GUI.
-            UpdateDebugVariables(l_Acceleration, m_Rigidbody.velocity);
         }
-
-        private void UpdateDebugVariables(float p_AccelerationForce, Vector3 p_Velocity)
-        {
-            DebugParameters["Acceleration"] = p_AccelerationForce.ToString("n2");
-            DebugParameters["Velocity"] = p_Velocity.magnitude.ToString();
-        }
-
-        public void OnGUI()
-        {
-            GUI.backgroundColor = Color.black;
-            int l_YOffset = 10;
-            foreach (KeyValuePair<string, string> DebugParameter in DebugParameters)
-            {
-                GUI.TextField(new Rect(10, l_YOffset, 170, 20), string.Format("{0}: {1}", DebugParameter.Key, DebugParameter.Value));
-                    
-                l_YOffset += 25;
-            }
-        }
-
+        
         public Vector3 GetDirectionOfFowardMovement()
         {
             Vector3 l_RearGroundHitAveragePoint = (RearLeftHoverWheel.GroundHitPoint.point + RearRightHoverWheel.GroundHitPoint.point) / 2;
@@ -181,9 +167,39 @@ namespace Controllers
         {
             m_Rigidbody.AddForceAtPosition((GetDirectionOfFowardMovement() * p_BoostForce) * Time.deltaTime, PointOfAcceleration.position);
             Transform l_Thrusters = transform.Find("VFX/Thrusters");
-            foreach(Transform l_Thruster in l_Thrusters.transform)
+            foreach (Transform l_Thruster in l_Thrusters.transform)
             {
                 l_Thruster.gameObject.GetComponent<ParticleSystem>().Play(true);
+            }
+        }
+
+        public void ChangeKartSkin()
+        {
+            foreach (SkinnableObject l_Object in SkinnableKartPeices)
+            {
+                l_Object.NextSkin();
+            }
+        }
+
+        public void ResetKartSkin()
+        {
+            foreach (SkinnableObject l_Object in SkinnableKartPeices)
+            {
+                l_Object.ResetSkin();
+            }
+        }
+
+        public int GetMaterialSkinIndex()
+        {
+            return SkinnableKartPeices[0].MaterialIndex;
+        }
+
+        public void SetKartSkin(int p_MaterialIndex)
+        {
+
+            foreach (SkinnableObject l_Object in SkinnableKartPeices)
+            {
+                l_Object.SetSkin(p_MaterialIndex);
             }
         }
     }

@@ -31,10 +31,11 @@ namespace Controllers
 
         void Start()
         {
+            // Early out if we don't have a target
             ForwardTarget = DriverFollowing.transform.FindChild("CameraObjects/ForwardFacingFocalPoint").transform;
             RearTarget = DriverFollowing.transform.FindChild("CameraObjects/BackwardFacingFocalPoint").transform;
 
-            // Early out if we don't have a target
+            // Early out if we can't find both front and rear targets
             if (!ForwardTarget || !RearTarget)
                 return;
 
@@ -46,8 +47,8 @@ namespace Controllers
         void Update()
         {
             // Early out if we don't have a target
-            //if (!ForwardTarget)
-            //     return;
+            if (!ForwardTarget)
+                 return;
 
             // Calculate the current rotation angles
             float l_WantedRotationAngle = CurrentTarget.transform.eulerAngles.y;

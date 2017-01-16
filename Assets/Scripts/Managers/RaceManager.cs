@@ -9,134 +9,101 @@ namespace Managers
 {
     public class RaceManager : MonoBehaviour
     {
-        public Camera MapCamera;
-        public GameObject KartCameraPrefab;
-        public List<GameObject> KartList;
-        public List<Transform> StartPositions;
+        private ObjectFadeController m_FadeController;
+        private TrackInfo m_SelectedTrackInfo;
+        public List<GameObject> m_Drivers = new List<GameObject>();
+        private Dictionary<string, List<WaypointController>> m_DriverTrackedWaypoints = new Dictionary<string, List<WaypointController>>();
+        private Dictionary<string, int> m_DriverLapCount = new Dictionary<string, int>();
 
-        public List<GameObject> DriverList = new List<GameObject>();
-        //Possible addition, code dictionary to be serializable thus removes need of above kart list
-        public Dictionary<string, GameObject> KartDictionary = new Dictionary<string, GameObject>();
+        float RaceStartDelayTime = 8.0f;
+        bool RaceStarted = false;
 
-        public TrackInfo SelectedTrackInfo;
-        public Dictionary<string, List<WaypointController>> TrackedWaypoints = new Dictionary<string, List<WaypointController>>();
-        public Dictionary<string, int> DriverLapCount = new Dictionary<string, int>();
-        public BezierSpline MainSpline;
 
-        public ObjectFadeController FadeController;
-
-        private Dictionary<string, string> DebugParameters = new Dictionary<string, string>();
-
-        void Awake()
+        public void Start()
         {
-            foreach (GameObject kart in KartList)
-                KartDictionary.Add(kart.name, kart);
+            for (int i = 0; i < m_Drivers.Count; i++)
+            {
+                if (m_Drivers[i].GetComponent<AIController>())
+                    m_Drivers[i].GetComponent<AIController>().SetupTrack(m_SelectedTrackInfo.StartPositions[i], m_SelectedTrackInfo.StartingSpline);
+                else if (m_Drivers[i].GetComponent<PlayerController>())
+                    m_Drivers[i].GetComponent<PlayerController>().SetupTrack(m_SelectedTrackInfo.StartPositions[i], m_SelectedTrackInfo.StartingSpline);
 
+            }
             SetCameras();
-
-            foreach (WaypointController l_Waypoint in SelectedTrackInfo.Waypoints)
-            {
-                l_Waypoint.OnWaypointSetUnset += Waypoint_OnWaypointSetUnset;
-            }
-
-            foreach (GameObject l_GameObject in DriverList)
-            {
-                Driver l_Driver = l_GameObject.GetComponent<Driver>();
-
-                if (l_Driver != null)
-                {
-                    DriverLapCount.Add(l_Driver.Name, 0);
-                    TrackedWaypoints.Add(l_Driver.Name, new List<WaypointController>());
-                }
-            }
         }
 
-        void Update()
+        public void Update()
         {
-            //first check if any Drivers exist
-            if (DriverList.Count >= 0 && DriverList.Count <= 4)
+            if (!RaceStarted)
             {
-                //Check for Drivers pressing start
-                if (Input.GetButton("JS1Start"))
+                RaceStartDelayTime -= Time.deltaTime;
+
+                if (RaceStartDelayTime < 0.0f)
                 {
-                    if (DoesControllerIDExist("JS1") == false)
-                    {
-                        AddPlayer("Beaver Kart 1", "JS1");
-                        SetCameras();
-                    }
-                }
-                else if (Input.GetButton("JS2Start"))
-                {
-                    if (DoesControllerIDExist("JS2") == false)
-                    { 
-                        AddPlayer("Beaver Kart 1", "JS2");
-                        SetCameras();
-                    }
-                }
-                else if (Input.GetButton("JS3Start"))
-                {
-                    if (DoesControllerIDExist("JS3") == false)
-                    {
-                        AddPlayer("Beaver Kart 1", "JS3");
-                        SetCameras();
-                    }
-                }
-                else if (Input.GetButton("JS4Start"))
-                {
-                    if (DoesControllerIDExist("JS4") == false)
-                    {
-                        AddPlayer("Beaver Kart 1", "JS4");
-                        SetCameras();
-                    }
-                }
-                else if (Input.GetButton("KStart"))
-                {
-                    if(DoesControllerIDExist("K") == false)
-                    {
-                        AddPlayer("Bat Kart 1", "K");
-                        SetCameras();
-                    }
+                    StartRace();
+                    RaceStarted = true;
                 }
             }
-
-            //Optimize, only needs to be called when a new player is added
-            
         }
 
+        private void StartRace()
+        {
+            for (int i = 0; i < m_Drivers.Count; i++)
+            {
+                if (m_Drivers[i].GetComponent<AIController>())
+                    m_Drivers[i].GetComponent<AIController>().Active = true;
+                else if (m_Drivers[i].GetComponent<PlayerController>())
+                    m_Drivers[i].GetComponent<PlayerController>().Active = true;
+            }
+        }
+
+        public void SetTrackInfo(TrackInfo p_TrackInfo)
+        {
+            m_SelectedTrackInfo = p_TrackInfo;
+
+            foreach (WaypointController l_Waypoint in m_SelectedTrackInfo.Waypoints)
+                l_Waypoint.OnWaypointSetUnset += Waypoint_OnWaypointSetUnset;
+        }
+
+        public void SetFadeController(ObjectFadeController p_FadeController)
+        {
+            m_FadeController = p_FadeController;
+        }
+        
         private void Waypoint_OnWaypointSetUnset(SetUnsetWaypointCollisionEventArgs e_EventArgs)
         {
             string l_DriverName = e_EventArgs.e_Driver.Name;
-            int l_LastTrackedWaypointIndex = TrackedWaypoints[l_DriverName].Count - 1;
+            int l_LastTrackedWaypointIndex = m_DriverTrackedWaypoints[l_DriverName].Count - 1;
             WaypointController l_LastTrackedWaypoint = null;
             
             try
             {
-                l_LastTrackedWaypoint = TrackedWaypoints[l_DriverName][l_LastTrackedWaypointIndex];
+                l_LastTrackedWaypoint = m_DriverTrackedWaypoints[l_DriverName][l_LastTrackedWaypointIndex];
             }
             catch { }
 
-            if (e_EventArgs.e_Waypoint == SelectedTrackInfo.StartFinishWaypoint)
+            if (e_EventArgs.e_Waypoint == m_SelectedTrackInfo.StartFinishWaypoint)
             {
                 if (e_EventArgs.e_Type == SetUnsetWayPointType.Unset)
                 {
                     if (e_EventArgs.e_Waypoint == l_LastTrackedWaypoint)
                     {
-                        DriverLapCount[l_DriverName] -= 1;
+                        m_DriverLapCount[l_DriverName] -= 1;
 
-                        TrackedWaypoints[l_DriverName].Remove(e_EventArgs.e_Waypoint);
+                        m_DriverTrackedWaypoints[l_DriverName].Remove(e_EventArgs.e_Waypoint);
                     }
                 }
                 else if (e_EventArgs.e_Type == SetUnsetWayPointType.Set)
                 {
-                    if (DriverLapCount[l_DriverName] == 0 || SelectedTrackInfo.ConfirmLap(TrackedWaypoints[l_DriverName]))
+                    if (m_DriverLapCount[l_DriverName] == 0 || m_SelectedTrackInfo.ConfirmLap(m_DriverTrackedWaypoints[l_DriverName]))
                     {
-                        DriverLapCount[l_DriverName] += 1;
+                        m_DriverLapCount[l_DriverName] += 1;
                     }
 
                     if (e_EventArgs.e_Waypoint != l_LastTrackedWaypoint)
                     {
                         if (l_LastTrackedWaypoint == null || l_LastTrackedWaypoint.NextWaypoints.Contains(e_EventArgs.e_Waypoint))
-                            TrackedWaypoints[l_DriverName].Add(e_EventArgs.e_Waypoint);
+                            m_DriverTrackedWaypoints[l_DriverName].Add(e_EventArgs.e_Waypoint);
                     }
                 }
             }
@@ -146,7 +113,7 @@ namespace Managers
                 {
                     if (e_EventArgs.e_Waypoint == l_LastTrackedWaypoint)
                     {
-                        TrackedWaypoints[l_DriverName].Remove(e_EventArgs.e_Waypoint);
+                        m_DriverTrackedWaypoints[l_DriverName].Remove(e_EventArgs.e_Waypoint);
                     }
                 }
                 else if (e_EventArgs.e_Type == SetUnsetWayPointType.Set)
@@ -154,154 +121,111 @@ namespace Managers
                     if (e_EventArgs.e_Waypoint != l_LastTrackedWaypoint)
                     {
                         if (l_LastTrackedWaypoint.NextWaypoints.Contains(e_EventArgs.e_Waypoint))
-                            TrackedWaypoints[l_DriverName].Add(e_EventArgs.e_Waypoint);
+                            m_DriverTrackedWaypoints[l_DriverName].Add(e_EventArgs.e_Waypoint);
                     }
                 }
             }
 
-            // ****** Debug OnGui Information ******
-
-            l_LastTrackedWaypointIndex = TrackedWaypoints[l_DriverName].Count - 1;
+            l_LastTrackedWaypointIndex = m_DriverTrackedWaypoints[l_DriverName].Count - 1;
 
             try
             {
-                l_LastTrackedWaypoint = TrackedWaypoints[l_DriverName][l_LastTrackedWaypointIndex];
+                l_LastTrackedWaypoint = m_DriverTrackedWaypoints[l_DriverName][l_LastTrackedWaypointIndex];
             }
             catch { }
-
-            string NextPossibleWaypoints = "";
-            if (l_LastTrackedWaypoint != null)
-            {
-                foreach (WaypointController l_Waypoint in l_LastTrackedWaypoint.NextWaypoints)
-                    NextPossibleWaypoints += l_Waypoint.ID.ToString() + ", ";
-
-                UpdateDebugVariables(NextPossibleWaypoints, DriverLapCount[l_DriverName].ToString());
-            }
         }
 
-        private void UpdateDebugVariables(string p_NextWaypoints, string p_LapNumber)
-        {
-            DebugParameters["Next Waypoints"] = p_NextWaypoints;
-            DebugParameters["Lap Number:"] = p_LapNumber;
-        }
-
-        public void OnGUI()
-        {
-            GUI.backgroundColor = Color.black;
-            int l_YOffset = -25;
-
-            foreach (KeyValuePair<string, string> DebugParameter in DebugParameters)
-            {
-                int ScreenBottom = Screen.height;
-
-                GUI.TextField(new Rect(10, ScreenBottom + l_YOffset, 170, 20), string.Format("{0}: {1}", DebugParameter.Key, DebugParameter.Value));
-
-                l_YOffset -= 25;
-            }
-            if (GUI.Button(new Rect(Screen.width - 150, Screen.height - 25, 125, 20), "Spawn AI Driver"))
-                AddAI("Beaver Kart 1");
-        }
-
-        public void AddAI(string p_KartName)
+        public void AddAI(AIController p_AIController, int p_KartMaterialIndex, int p_CharacterMaterialIndex)
         {
             GameObject l_AIDriver = new GameObject();
-            GameObject l_kart = Instantiate(KartDictionary[p_KartName]);
-            l_kart.transform.SetParent(l_AIDriver.transform);
-            l_AIDriver.name = "Driver" + DriverList.Count;
-            l_AIDriver.AddComponent<AIController>();
-            
-            l_AIDriver.GetComponent<AIController>().MakeDriver(l_kart, StartPositions[DriverList.Count], this, MainSpline, FadeController);
-            
-            DriverLapCount.Add(l_AIDriver.name, 0);
-            TrackedWaypoints.Add(l_AIDriver.name, new List<WaypointController>());
+            GameObject l_Kart = Instantiate(p_AIController.Kart);
+            GameObject l_Character = Instantiate(p_AIController.Character);
+            GameObject l_InCarCharacter = Instantiate(p_AIController.InCarCharacter);
+            l_Kart.transform.SetParent(l_AIDriver.transform);
+            l_AIDriver.name = "Driver" + m_Drivers.Count;
 
-            DriverList.Add(l_AIDriver);
+            l_AIDriver.AddComponent<AIController>();
+            l_AIDriver.GetComponent<AIController>().SetupDriver(l_AIDriver.name, l_Kart, l_Character, l_InCarCharacter, this, m_FadeController, p_KartMaterialIndex, p_CharacterMaterialIndex);
+            l_AIDriver.GetComponent<AIController>().CenterPath = m_SelectedTrackInfo.StartingSpline;
+
+            l_Kart.GetComponent<Rigidbody>().useGravity = true;
+            
+            m_DriverLapCount.Add(l_AIDriver.name, 0);
+            m_DriverTrackedWaypoints.Add(l_AIDriver.name, new List<WaypointController>());
+
+            m_Drivers.Add(l_AIDriver);
+
+            //l_Character.SetActive(false);
+
+            DontDestroyOnLoad(l_AIDriver);
+            DontDestroyOnLoad(l_Character);            
         }
 
-        public void AddPlayer(string p_KartName, string p_ControllerID)
+        public void AddPlayer(PlayerController p_PlayerController, GameObject p_CameraPrefab, int p_KartMaterialIndex, int p_CharacterMaterialIndex)
         {
             GameObject l_Player = new GameObject();
-            GameObject l_kart = Instantiate(KartDictionary[p_KartName]);
-            l_kart.transform.SetParent(l_Player.transform);
-            l_Player.name = "Driver" + DriverList.Count;
-            l_Player.AddComponent<PlayerController>();
+            GameObject l_Kart = Instantiate(p_PlayerController.Kart);
+            GameObject l_Character = Instantiate(p_PlayerController.Character);
+            GameObject l_InCarCharacter = Instantiate(p_PlayerController.InCarCharacter);
+            l_Kart.transform.SetParent(l_Player.transform);
+            l_Player.name = "Driver" + m_Drivers.Count;
 
-            GameObject l_NewCamera = Instantiate(KartCameraPrefab);
+            l_Player.AddComponent<PlayerController>();            
+            l_Player.GetComponent<PlayerController>().SetupDriver(l_Player.name, l_Kart, l_Character, l_InCarCharacter, this, m_FadeController, p_KartMaterialIndex, p_CharacterMaterialIndex);
+            l_Player.GetComponent<PlayerController>().ControllerID = p_PlayerController.ControllerID;
+
+            l_Kart.GetComponent<Rigidbody>().useGravity = true;
+
+            GameObject l_NewCamera = Instantiate(p_CameraPrefab);
             l_NewCamera.transform.SetParent(l_Player.transform);
-            l_NewCamera.GetComponent<CameraController>().DriverFollowing = l_kart.gameObject;
-
-            l_Player.GetComponent<PlayerController>().MakeDriver(l_kart, StartPositions[DriverList.Count], this, MainSpline, FadeController);
-
-            l_Player.GetComponent<PlayerController>().ControllerID = p_ControllerID;
+            l_NewCamera.GetComponent<CameraController>().DriverFollowing = l_Kart.gameObject;
     
-            DriverLapCount.Add(l_Player.name, 0);
-            TrackedWaypoints.Add(l_Player.name, new List<WaypointController>());
+            m_DriverLapCount.Add(l_Player.name, 0);
+            m_DriverTrackedWaypoints.Add(l_Player.name, new List<WaypointController>());
 
-            DriverList.Add(l_Player);   
-        }
-        
-        private bool DoesControllerIDExist(string p_controllerID)
-        {
-            bool l_IsControllerIDTaken = false;
-            foreach(GameObject l_Driver in DriverList)
-            {
-                if (l_Driver.GetComponent<PlayerController>() != null)
-                {
-                    if (l_Driver.GetComponent<PlayerController>().ControllerID.Trim().Equals(p_controllerID))
-                    {
-                        l_IsControllerIDTaken = true;
-                        return l_IsControllerIDTaken;
-                    }
-                }
-                else
-                    l_IsControllerIDTaken = false;
-            }
+            m_Drivers.Add(l_Player);
 
-            return l_IsControllerIDTaken;
+            //l_Character.SetActive(false);
+
+            DontDestroyOnLoad(l_Player);
+            //DontDestroyOnLoad(l_Character);
         }
 
         private void SetCameras()
         {
-            switch(DriverList.Count)
+            switch(m_Drivers.Count)
             {
                 case 0:
-                    MapCamera.enabled = true;
-                    MapCamera.rect = new Rect(0f, 0f, 1f, 1f);
                     break;
                 case 1:
-                    MapCamera.enabled = false;
-                    DriverList[0].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 1f, 1f));
+                    m_Drivers[0].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 1f, 1f));
                     break;
                 case 2:
-                    MapCamera.enabled = false;
-                    DriverList[0].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, 1f, 0.5f));
-                    DriverList[1].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 1f, 0.5f));
+                    m_Drivers[0].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, 1f, 0.5f));
+                    m_Drivers[1].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 1f, 0.5f));
                     break;
                 case 3:
-                    MapCamera.enabled = true;
-                    MapCamera.rect = new Rect(0.5f, 0f, 0.5f, 0.5f);
-                    DriverList[0].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, 0.5f, 0.5f));
-                    DriverList[1].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0.5f, 0.5f, 0.5f, 0.5f));
-                    DriverList[2].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 0.5f, 0.5f));
+                    m_Drivers[0].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, 0.5f, 0.5f));
+                    m_Drivers[1].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0.5f, 0.5f, 0.5f, 0.5f));
+                    m_Drivers[2].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 0.5f, 0.5f));
                     break;
                 case 4:
-                    MapCamera.enabled = false;                    
-                    DriverList[0].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, 0.5f, 0.5f));
-                    DriverList[1].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0.5f, 0.5f, 0.5f, 0.5f));
-                    DriverList[2].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 0.5f, 0.5f));
-                    DriverList[3].GetComponentInChildren<Controllers.CameraController>().SetCameraScreenSize(new Rect(0.5f, 0f, 0.5f, 0.5f));
+                    m_Drivers[0].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, 0.5f, 0.5f));
+                    m_Drivers[1].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0.5f, 0.5f, 0.5f, 0.5f));
+                    m_Drivers[2].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 0.5f, 0.5f));
+                    m_Drivers[3].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0.5f, 0f, 0.5f, 0.5f));
                     break;
             }
         }
 
-        public WaypointController GetDriversNextWaypoint(string p_DriverName)
-        {
-            int l_DriversLastTrackedWaypointIndex = TrackedWaypoints[p_DriverName].Count - 1;
+        //public WaypointController GetDriversNextWaypoint(string p_DriverName)
+        //{
+        //    int l_DriversLastTrackedWaypointIndex = m_DriverTrackedWaypoints[p_DriverName].Count - 1;
 
-            if (l_DriversLastTrackedWaypointIndex < 0)
-                return SelectedTrackInfo.StartFinishWaypoint;
+        //    if (l_DriversLastTrackedWaypointIndex < 0)
+        //        return SelectedTrackInfo.StartFinishWaypoint;
 
-            return TrackedWaypoints[p_DriverName][l_DriversLastTrackedWaypointIndex].NextWaypoints[0];
-        }
+        //    return m_DriverTrackedWaypoints[p_DriverName][l_DriversLastTrackedWaypointIndex].NextWaypoints[0];
+        //}
     }
 }

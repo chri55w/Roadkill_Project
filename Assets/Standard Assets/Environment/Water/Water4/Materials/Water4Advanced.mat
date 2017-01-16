@@ -28,6 +28,12 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
+        name: _ColorControl
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
         name: _DecalTex
       second:
         m_Texture: {fileID: 0}
@@ -328,7 +334,10 @@ Material:
       second: {r: 0.1, g: 0.1, b: 0.01, a: 0.01}
     - first:
         name: _WorldLightDir
-      second: {r: -0.030375138, g: -0.20139083, b: -0.97903997, a: 0}
+      second: {r: -0.33985412, g: -0.20139086, b: -0.9186631, a: 0}
+    - first:
+        name: _horizonColor
+      second: {r: 0.172, g: 0.463, b: 0.435, a: 0}
 --- !u!1002 &2100001
 EditorExtensionImpl:
   serializedVersion: 6
