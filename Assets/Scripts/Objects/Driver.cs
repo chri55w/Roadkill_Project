@@ -21,8 +21,12 @@ namespace Objects
         //Respawn variables
         public float RespawnDistanceModifier = 5;
         public BezierSpline CurrentSpline;
-        public int SplineDetail;
+        public int CurrentSplineDetail;
         float ClosestTimePointOnSpline = 0f;
+
+        public BezierSpline LapSpline;
+        public int LapSplineDetail;
+        float ClosestTimePointOnLapSpline = 0f;
 
         public ObjectFadeController m_FadeController;
         public bool Faded = false;
@@ -47,9 +51,6 @@ namespace Objects
             m_FadeController = p_ObjectFadeController;
 
             Kart.GetComponent<KartController>().SetKartSkin(p_KartMaterialIndex);
-
-            CurrentSpline = p_StartingSpline;
-            SplineDetail = CurrentSpline.MeshDetailLevel;
 
             m_KartHealth = 3;
             m_KartColorIDs = Shader.PropertyToID("_Color");
@@ -79,17 +80,30 @@ namespace Objects
             m_RespawnState = e_RespawnState.ALIVE;
         }
 
-        public void SetupTrack(Transform p_StartPosition, BezierSpline p_StartingSpline)
+        public void SetupTrack(Transform p_StartPosition, BezierSpline p_StartingSpline, BezierSpline p_LapSpline)
         {
             Kart.transform.position = p_StartPosition.position;
             Kart.transform.rotation = p_StartPosition.rotation;
-                        
-            RespawnCenterPath = p_StartingSpline;
+
+            CurrentSpline = p_StartingSpline;
+            CurrentSplineDetail = CurrentSpline.MeshDetailLevel;
+
+            LapSpline = p_LapSpline;
+            LapSplineDetail = LapSpline.MeshDetailLevel;
         }
 
         public void Start()
         {
             Name = transform.root.gameObject.name;
+        }
+
+        public float GetPosition()
+        {
+            Vector3 l_CurrentPosition = new Vector3(Kart.transform.position.x, Kart.transform.position.y, Kart.transform.position.z);
+
+            ClosestTimePointOnLapSpline = LapSpline.GetClosestTimePointOnSpline(LapSplineDetail, l_CurrentPosition);
+
+            return ClosestTimePointOnLapSpline;
         }
 
         protected bool DeathCheck()
@@ -212,10 +226,10 @@ namespace Objects
         {
             Vector3 l_CurrentPosition = new Vector3(Kart.transform.position.x, Kart.transform.position.y, Kart.transform.position.z);
 
-            ClosestTimePointOnSpline = CurrentSpline.GetClosestTimePointOnSpline(SplineDetail, l_CurrentPosition);
+            ClosestTimePointOnSpline = CurrentSpline.GetClosestTimePointOnSpline(CurrentSplineDetail, l_CurrentPosition);
 
             // (+/-)(1.0f/SplineDetail) * x where x is how many steps ahead or behind you want the point to be 
-            float l_TimePointAhead = (ClosestTimePointOnSpline + ((1.0f / SplineDetail) * p_Distance)) % 1;
+            float l_TimePointAhead = (ClosestTimePointOnSpline + ((1.0f / CurrentSplineDetail) * p_Distance)) % 1;
 
             Vector3 l_PointAhead = CurrentSpline.GetPoint(l_TimePointAhead);
 
@@ -226,10 +240,10 @@ namespace Objects
         {
             Vector3 l_CurrentPosition = new Vector3(Kart.transform.position.x, Kart.transform.position.y, Kart.transform.position.z);
             
-            ClosestTimePointOnSpline = CurrentSpline.GetClosestTimePointOnSpline(SplineDetail, l_CurrentPosition);
+            ClosestTimePointOnSpline = CurrentSpline.GetClosestTimePointOnSpline(CurrentSplineDetail, l_CurrentPosition);
             
             // (+/-)(1.0f/SplineDetail) * x where x is how many steps ahead or behind you want the point to be 
-            float l_TimePointAhead = (ClosestTimePointOnSpline - ((1.0f / SplineDetail) * p_Distance)) % 1;
+            float l_TimePointAhead = (ClosestTimePointOnSpline - ((1.0f / CurrentSplineDetail) * p_Distance)) % 1;
 
             Vector3 l_PointBehind = CurrentSpline.GetPoint(l_TimePointAhead);
 
@@ -238,10 +252,10 @@ namespace Objects
 
         protected void FaceForwards(Vector3 p_Postion)
         {
-            ClosestTimePointOnSpline = CurrentSpline.GetClosestTimePointOnSpline(SplineDetail, p_Postion);
+            ClosestTimePointOnSpline = CurrentSpline.GetClosestTimePointOnSpline(CurrentSplineDetail, p_Postion);
 
             // (+/-)(1.0f/SplineDetail) * x where x is how many steps ahead or behind you want the point to be 
-            float l_TimePointAhead = (ClosestTimePointOnSpline + ((1.0f / SplineDetail))) % 1;
+            float l_TimePointAhead = (ClosestTimePointOnSpline + ((1.0f / CurrentSplineDetail))) % 1;
 
             Kart.transform.LookAt(CurrentSpline.GetPoint(l_TimePointAhead));
         }
@@ -249,7 +263,7 @@ namespace Objects
         public void ChangeSpline(BezierSpline p_NewSpline)
         {
             CurrentSpline = p_NewSpline;
-            SplineDetail = CurrentSpline.MeshDetailLevel;
+            CurrentSplineDetail = CurrentSpline.MeshDetailLevel;
         }
       }
   }
