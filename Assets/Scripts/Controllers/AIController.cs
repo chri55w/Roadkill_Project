@@ -9,9 +9,12 @@ namespace Controllers
     {
         public BezierSpline CenterPath;
         float ClosestTimePointOnSpline = 0f;
-        
+
         void FixedUpdate()
         {
+            if (!Active)
+                return;
+
             int l_SplineDetail = CenterPath.MeshDetailLevel;
 
             Vector3 CurrentPosition = new Vector3(Kart.transform.position.x, Kart.transform.position.y, Kart.transform.position.z);

@@ -9,24 +9,32 @@ namespace Controllers
     public class PlayerController : Driver
     {
         public string ControllerID;
-
+        
         new void Start()
         {
             base.Start();
             Debug.Log("Player start");
         }
 
+        void FixedUpdate()
+        {
+
+        }
+
         void Update()
         {
+            if (!Active)
+                return;
+
             if (DeathCheck() == false)
             {
                 Kart.GetComponent<KartController>().Move(Input.GetAxis(ControllerID + "Vertical"), Input.GetAxis(ControllerID + "Horizontal"));
 
-                if (Input.GetButtonDown(ControllerID + "FlipCamera"))
+                if (Input.GetButtonDown(ControllerID + "CameraAction"))
                     GetComponentInChildren<CameraController>().FlipCamera();
-                if (Input.GetButtonUp(ControllerID + "FlipCamera"))
+                if (Input.GetButtonUp(ControllerID + "CameraAction"))
                     GetComponentInChildren<CameraController>().FlipCamera();
-                if ((Input.GetButtonDown(ControllerID + "UsePickup")))
+                if ((Input.GetButtonDown(ControllerID + "Action")))
                 {
                     if (CurrentPickup != null)
                     {

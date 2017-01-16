@@ -10,9 +10,12 @@ namespace Objects
     public abstract class Driver : MonoBehaviour
     {
         public GameObject Kart;
+        public GameObject Character;
+        public GameObject InCarCharacter;
         public GameObject CurrentPickup;
         public string Name;
-
+        public bool Active = false;
+        
         //Respawn variables
         public float RespawnDistanceModifier = 1.5f;
         public BezierSpline RespawnCenterPath;
@@ -30,25 +33,20 @@ namespace Objects
         protected Dictionary<int, Material> m_KartMaterials = new Dictionary<int, Material>();
         protected int m_KartColorIDs = -1;
         protected List<GameObject> m_KartParts = new List<GameObject>();
- 
 
-        public void MakeDriver(GameObject p_Kart, Transform p_StartPosition, RaceManager p_RaceManager, BezierSpline p_StartingSpline, ObjectFadeController p_SidLordOfTheFade)
+        public void SetupDriver(string p_Name, GameObject p_Kart, GameObject p_Character, GameObject p_InCarCharacter, RaceManager p_RaceManager, ObjectFadeController p_ObjectFadeController, int p_KartMaterialIndex, int p_CharacterMaterialIndex)
         {
+            Name = p_Name;
             Kart = p_Kart;
+            Character = p_Character;
+            InCarCharacter = p_InCarCharacter;
+            m_RaceManager = p_RaceManager;
+            m_FadeController = p_ObjectFadeController;
 
-            transform.position = p_StartPosition.position;
-            transform.rotation = p_StartPosition.rotation;
+            Kart.GetComponent<KartController>().SetKartSkin(p_KartMaterialIndex);
 
             m_KartHealth = 3;
-            
-            m_RaceManager = p_RaceManager;
-
-            m_FadeController = p_SidLordOfTheFade;
-
-            RespawnCenterPath = p_StartingSpline;
-
             m_KartColorIDs = Shader.PropertyToID("_Color");
-            Debug.Log("Shader ID for color: " + m_KartColorIDs);
 
             // Get each child object of the mesh gameObject
             for (int i = 0; i < Kart.transform.GetChild(0).childCount; i++)
@@ -74,6 +72,14 @@ namespace Objects
             FadeIndex = new bool[m_KartMaterials.Count];
         }
 
+        public void SetupTrack(Transform p_StartPosition, BezierSpline p_StartingSpline)
+        {
+            Kart.transform.position = p_StartPosition.position;
+            Kart.transform.rotation = p_StartPosition.rotation;
+                        
+            RespawnCenterPath = p_StartingSpline;
+        }
+
 
         public void Start()
         {
@@ -92,7 +98,6 @@ namespace Objects
                         FadeIndex[i] = false;
 
                     Die();
-                    Debug.Log("I died RIP");
                     // Start respawning if not still fading
                     m_Respawning = true;
                     return true;
@@ -127,8 +132,6 @@ namespace Objects
         public void TakeDamage(int p_damage)
         {
             m_KartHealth -= p_damage;
-
-            Debug.Log("They got me");
         }
 
         protected void Die()

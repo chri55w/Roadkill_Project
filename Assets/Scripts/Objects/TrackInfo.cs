@@ -1,12 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+using Objects;
+
 using Controllers;
 
 public class TrackInfo : MonoBehaviour {
 
+    public string TrackName;
     public List<WaypointController> Waypoints;
     public WaypointController StartFinishWaypoint;
+    public List<Transform> StartPositions;
+    public BezierSpline StartingSpline;
 
     // Use this for initialization
     void Start ()

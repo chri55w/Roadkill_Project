@@ -46,7 +46,7 @@ namespace Objects
 
         public void Start()
         {
-            Debug.Log(Points.Count);
+            //Debug.Log(Points.Count);
         }
 
         public bool Locked
