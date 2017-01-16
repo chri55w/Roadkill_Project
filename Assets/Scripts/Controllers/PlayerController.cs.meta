@@ -1,10 +1,19 @@
 fileFormatVersion: 2
 guid: 4b015e21cb36bc54daf4d5d47e65c422
-timeCreated: 1477854577
+timeCreated: 1484591898
 licenseType: Pro
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - Kart: {instanceID: 0}
+  - Character: {instanceID: 0}
+  - InCarCharacter: {instanceID: 0}
+  - CurrentPickup: {instanceID: 0}
+  - CurrentSpline: {instanceID: 0}
+  - LapSpline: {instanceID: 0}
+  - m_FadeController: {instanceID: 0}
+  - NoPickupIcon: {instanceID: 0}
+  - Position: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

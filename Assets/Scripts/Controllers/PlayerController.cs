@@ -9,10 +9,13 @@ namespace Controllers
     public class PlayerController : Driver
     {
         public string ControllerID;
+        public Texture2D NoPickupIcon;
+        public Texture2D Position;
         
         new void Start()
         {
             base.Start();
+            NoPickupIcon = Resources.Load<Texture2D>("GUI/No Weapon");
         }
 
         void FixedUpdate()
@@ -51,10 +54,18 @@ namespace Controllers
         void OnGUI()
         {
             GUI.backgroundColor = Color.black;
-
-            if (CurrentPickup)
+            if (m_RaceManager != null && m_RaceManager.RaceStarted)
             {
-                GUI.DrawTexture(new Rect(Screen.width - 60, 10, 50, 50), CurrentPickup.GetComponent<Pickup>().GetCurrentIcon());
+                if (CurrentPickup != null)
+                {
+                    GUI.DrawTexture(new Rect(Screen.width - 60, 10, 50, 50), CurrentPickup.GetComponent<Pickup>().GetCurrentIcon());
+                }
+                else
+                {
+                    GUI.DrawTexture(new Rect(Screen.width - 60, 10, 50, 50), NoPickupIcon);
+                }
+
+                GUI.DrawTexture(new Rect(60, 10, 50, 50), Position);
             }
         }
 

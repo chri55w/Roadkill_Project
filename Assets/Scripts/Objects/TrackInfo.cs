@@ -12,6 +12,7 @@ public class TrackInfo : MonoBehaviour {
     public WaypointController StartFinishWaypoint;
     public List<Transform> StartPositions;
     public BezierSpline StartingSpline;
+    public BezierSpline LapSpline;
 
     // Use this for initialization
     void Start ()
