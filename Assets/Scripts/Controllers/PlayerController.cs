@@ -13,7 +13,6 @@ namespace Controllers
         new void Start()
         {
             base.Start();
-            Debug.Log("Player start");
         }
 
         void FixedUpdate()
@@ -55,8 +54,7 @@ namespace Controllers
 
             if (CurrentPickup)
             {
-                GUI.TextField(new Rect(Screen.width - 300, 10, 200, 20), string.Format("Current Pickup Name: {0}", CurrentPickup.GetComponent<Pickup>().PickupName));
-                GUI.TextField(new Rect(Screen.width - 300, 35, 200, 20), string.Format("Current Pickup Level: {0}", CurrentPickup.GetComponent<Pickup>().PickupLevel));
+                GUI.DrawTexture(new Rect(Screen.width - 60, 10, 50, 50), CurrentPickup.GetComponent<Pickup>().GetCurrentIcon());
             }
         }
 

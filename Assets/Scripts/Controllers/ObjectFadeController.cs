@@ -44,14 +44,12 @@ public class ObjectFadeController : MonoBehaviour
             float l_NewAlpha = Mathf.Lerp(l_AkuAku.a, 1.0f, t);
             //Debug.Log(l_NewAlpha + " at time " + t);
             p_Material.SetColor(p_ColourShaderID, new Color(l_AkuAku.r, l_AkuAku.g, l_AkuAku.b, l_NewAlpha));
+
+            yield return null;
         }
         //Debug.Log("END FADING");
         // Bools are structs and refs cannot be passed into IEnumerators
         // Therefor must find the bool (if required) from the object directly
-        if(p_ObjectToFade.name.Contains("Driver"))
-        {
-            p_ObjectToFade.GetComponent<Driver>().Faded = true;
-        }
 
         //Wont work for group
         //if (OnFadeIn != null)
@@ -78,6 +76,8 @@ public class ObjectFadeController : MonoBehaviour
             float l_NewAlpha = Mathf.Lerp(l_AkuAku.a, 1.0f, t);
             //Debug.Log(l_NewAlpha + " at time " + t);
             p_Material.SetColor(p_ColourShaderID, new Color(l_AkuAku.r, l_AkuAku.g, l_AkuAku.b, l_NewAlpha));
+
+            yield return null;
         }
         //Debug.Log("END FADING");
         // Bools are structs and refs cannot be passed into IEnumerators
@@ -96,19 +96,18 @@ public class ObjectFadeController : MonoBehaviour
 
     private IEnumerator FadeOut(GameObject p_ObjectToFade, Material p_Material, int p_ColourShaderID, float p_FadeTime)
     {
+
         Color l_AkuAku = p_Material.GetColor(p_ColourShaderID);
-        //Debug.Log(string.Format("START Fading to {0} from {1}", p_FadeTo, l_AkuAku.a));
+
         for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / p_FadeTime)
         {
             float l_NewAlpha = Mathf.Lerp(l_AkuAku.a, 0.0f, t);
             //Debug.Log(l_NewAlpha + " at time " + t);
             p_Material.SetColor(p_ColourShaderID, new Color(l_AkuAku.r, l_AkuAku.g, l_AkuAku.b, l_NewAlpha));
+
+            yield return null;
         }
-        //Debug.Log("END FADING");
-        if (p_ObjectToFade.name.Contains("Driver"))
-        {
-            p_ObjectToFade.GetComponent<Driver>().Faded = true;
-        }
+
         //p_FadeComplete = true;
         yield return null;
     }
@@ -124,15 +123,13 @@ public class ObjectFadeController : MonoBehaviour
     /// <returns></returns>
     private IEnumerator FadeOut(GameObject p_ObjectToFade, Material p_Material, int p_MaterialID, int p_ColourShaderID, float p_FadeTime)
     {
-        float l_FadeTarget = 0.1f;
         Color l_AkuAku = p_Material.GetColor(p_ColourShaderID);
         for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / p_FadeTime)
         {
-            float l_NewAlpha = Mathf.Lerp(l_AkuAku.a, l_FadeTarget, t);
+            float l_NewAlpha = Mathf.Lerp(l_AkuAku.a, 0.0f, t);
             p_Material.SetColor(p_ColourShaderID, new Color(l_AkuAku.r, l_AkuAku.g, l_AkuAku.b, l_NewAlpha));
 
-            if (l_AkuAku.a > l_FadeTarget)
-                yield return null;
+            yield return null;
 
         }
         // Bools are structs and refs cannot be passed into IEnumerators

@@ -9,53 +9,45 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1000010924640904}
+  m_RootGameObject: {fileID: 1000010488921926}
   m_IsPrefabParent: 1
---- !u!1 &1000010924640904
+--- !u!1 &1000010488921926
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 4000013813791688}
-  - 114: {fileID: 114000010071472810}
+  - 4: {fileID: 4000010892281710}
+  - 114: {fileID: 114000012182164848}
   m_Layer: 0
-  m_Name: Speed Boost
+  m_Name: FadeController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4000013813791688
+--- !u!4 &4000010892281710
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010924640904}
+  m_GameObject: {fileID: 1000010488921926}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 250.72726, y: 0.85915786, z: 191.7182}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &114000010071472810
+--- !u!114 &114000012182164848
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010924640904}
+  m_GameObject: {fileID: 1000010488921926}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f81f1d1a6551a914ba00a5076ed19d40, type: 3}
+  m_Script: {fileID: 11500000, guid: c53cd16ed7a547a4792b9a3484857ec9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PickupLevel: 1
-  PickupUses: 1
-  PickupDamage: 0
-  PickupName: Speed Boost
-  Level1Icon: {fileID: 2800000, guid: eaad7d919bb6424418ab072b6faf30fc, type: 3}
-  Level2Icon: {fileID: 2800000, guid: 18c9860e2a2ebd8459eb80973e6ad7a0, type: 3}
-  Level3Icon: {fileID: 2800000, guid: e717e88a53475894e942e5f9b1f12f0a, type: 3}
-  BoostForce: 25000

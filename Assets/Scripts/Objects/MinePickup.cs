@@ -10,7 +10,7 @@ namespace Objects
         {
             base.LevelUp(p_Driver);
             //Level 2 damage boost
-            if(PickupLevel == 2)
+            if (PickupLevel == 2)
             {
                 PickupDamage = 2;
                 GetComponent<Mine>().damage = PickupDamage;
@@ -27,19 +27,27 @@ namespace Objects
 
         protected override void Effect(GameObject p_Driver)
         {
-            // Should only be called after level 3 (since that grants extra use), possibly need a check in
+            // TODO level 3 mine isn't allowing multiple uses, LevelUp function is okay
+            // Should only be called after level 3 (since that grants extra use)
+            // TODO add rigidbody or gravity so mine is on floor
             if (PickupUses > 1)
             {
                 base.Effect(p_Driver);
-                p_Driver.GetComponent<Driver>().CurrentPickup = Instantiate(gameObject);
+                GameObject l_MineCopy = Instantiate(gameObject);
+                l_MineCopy.transform.SetParent(p_Driver.transform);
+                p_Driver.GetComponent<Driver>().CurrentPickup = l_MineCopy;
             }
+            else
+            {
+                base.Effect(p_Driver);
+            }
+
+            transform.parent = null;
 
             Transform l_SpawnLocation = p_Driver.transform.GetChild(0);
 
             transform.position = new Vector3(l_SpawnLocation.position.x, l_SpawnLocation.position.y - 0.5f, l_SpawnLocation.position.z);
-            GetComponent<Mine>().enabled = true;
-            transform.parent = null;
-            base.Effect(p_Driver);
+            GetComponent<Mine>().enabled = true;     
         }
 
         public override void DeletePickup(GameObject p_Driver)

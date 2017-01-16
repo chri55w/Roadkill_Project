@@ -10,6 +10,15 @@ namespace Controllers
         public BezierSpline CenterPath;
         float ClosestTimePointOnSpline = 0f;
 
+        private float m_PickupTimer;
+        private Transform m_AimRaycastOrigin;
+
+        new void Start()
+        {
+            base.Start();
+            m_AimRaycastOrigin = Kart.transform.Find("Raycast Points/Kart Front");
+        }
+
         void FixedUpdate()
         {
             if (!Active)
@@ -43,13 +52,69 @@ namespace Controllers
             float l_TurningDot = Vector3.Dot(heading.normalized, Kart.transform.right);
 
             Kart.GetComponent<KartController>().Move(l_ForwardDot, l_TurningDot);
+
+            // Does AI have a pickup at this point in time
+            if ((m_PickupTimer <= 0) && (CurrentPickup != null))
+            {
+                float UsePickupChance = Random.Range(0, 10);
+                if(UsePickupChance >= 5)
+                {
+                    Pickup l_LocalPickup = CurrentPickup.GetComponent<Pickup>();
+                    switch (l_LocalPickup.PickupID)
+                    {
+                        case Pickup.e_PickupID.SPEED_BOOST:
+                            // If not approaching corner
+                            // Get a point 5-10 units ahead
+                            // Compare the angle between current direction
+                            // And direction to far point
+                            // If angle is low enough use boost
+                            Vector3 l_CurrentPoint = GetPointAhead(0);
+                            Vector3 l_NextPoint = GetPointAhead(1);
+                            Vector3 l_FuturePoint = GetPointAhead(7);
+
+                            Vector3 l_NextPointDistance = l_NextPoint - l_CurrentPoint;
+                            Vector3 l_FuturePointDistance = l_FuturePoint - l_CurrentPoint;
+
+                            float l_Angle = Vector3.Angle(l_NextPointDistance, l_FuturePointDistance);
+
+                            if (l_Angle <= 20.0f)
+                                l_LocalPickup.UsePickup(gameObject);
+                            break;
+                        case Pickup.e_PickupID.LAND_MINE:
+                            // Kart must be considered on the ground to be used
+                            if(Kart.GetComponent<KartController>().WheelsGrounded() == 4)
+                                l_LocalPickup.UsePickup(gameObject);
+                            break;
+                        case Pickup.e_PickupID.THROWING_AXE:
+                            // Do I have a target
+                            RaycastHit l_Hit = new RaycastHit();
+                            if (Physics.SphereCast(m_AimRaycastOrigin.position, 7.5f, Kart.transform.forward, out l_Hit, 15.0f))                                                  
+                                if (l_Hit.transform.parent.name.Contains("Driver"))                                
+                                    l_LocalPickup.UsePickup(gameObject);                     
+                            break;
+                        case Pickup.e_PickupID.SHIELD:
+                            // Is something incoming
+                            break;
+                        case Pickup.e_PickupID.BLOOD_SLICK:
+                            // Kart must be considered on the ground to be used
+                            if (Kart.GetComponent<KartController>().WheelsGrounded() == 4)
+                                l_LocalPickup.UsePickup(gameObject);
+                            break;
+                    }
+
+                    if (l_LocalPickup.PickupUses <= 0)
+                        l_LocalPickup.DeletePickup(gameObject);
+                }
+
+                SetRandomTime(1.0f, 5.0f);
+            }
+            else
+                m_PickupTimer -= Time.deltaTime;
         }
 
         public void SwitchSpline(List<BezierSpline> p_SplineOptions)
         {
             int l_RandomIndex = Random.Range((int)0, (int)p_SplineOptions.Count);
-
-            Debug.Log("Range: 0 - " + (p_SplineOptions.Count ) + " || Random: " + l_RandomIndex);
 
             CenterPath = p_SplineOptions[l_RandomIndex];
         }
@@ -57,15 +122,43 @@ namespace Controllers
         void OnDrawGizmos()
         {
             Gizmos.color = Color.white;
-            var transform = this.transform;
 
+            // To draw position of AI drive point
+            /* 
             int l_SplineDetail = CenterPath.MeshDetailLevel;
+
+            Vector3 CurrentPosition = new Vector3(Kart.transform.position.x, Kart.transform.position.y, Kart.transform.position.z);
+
+            ClosestTimePointOnSpline = CenterPath.GetClosestTimePointOnSpline(l_SplineDetail, CurrentPosition);
 
             float TimePointAhead = (ClosestTimePointOnSpline + ((1.0f / l_SplineDetail) * 2)) % 1;
 
-            Vector3 PointAhead = CenterPath.GetPoint(TimePointAhead);
+            Vector3 l_CurrentPoint = GetPointAhead(0);
+            Vector3 l_NextPoint = GetPointAhead(1);
+            Vector3 l_NextPointDistance = l_NextPoint - l_CurrentPoint;
 
-            Gizmos.DrawWireSphere(PointAhead, 0.5f);
+            Vector3 l_FuturePoint = GetPointAhead(7);
+            Vector3 l_FuturePointDistance = l_FuturePoint - l_CurrentPoint;
+
+            Gizmos.DrawLine(l_CurrentPoint, l_NextPoint);
+            Gizmos.DrawWireSphere(l_NextPoint, 0.5f);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(l_CurrentPoint, l_FuturePoint);
+            Gizmos.DrawWireSphere(l_FuturePoint, 0.5f);
+
+            Vector3 PointAheadDistance = l_NextPoint - l_CurrentPoint;
+            Vector3 PointFarAheadDistance = l_FuturePoint - l_CurrentPoint;
+            
+
+            float angle = Vector3.Angle(PointAheadDistance, PointFarAheadDistance);            
+            Debug.Log(angle
+            */
+        }
+
+        private void SetRandomTime(float p_MinTime, float p_MaxTime)
+        {
+            m_PickupTimer = Random.Range(p_MinTime, p_MaxTime);
         }
     }
 }

@@ -74,7 +74,7 @@ namespace Controllers
             }
         }
 
-        private int WheelsGrounded()
+        public int WheelsGrounded()
         {
             int GroundedWheels = 0;
 
@@ -114,6 +114,7 @@ namespace Controllers
                     m_Rigidbody.drag = 0.25f;
                 }
 
+                // Kart not considered on the ground therefore it cannot change current movement
                 return;
             }
             else
@@ -165,6 +166,11 @@ namespace Controllers
         public void Boost(float p_BoostForce)
         {
             m_Rigidbody.AddForceAtPosition((GetDirectionOfFowardMovement() * p_BoostForce) * Time.deltaTime, PointOfAcceleration.position);
+            Transform l_Thrusters = transform.Find("VFX/Thrusters");
+            foreach (Transform l_Thruster in l_Thrusters.transform)
+            {
+                l_Thruster.gameObject.GetComponent<ParticleSystem>().Play(true);
+            }
         }
 
         public void ChangeKartSkin()
@@ -190,6 +196,7 @@ namespace Controllers
 
         public void SetKartSkin(int p_MaterialIndex)
         {
+
             foreach (SkinnableObject l_Object in SkinnableKartPeices)
             {
                 l_Object.SetSkin(p_MaterialIndex);

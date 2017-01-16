@@ -111,8 +111,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013537250688}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.004, z: 0}
+  m_LocalRotation: {x: -0.2693664, y: 0.6397252, z: -0.2747523, w: 0.6653605}
+  m_LocalPosition: {x: 194.8462, y: 6.204935, z: 197.68283}
   m_LocalScale: {x: 0.0127, y: 0.0127, z: 0.0127}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -247,7 +247,7 @@ MonoBehaviour:
   ThrowSpeed: 10
   Lifetime: 5
   RotateSpeed: 450
-  ThrowDirection: {x: 0, y: 0, z: 0}
+  ThrowDirection: {x: 0.99931407, y: 0.006919427, z: 0.03638671}
   PivotPoint: {fileID: 4000013579736088}
   m_MeshRenderers:
   - {fileID: 23000010316787396}
@@ -263,6 +263,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42f54883f160ac340b20f19df99da045, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PickupLevel: 1
+  PickupLevel: 2
   PickupUses: 1
-  PickupName: Axe
+  PickupDamage: 0
+  PickupID: 2
+  Level1Icon: {fileID: 2800000, guid: f3fcc4ed7d3e990459b3489f46e80b59, type: 3}
+  Level2Icon: {fileID: 2800000, guid: fa14ac2d5da758645af9e62006de1652, type: 3}
+  Level3Icon: {fileID: 2800000, guid: d557af3600c9a13499dcc106993ce7f1, type: 3}
