@@ -85,18 +85,9 @@ namespace Controllers
                         case Pickup.e_PickupID.THROWING_AXE:
                             // Do I have a target
                             RaycastHit l_Hit = new RaycastHit();
-                            if (Physics.SphereCast(m_AimRaycastOrigin.position, 7.5f, Kart.transform.forward, out l_Hit, 15.0f))
-                            {
-                                Debug.Log(l_Hit.transform.parent.name);
-                                
-                                if (l_Hit.transform.parent.name.Contains("Driver"))
-                                {
-                                    l_LocalPickup.UsePickup(gameObject);
-                                    Debug.Log("Attempting to throw axe");
-                                }
-                            }
-                            else
-                                Debug.Log("Miss");
+                            if (Physics.SphereCast(m_AimRaycastOrigin.position, 7.5f, Kart.transform.forward, out l_Hit, 15.0f))                                                  
+                                if (l_Hit.transform.parent.name.Contains("Driver"))                                
+                                    l_LocalPickup.UsePickup(gameObject);                     
                             break;
                         case Pickup.e_PickupID.SHIELD:
                             // Is something incoming

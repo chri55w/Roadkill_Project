@@ -22,13 +22,15 @@ namespace Objects
 
         void OnTriggerEnter(Collider p_OtherCollider)
         {
-
-            if (p_OtherCollider.name == "DriverTriggerCollider")
+            if (p_OtherCollider.name == "DriverTriggerCollider" || p_OtherCollider.name.Equals("Throwing Axe"))
             {
                 Controllers.AIController l_AIController = p_OtherCollider.transform.root.gameObject.GetComponent<Controllers.AIController>();
+                Throwable l_Axe = p_OtherCollider.transform.root.gameObject.GetComponent<Throwable>();
 
                 if (l_AIController != null)
                     l_AIController.SwitchSpline(SplineOptions);
+                else if (l_Axe != null)
+                    l_Axe.SwitchSpline(SplineOptions);
             }
         }
     }
