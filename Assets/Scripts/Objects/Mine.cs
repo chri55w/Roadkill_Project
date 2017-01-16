@@ -52,15 +52,14 @@ namespace Objects
 
                 GameObject l_HitObject = new GameObject();
 
-                // TODO Change effect: disable current physics and apply new ones (launch in air) 
                 foreach (Collider l_hit in l_Colliders)
                 {
                     if (l_hit.name.Contains("Driver"))
                     {
                         l_HitObject = l_hit.transform.root.gameObject;
                         l_HitObject.GetComponent<Driver>().TakeDamage(damage);
-                        l_HitObject.GetComponentInChildren<Rigidbody>().AddExplosionForce(power, m_ExplosionPosition, radius, upwardModifer);
-                        l_HitObject.GetComponentInChildren<Rigidbody>().AddForce((power / 5) * -l_HitObject.transform.GetChild(0).transform.forward, ForceMode.Impulse);
+                        l_HitObject.GetComponentInChildren<Rigidbody>().velocity = Vector3.zero;
+                        l_HitObject.GetComponentInChildren<Rigidbody>().AddForce(Vector3.up * power, ForceMode.VelocityChange);
                         m_Triggered = true;
                     }
                 }
