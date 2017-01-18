@@ -34,6 +34,8 @@ namespace Objects
 
             m_BoxCollider.enabled = m_CooldownTimer > 0 ? false : true;
             m_MeshRender.enabled = m_CooldownTimer > 0 ? false : true;
+
+            transform.Rotate(Vector3.up);
         }
 
         void OnTriggerEnter(Collider p_OtherCollider)
