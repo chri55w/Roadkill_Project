@@ -48,6 +48,17 @@ namespace Controllers
                             l_Pickup.DeletePickup(gameObject);
                     }
                 }
+                if (Input.GetButtonDown(ControllerID + "MenuCycleButtonTwo"))
+                {
+                    // Reset
+                    Kart.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    Vector3 l_RespawnPoint = GetPointBehind(1);
+                    l_RespawnPoint.y += 0.5f;
+                    //Move Kart to respawn point - may need to add facing correct direction on respawn
+                    // Change to Lerp? - wont pass through waypoints otherwise
+                    Kart.transform.position = l_RespawnPoint;
+                    FaceForwards(l_RespawnPoint);
+                }
             }
         }
 

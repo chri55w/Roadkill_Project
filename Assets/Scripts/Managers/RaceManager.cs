@@ -102,11 +102,9 @@ namespace Managers
                 {
                     if (l_Driver.name.Equals(l_DriverName))
                     {
-                        if (m_DriverLapCount[l_DriverName] > 0)
-                        {
+                        if (m_DriverLapCount[l_DriverName] > 0)                        
                             m_DriverPositions.Add(l_Driver, l_Driver.GetComponent<Driver>().GetPosition() + (m_DriverLapCount[l_DriverName] + 1));
-                            Debug.Log("Driver 0 spline position is: " + l_Driver.GetComponent<Driver>().GetPosition() + m_DriverLapCount[l_DriverName]);
-                        }
+                        
                         else
                             m_DriverPositions.Add(l_Driver, l_Driver.GetComponent<Driver>().GetPosition());
                     }

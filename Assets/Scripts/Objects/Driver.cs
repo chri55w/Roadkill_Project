@@ -17,6 +17,7 @@ namespace Objects
         public GameObject CurrentPickup;
         public string Name;
         public bool Active = false;
+        public bool IsShielded = false;
         
         //Respawn variables
         public float RespawnDistanceModifier = 5;
@@ -61,7 +62,7 @@ namespace Objects
                 m_KartParts.Add(Kart.transform.GetChild(0).GetChild(i).gameObject);
                 Material m_KartPartMaterial = m_KartParts[i].GetComponent<MeshRenderer>().material;
                 // 0f - opacity, 1f - cutout, 2f - fade, 3f - transparent
-                m_KartPartMaterial.SetFloat("_Mode", 3f);
+                //m_KartPartMaterial.SetFloat("_Mode", 3f);
                 //m_KartMaterialColours.Add(m_KartMaterials[i].GetColor("_Color"));
 
                 //May need to do elsewhere
@@ -157,11 +158,13 @@ namespace Objects
 
         public void TakeDamage(int p_damage)
         {
-            m_KartHealth -= p_damage;
+            if (IsShielded)
+            {
+                m_KartHealth -= p_damage;
 
-            if (m_KartHealth <= 0)
-                m_RespawnState = e_RespawnState.DYING;
-
+                if (m_KartHealth <= 0)
+                    m_RespawnState = e_RespawnState.DYING;
+            }
         }
 
         protected void Die()
