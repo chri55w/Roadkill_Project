@@ -52,7 +52,7 @@ namespace Controllers
         {
             GUI.backgroundColor = Color.black;
 
-            if (CurrentPickup)
+            if (CurrentPickup != null)
             {
                 GUI.DrawTexture(new Rect(Screen.width - 60, 10, 50, 50), CurrentPickup.GetComponent<Pickup>().GetCurrentIcon());
             }

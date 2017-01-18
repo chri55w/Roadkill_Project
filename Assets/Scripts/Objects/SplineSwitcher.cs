@@ -29,8 +29,8 @@ namespace Objects
 
                 if (l_AIController != null)
                     l_AIController.SwitchSpline(SplineOptions);
-                else if (l_Axe != null)
-                    l_Axe.SwitchSpline(SplineOptions);
+                //else if (l_Axe != null)
+                //    l_Axe.SwitchSpline(SplineOptions);
             }
         }
     }

@@ -1,0 +1,114 @@
+fileFormatVersion: 2
+guid: 6a97bbe3571a4c7408075bb86208a18c
+timeCreated: 1480114011
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Kart_Back_Left_Wheel
+    100004: Kart_Back_Right_Wheel
+    100006: Kart_Driving_Wheel
+    100008: Kart_Front_Left_Wheel
+    100010: Kart_Front_Right_Wheel
+    100012: Kart_Left_Door
+    100014: Kart_Main_Body
+    100016: Kart_Right_Door
+    400000: //RootNode
+    400002: Kart_Back_Left_Wheel
+    400004: Kart_Back_Right_Wheel
+    400006: Kart_Driving_Wheel
+    400008: Kart_Front_Left_Wheel
+    400010: Kart_Front_Right_Wheel
+    400012: Kart_Left_Door
+    400014: Kart_Main_Body
+    400016: Kart_Right_Door
+    2300000: Kart_Back_Left_Wheel
+    2300002: Kart_Back_Right_Wheel
+    2300004: Kart_Driving_Wheel
+    2300006: Kart_Front_Left_Wheel
+    2300008: Kart_Front_Right_Wheel
+    2300010: Kart_Left_Door
+    2300012: Kart_Main_Body
+    2300014: Kart_Right_Door
+    3300000: Kart_Back_Left_Wheel
+    3300002: Kart_Back_Right_Wheel
+    3300004: Kart_Driving_Wheel
+    3300006: Kart_Front_Left_Wheel
+    3300008: Kart_Front_Right_Wheel
+    3300010: Kart_Left_Door
+    3300012: Kart_Main_Body
+    3300014: Kart_Right_Door
+    4300000: Kart_Left_Door
+    4300002: Kart_Driving_Wheel
+    4300004: Kart_Front_Left_Wheel
+    4300006: Kart_Main_Body
+    4300008: Kart_Right_Door
+    4300010: Kart_Back_Left_Wheel
+    4300012: Kart_Front_Right_Wheel
+    4300014: Kart_Back_Right_Wheel
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

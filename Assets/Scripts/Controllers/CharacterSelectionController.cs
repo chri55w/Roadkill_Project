@@ -39,12 +39,16 @@ public class CharacterSelectionController : MonoBehaviour {
     {
         return CharacterPlatforms[m_SelectedPlatformIndex].GetComponent<PlatformController>().InCarCharacter;
     }
+    public Sprite GetSelectedCharacterIcon()
+    {
+        return CharacterPlatforms[m_SelectedPlatformIndex].GetComponent<PlatformController>().CharacterIcon;
+    }
 
     void Update()
     {
         GameObject l_SelectedCharacterPlatform = CharacterPlatforms[m_SelectedPlatformIndex];
 
-        CharacterIconImage.material = l_SelectedCharacterPlatform.GetComponent<PlatformController>().CharacterIcon;
+        CharacterIconImage.sprite = l_SelectedCharacterPlatform.GetComponent<PlatformController>().CharacterIcon;
 
         if ((int)SelectionPlatform.transform.eulerAngles.y != (int)TargetRotation.y)
         {
