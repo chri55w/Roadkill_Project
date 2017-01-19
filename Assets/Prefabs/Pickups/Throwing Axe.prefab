@@ -71,7 +71,7 @@ GameObject:
   - 114: {fileID: 114000012466523042}
   - 114: {fileID: 114000013781913116}
   - 54: {fileID: 54000011021870510}
-  - 65: {fileID: 65000012374965568}
+  - 65: {fileID: 65000011289824794}
   m_Layer: 0
   m_Name: Throwing Axe
   m_TagString: Untagged
@@ -85,40 +85,40 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013164781232}
-  m_LocalRotation: {x: 0.49999994, y: -0.50000006, z: 0.49999994, w: 0.50000006}
-  m_LocalPosition: {x: 0.0000106673115, y: 55.847095, z: -0.0000007767794}
-  m_LocalScale: {x: 0.5762692, y: 0.5762692, z: 0.9090543}
+  m_LocalRotation: {x: 0.49999994, y: -0.5000001, z: 0.49999997, w: 0.50000006}
+  m_LocalPosition: {x: 0.000013419845, y: 55.84709, z: 0}
+  m_LocalScale: {x: 0.57626957, y: 0.5762692, z: 0.90905416}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000012724164026}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!4 &4000012439164580
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012121639242}
-  m_LocalRotation: {x: -0.5000829, y: 0.5000829, z: 0.4999171, w: 0.4999171}
-  m_LocalPosition: {x: -0.13443702, y: 35.418884, z: 9.182341}
-  m_LocalScale: {x: 0.68471855, y: 0.10091371, z: 0.47166538}
+  m_LocalRotation: {x: -0.5000829, y: 0.50008297, z: 0.4999171, w: 0.49991712}
+  m_LocalPosition: {x: -0.13443781, y: 35.418884, z: 9.182342}
+  m_LocalScale: {x: 0.68471897, y: 0.10091376, z: 0.47166556}
   m_LocalEulerAnglesHint: {x: -89.981, y: 180, z: -90.00001}
   m_Children: []
   m_Father: {fileID: 4000012724164026}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!4 &4000012724164026
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013537250688}
-  m_LocalRotation: {x: -0.2693664, y: 0.6397252, z: -0.2747523, w: 0.6653605}
-  m_LocalPosition: {x: 194.8462, y: 6.204935, z: 197.68283}
+  m_LocalRotation: {x: -0.27059805, y: 0.6532815, z: -0.27059805, w: 0.6532815}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.0127, y: 0.0127, z: 0.0127}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: -45}
   m_Children:
+  - {fileID: 4000013579736088}
   - {fileID: 4000011040528642}
   - {fileID: 4000012439164580}
-  - {fileID: 4000013579736088}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &4000013579736088
@@ -128,19 +128,19 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010496930840}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 28, z: 8.1}
+  m_LocalPosition: {x: -0.2, y: 29, z: 5.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000012724164026}
-  m_RootOrder: 2
+  m_RootOrder: 0
 --- !u!23 &23000010316787396
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013164781232}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_MotionVectors: 1
@@ -169,7 +169,7 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012121639242}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_MotionVectors: 1
@@ -221,18 +221,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &65000012374965568
+--- !u!65 &65000011289824794
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013537250688}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 5, y: 61, z: 34}
-  m_Center: {x: 0, y: 30.5, z: 10.5}
+  m_Size: {x: 5, y: 60, z: 33}
+  m_Center: {x: 0, y: 30, z: 10}
 --- !u!114 &114000012466523042
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -244,14 +244,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4515f155b056ec5499a1c72898980f24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 1
   ThrowSpeed: 10
-  Lifetime: 5
+  Lifetime: 100
   RotateSpeed: 450
   ThrowDirection: {x: 0.99931407, y: 0.006919427, z: 0.03638671}
   PivotPoint: {fileID: 4000013579736088}
   m_MeshRenderers:
   - {fileID: 23000010316787396}
   - {fileID: 23000013540724778}
+  Track: {fileID: 0}
+  ClosestTimePointOnSpline: 0
+  m_BoxCollider: {fileID: 0}
+  m_TriggerCollider: {fileID: 65000011289824794}
 --- !u!114 &114000013781913116
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -263,10 +268,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42f54883f160ac340b20f19df99da045, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PickupLevel: 2
+  PickupLevel: 1
   PickupUses: 1
   PickupDamage: 0
   PickupID: 2
-  Level1Icon: {fileID: 2800000, guid: f3fcc4ed7d3e990459b3489f46e80b59, type: 3}
-  Level2Icon: {fileID: 2800000, guid: fa14ac2d5da758645af9e62006de1652, type: 3}
-  Level3Icon: {fileID: 2800000, guid: d557af3600c9a13499dcc106993ce7f1, type: 3}
+  Level1Icon: {fileID: 2800000, guid: 879b3b2cdc90c9849aa0b046db8f4ecc, type: 3}
+  Level2Icon: {fileID: 2800000, guid: 449bae8b17edd4c4a8e34e5dc30d1162, type: 3}
+  Level3Icon: {fileID: 2800000, guid: 9652d19247f708a4eb093178f49fa61f, type: 3}

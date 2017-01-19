@@ -15,6 +15,7 @@ public class TrackInfo : MonoBehaviour {
     public Sprite MiniMapMaterial;
     public Vector2 MapSize;
     public Vector2 MiniMapCharacterOffset;
+    public BezierSpline LapSpline;
 
     // Use this for initialization
     void Start ()

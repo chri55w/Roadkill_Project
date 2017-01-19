@@ -9,10 +9,13 @@ namespace Controllers
     public class PlayerController : Driver
     {
         public string ControllerID;
+        public Texture2D NoPickupIcon;
+        public Texture2D Position;
         
         new void Start()
         {
             base.Start();
+            NoPickupIcon = Resources.Load<Texture2D>("GUI/No Weapon");
         }
 
         void FixedUpdate()
@@ -45,16 +48,36 @@ namespace Controllers
                             l_Pickup.DeletePickup(gameObject);
                     }
                 }
+                if (Input.GetButtonDown(ControllerID + "MenuCycleButtonTwo"))
+                {
+                    // Reset
+                    Kart.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    Vector3 l_RespawnPoint = GetPointBehind(1);
+                    l_RespawnPoint.y += 0.5f;
+                    //Move Kart to respawn point - may need to add facing correct direction on respawn
+                    // Change to Lerp? - wont pass through waypoints otherwise
+                    Kart.transform.position = l_RespawnPoint;
+                    FaceForwards(l_RespawnPoint);
+                }
             }
         }
 
         void OnGUI()
         {
             GUI.backgroundColor = Color.black;
-
-            if (CurrentPickup != null)
+            
+            if (m_RaceManager != null && m_RaceManager.RaceStarted)
             {
-                GUI.DrawTexture(new Rect(Screen.width - 60, 10, 50, 50), CurrentPickup.GetComponent<Pickup>().GetCurrentIcon());
+                if (CurrentPickup != null)
+                {
+                    GUI.DrawTexture(new Rect(Screen.width - 60, 10, 50, 50), CurrentPickup.GetComponent<Pickup>().GetCurrentIcon());
+                }
+                else
+                {
+                    GUI.DrawTexture(new Rect(Screen.width - 60, 10, 50, 50), NoPickupIcon);
+                }
+
+                GUI.DrawTexture(new Rect(60, 10, 50, 50), Position);
             }
         }
 

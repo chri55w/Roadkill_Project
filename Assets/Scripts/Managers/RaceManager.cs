@@ -16,23 +16,27 @@ namespace Managers
         private Dictionary<string, List<WaypointController>> m_DriverTrackedWaypoints = new Dictionary<string, List<WaypointController>>();
         private Dictionary<string, int> m_DriverLapCount = new Dictionary<string, int>();
         private Canvas m_Canvas;
+        private Dictionary<GameObject, float> m_DriverPositions = new Dictionary<GameObject, float>();
+        public Texture2D[] m_Positiontextures = new Texture2D[12]; 
 
         float RaceStartDelayTime = 8.0f;
-        bool RaceStarted = false;
+        public bool RaceStarted = false;
 
         public void Start()
         {
             for (int i = 0; i < m_Drivers.Count; i++)
             {
                 if (m_Drivers[i].GetComponent<AIController>())
-                    m_Drivers[i].GetComponent<AIController>().SetupTrack(m_SelectedTrackInfo.StartPositions[i], m_SelectedTrackInfo.StartingSpline);
+                    m_Drivers[i].GetComponent<AIController>().SetupTrack(m_SelectedTrackInfo.StartPositions[i], m_SelectedTrackInfo.StartingSpline, m_SelectedTrackInfo.LapSpline);
                 else if (m_Drivers[i].GetComponent<PlayerController>())
-                    m_Drivers[i].GetComponent<PlayerController>().SetupTrack(m_SelectedTrackInfo.StartPositions[i], m_SelectedTrackInfo.StartingSpline);
+                    m_Drivers[i].GetComponent<PlayerController>().SetupTrack(m_SelectedTrackInfo.StartPositions[i], m_SelectedTrackInfo.StartingSpline, m_SelectedTrackInfo.LapSpline);
 
             }
             
             SetHUDLayout();
             SetCameras();
+
+            LoadPositionTextures();
         }
 
         public void Update()
@@ -47,6 +51,24 @@ namespace Managers
                     RaceStarted = true;
                 }
             }
+
+            UpdatePositions();
+        }
+
+        private void LoadPositionTextures()
+        {
+            m_Positiontextures[0] = Resources.Load<Texture2D>("Gui/Positions/1st Position");
+            m_Positiontextures[1] = Resources.Load<Texture2D>("Gui/Positions/2nd Position");
+            m_Positiontextures[2] = Resources.Load<Texture2D>("Gui/Positions/3rd Position");
+            m_Positiontextures[3] = Resources.Load<Texture2D>("Gui/Positions/4th Position");
+            m_Positiontextures[4] = Resources.Load<Texture2D>("Gui/Positions/5th Position");
+            m_Positiontextures[5] = Resources.Load<Texture2D>("Gui/Positions/6th Position");
+            m_Positiontextures[6] = Resources.Load<Texture2D>("Gui/Positions/7th Position"); 
+            m_Positiontextures[7] = Resources.Load<Texture2D>("Gui/Positions/8th Position");
+            m_Positiontextures[8] = Resources.Load<Texture2D>("Gui/Positions/9th Position");
+            m_Positiontextures[9] = Resources.Load<Texture2D>("Gui/Positions/10th Position");
+            m_Positiontextures[10] = Resources.Load<Texture2D>("Gui/Positions/11th Position");
+            m_Positiontextures[11] = Resources.Load<Texture2D>("Gui/Positions/12th Position");
         }
 
         private void StartRace()
@@ -72,7 +94,7 @@ namespace Managers
         {
             m_FadeController = p_FadeController;
         }
-
+        
         public void SetHUDLayout()
         {
             m_MiniMapController.SetScreenPosition(RectTransform.Edge.Top, RectTransform.Edge.Right, new Vector2(10, 10), new Vector2(250, 150));
@@ -87,6 +109,51 @@ namespace Managers
                 case 2:
                     m_MiniMapController.SetScreenPosition(RectTransform.Edge.Top, RectTransform.Edge.Right, new Vector2(-135, -85), new Vector2(250, 150));
                     break;
+            }
+        }
+        
+        public void UpdatePositions()
+        {
+            m_DriverPositions.Clear();
+
+            foreach (string l_DriverName in m_DriverLapCount.Keys)
+            {
+                foreach (GameObject l_Driver in m_Drivers)
+                {
+                    if (l_Driver.name.Equals(l_DriverName))
+                    {
+                        if (m_DriverLapCount[l_DriverName] > 0)                        
+                            m_DriverPositions.Add(l_Driver, l_Driver.GetComponent<Driver>().GetPosition() + (m_DriverLapCount[l_DriverName] + 1));
+                        
+                        else
+                            m_DriverPositions.Add(l_Driver, l_Driver.GetComponent<Driver>().GetPosition());
+                    }
+
+                }
+            }
+
+            // Use stored list from above loop
+            foreach (GameObject l_Driver in m_DriverPositions.Keys)
+            {
+                // Position Icons are stored 1 - 12
+                // Therefore to track positions need to begin from last (m_Drivers.Count)
+                // And decrement for each Driver players are ahead
+                int l_Position = m_Drivers.Count;
+                
+                foreach(float l_DriverPosition in m_DriverPositions.Values)
+                {                    
+                    if(m_DriverPositions[l_Driver] > l_DriverPosition)
+                    {
+                        l_Position--;
+                    }
+                }
+
+                PlayerController l_Player = l_Driver.GetComponent<PlayerController>();
+
+                if (l_Player != null)
+                {
+                    l_Player.Position = m_Positiontextures[l_Position - 1];
+                }
             }
         }
 
@@ -227,7 +294,16 @@ namespace Managers
 
         private void SetCameras()
         {
-            switch(m_Drivers.Count)
+            int l_HumanPlayers = 0;
+            foreach(GameObject l_Driver in m_Drivers)
+            {
+                PlayerController l_Player = l_Driver.GetComponent<PlayerController>();
+
+                if (l_Player != null)
+                    l_HumanPlayers++;
+            }
+
+            switch(l_HumanPlayers)
             {
                 case 0:
                     break;

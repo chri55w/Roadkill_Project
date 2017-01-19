@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1000012676073072}
+  m_IsPrefabParent: 1
+--- !u!1 &1000012676073072
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000012121950742}
+  - 114: {fileID: 114000013659556972}
+  m_Layer: 0
+  m_Name: ShieldPickup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4000012121950742
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012676073072}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.34933153, y: -0.28637803, z: -0.67966104}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &114000013659556972
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012676073072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5b78561c2940bb4cbe2b6d230b92075, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PickupLevel: 1
+  PickupUses: 1
+  PickupDamage: 0
+  PickupID: 3
+  Level1Icon: {fileID: 2800000, guid: 1fffed3c1086230489f602e7f6e057d5, type: 3}
+  Level2Icon: {fileID: 2800000, guid: 5616c7769c7d6834faefee23ac25d627, type: 3}
+  Level3Icon: {fileID: 2800000, guid: aac49481676d1ed49ad7de9e27297901, type: 3}
+  duration: 3

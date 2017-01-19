@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 using Objects;
@@ -13,10 +14,18 @@ namespace Controllers
         private float m_PickupTimer;
         private Transform m_AimRaycastOrigin;
 
+        public bool m_CheckingIfStuck = false;
+
         new void Start()
         {
             base.Start();
             m_AimRaycastOrigin = Kart.transform.Find("Raycast Points/Kart Front");
+        }
+
+        void Update()
+        {
+            if (m_CheckingIfStuck == false && m_RaceManager.RaceStarted == true)
+                StartCoroutine(StuckCheck());
         }
 
         void FixedUpdate()
@@ -117,6 +126,23 @@ namespace Controllers
             int l_RandomIndex = Random.Range((int)0, (int)p_SplineOptions.Count);
 
             CenterPath = p_SplineOptions[l_RandomIndex];
+        }
+
+        private IEnumerator StuckCheck()
+        {
+            Vector3 l_CurrentPosition = Kart.transform.position;
+            m_CheckingIfStuck = true;
+            yield return new WaitForSeconds(2);
+            if (l_CurrentPosition == Kart.transform.position) 
+            {
+                Kart.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                Vector3 l_RespawnPoint = GetPointBehind(1);
+                l_RespawnPoint.y += 0.5f;
+                // Change to Lerp? - wont pass through waypoints otherwise
+                Kart.transform.position = l_RespawnPoint;
+                FaceForwards(l_RespawnPoint);
+            }
+            m_CheckingIfStuck = false;
         }
 
         void OnDrawGizmos()
