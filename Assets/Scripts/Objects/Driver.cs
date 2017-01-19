@@ -15,6 +15,7 @@ namespace Objects
         public GameObject Character;
         public GameObject InCarCharacter;
         public GameObject CurrentPickup;
+        public Sprite CharacterIcon;
         public string Name;
         public bool Active = false;
         public bool IsShielded = false;
@@ -42,18 +43,17 @@ namespace Objects
         protected List<GameObject> m_KartParts = new List<GameObject>();
         protected e_RespawnState m_RespawnState;
 
-        public void SetupDriver(string p_Name, GameObject p_Kart, GameObject p_Character, GameObject p_InCarCharacter, RaceManager p_RaceManager, ObjectFadeController p_ObjectFadeController, int p_KartMaterialIndex, int p_CharacterMaterialIndex)
+        public void SetupDriver(string p_Name, GameObject p_Kart, GameObject p_Character, Sprite p_CharacterIcon, RaceManager p_RaceManager, ObjectFadeController p_ObjectFadeController)
         {
             Name = p_Name;
             Kart = p_Kart;
             Character = p_Character;
-            InCarCharacter = p_InCarCharacter;
             m_RaceManager = p_RaceManager;
             m_FadeController = p_ObjectFadeController;
-
-            Kart.GetComponent<KartController>().SetKartSkin(p_KartMaterialIndex);
-
+            CharacterIcon = p_CharacterIcon;
+            
             m_KartHealth = 3;
+            
             m_KartColorIDs = Shader.PropertyToID("_Color");
 
             // Get each child object of the mesh gameObject
@@ -65,7 +65,7 @@ namespace Objects
                 //m_KartPartMaterial.SetFloat("_Mode", 3f);
                 //m_KartMaterialColours.Add(m_KartMaterials[i].GetColor("_Color"));
 
-                //May need to do elsewhere
+                //May need to do elsewhere  
                 m_KartPartMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
                 m_KartPartMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
                 m_KartPartMaterial.SetInt("_ZWrite", 1);
@@ -78,6 +78,7 @@ namespace Objects
             }
 
             FadeIndex = new bool[m_KartMaterials.Count];
+            
             m_RespawnState = e_RespawnState.ALIVE;
         }
 

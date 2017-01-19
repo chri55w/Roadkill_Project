@@ -65,6 +65,7 @@ namespace Controllers
         void OnGUI()
         {
             GUI.backgroundColor = Color.black;
+            
             if (m_RaceManager != null && m_RaceManager.RaceStarted)
             {
                 if (CurrentPickup != null)

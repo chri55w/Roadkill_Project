@@ -12,6 +12,9 @@ public class TrackInfo : MonoBehaviour {
     public WaypointController StartFinishWaypoint;
     public List<Transform> StartPositions;
     public BezierSpline StartingSpline;
+    public Sprite MiniMapMaterial;
+    public Vector2 MapSize;
+    public Vector2 MiniMapCharacterOffset;
     public BezierSpline LapSpline;
 
     // Use this for initialization

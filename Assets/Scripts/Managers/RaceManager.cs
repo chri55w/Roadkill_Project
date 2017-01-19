@@ -9,17 +9,18 @@ namespace Managers
 {
     public class RaceManager : MonoBehaviour
     {
+        private MiniMapController m_MiniMapController;
         private ObjectFadeController m_FadeController;
         private TrackInfo m_SelectedTrackInfo;
         public List<GameObject> m_Drivers = new List<GameObject>();
         private Dictionary<string, List<WaypointController>> m_DriverTrackedWaypoints = new Dictionary<string, List<WaypointController>>();
         private Dictionary<string, int> m_DriverLapCount = new Dictionary<string, int>();
+        private Canvas m_Canvas;
         private Dictionary<GameObject, float> m_DriverPositions = new Dictionary<GameObject, float>();
         public Texture2D[] m_Positiontextures = new Texture2D[12]; 
 
         float RaceStartDelayTime = 8.0f;
         public bool RaceStarted = false;
-
 
         public void Start()
         {
@@ -31,6 +32,8 @@ namespace Managers
                     m_Drivers[i].GetComponent<PlayerController>().SetupTrack(m_SelectedTrackInfo.StartPositions[i], m_SelectedTrackInfo.StartingSpline, m_SelectedTrackInfo.LapSpline);
 
             }
+            
+            SetHUDLayout();
             SetCameras();
 
             LoadPositionTextures();
@@ -92,6 +95,23 @@ namespace Managers
             m_FadeController = p_FadeController;
         }
         
+        public void SetHUDLayout()
+        {
+            m_MiniMapController.SetScreenPosition(RectTransform.Edge.Top, RectTransform.Edge.Right, new Vector2(10, 10), new Vector2(250, 150));
+
+            switch (m_Drivers.Count)
+            {
+                case 0:
+                    break;
+                case 1:
+                    m_MiniMapController.SetScreenPosition(RectTransform.Edge.Top, RectTransform.Edge.Right, new Vector2(10, 10), new Vector2(250, 150));
+                    break;
+                case 2:
+                    m_MiniMapController.SetScreenPosition(RectTransform.Edge.Top, RectTransform.Edge.Right, new Vector2(-135, -85), new Vector2(250, 150));
+                    break;
+            }
+        }
+        
         public void UpdatePositions()
         {
             m_DriverPositions.Clear();
@@ -142,7 +162,7 @@ namespace Managers
             string l_DriverName = e_EventArgs.e_Driver.Name;
             int l_LastTrackedWaypointIndex = m_DriverTrackedWaypoints[l_DriverName].Count - 1;
             WaypointController l_LastTrackedWaypoint = null;
-            
+
             try
             {
                 l_LastTrackedWaypoint = m_DriverTrackedWaypoints[l_DriverName][l_LastTrackedWaypointIndex];
@@ -202,60 +222,74 @@ namespace Managers
             catch { }
         }
 
-        public void AddAI(AIController p_AIController, int p_KartMaterialIndex, int p_CharacterMaterialIndex)
+        public void SetupCanvas()
         {
-            GameObject l_AIDriver = new GameObject();
-            GameObject l_Kart = Instantiate(p_AIController.Kart);
-            GameObject l_Character = Instantiate(p_AIController.Character);
-            GameObject l_InCarCharacter = Instantiate(p_AIController.InCarCharacter);
-            l_Kart.transform.SetParent(l_AIDriver.transform);
-            l_AIDriver.name = "Driver" + m_Drivers.Count;
+            GameObject l_CanvasObject = new GameObject();
+            m_Canvas = l_CanvasObject.AddComponent<Canvas>();
+            l_CanvasObject.AddComponent<UnityEngine.UI.CanvasScaler>();
+            m_Canvas.name = "Canvas";
 
-            l_AIDriver.AddComponent<AIController>();
-            l_AIDriver.GetComponent<AIController>().SetupDriver(l_AIDriver.name, l_Kart, l_Character, l_InCarCharacter, this, m_FadeController, p_KartMaterialIndex, p_CharacterMaterialIndex);
-            l_AIDriver.GetComponent<AIController>().CenterPath = m_SelectedTrackInfo.StartingSpline;
+            m_Canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 
-            l_Kart.GetComponent<Rigidbody>().useGravity = true;
-            
-            m_DriverLapCount.Add(l_AIDriver.name, 0);
-            m_DriverTrackedWaypoints.Add(l_AIDriver.name, new List<WaypointController>());
-
-            m_Drivers.Add(l_AIDriver);
-
-            //l_Character.SetActive(false);
-
-            DontDestroyOnLoad(l_AIDriver);
-            DontDestroyOnLoad(l_Character);            
+            DontDestroyOnLoad(l_CanvasObject);
         }
 
-        public void AddPlayer(PlayerController p_PlayerController, GameObject p_CameraPrefab, int p_KartMaterialIndex, int p_CharacterMaterialIndex)
+        public void ConfigureMinimap()
         {
-            GameObject l_Player = new GameObject();
-            GameObject l_Kart = Instantiate(p_PlayerController.Kart);
-            GameObject l_Character = Instantiate(p_PlayerController.Character);
-            GameObject l_InCarCharacter = Instantiate(p_PlayerController.InCarCharacter);
-            l_Kart.transform.SetParent(l_Player.transform);
-            l_Player.name = "Driver" + m_Drivers.Count;
+            GameObject l_MiniMapControllerObject = new GameObject();
+            m_MiniMapController = l_MiniMapControllerObject.AddComponent<MiniMapController>();
+            l_MiniMapControllerObject.name = "MiniMap Object";
 
-            l_Player.AddComponent<PlayerController>();            
-            l_Player.GetComponent<PlayerController>().SetupDriver(l_Player.name, l_Kart, l_Character, l_InCarCharacter, this, m_FadeController, p_KartMaterialIndex, p_CharacterMaterialIndex);
-            l_Player.GetComponent<PlayerController>().ControllerID = p_PlayerController.ControllerID;
+            l_MiniMapControllerObject.transform.SetParent(m_Canvas.gameObject.transform);
 
-            l_Kart.GetComponent<Rigidbody>().useGravity = true;
+            m_MiniMapController.AddComponents();
 
+            m_MiniMapController.SetCharacterIconSize(new Vector2(24, 24));
+            m_MiniMapController.SetMapSize(m_SelectedTrackInfo.MapSize);
+            m_MiniMapController.SetCharacterOffset(m_SelectedTrackInfo.MiniMapCharacterOffset);
+            m_MiniMapController.SetTrackImage(m_SelectedTrackInfo.MiniMapMaterial);
+
+            DontDestroyOnLoad(m_Canvas);
+        }
+
+        public void AddAI(GameObject p_AIDriver)// AIController p_AIController, int p_KartMaterialIndex, int p_CharacterMaterialIndex)
+        {
+            AddDriver(p_AIDriver);
+            
+            p_AIDriver.GetComponent<AIController>().CenterPath = m_SelectedTrackInfo.StartingSpline;
+        }
+
+        public void AddPlayer(GameObject p_PlayerDriver, GameObject p_CameraPrefab)
+        {
+            Driver l_Driver = p_PlayerDriver.GetComponent<Driver>();
+
+            AddDriver(p_PlayerDriver);
+            
             GameObject l_NewCamera = Instantiate(p_CameraPrefab);
-            l_NewCamera.transform.SetParent(l_Player.transform);
-            l_NewCamera.GetComponent<CameraController>().DriverFollowing = l_Kart.gameObject;
-    
-            m_DriverLapCount.Add(l_Player.name, 0);
-            m_DriverTrackedWaypoints.Add(l_Player.name, new List<WaypointController>());
+            l_NewCamera.transform.SetParent(p_PlayerDriver.transform);
+            l_NewCamera.GetComponent<CameraController>().DriverFollowing = l_Driver.Kart.gameObject;
 
-            m_Drivers.Add(l_Player);
+            SetCameras();
+        }
 
-            //l_Character.SetActive(false);
+        private void AddDriver(GameObject p_DriverObject)
+        {
+            p_DriverObject.name = "Driver" + m_Drivers.Count;
 
-            DontDestroyOnLoad(l_Player);
-            //DontDestroyOnLoad(l_Character);
+            Driver l_Driver = p_DriverObject.GetComponent<Driver>();
+            
+            l_Driver.SetupDriver(p_DriverObject.name, l_Driver.Kart, l_Driver.Character, l_Driver.CharacterIcon, this, m_FadeController);
+
+            m_DriverLapCount.Add(p_DriverObject.name, 0);
+            m_DriverTrackedWaypoints.Add(p_DriverObject.name, new List<WaypointController>());
+
+            l_Driver.Kart.GetComponent<Rigidbody>().useGravity = true;
+
+            m_Drivers.Add(p_DriverObject);
+
+            m_MiniMapController.AddDriver(p_DriverObject.GetComponent<Driver>());
+            
+            DontDestroyOnLoad(p_DriverObject);
         }
 
         private void SetCameras()

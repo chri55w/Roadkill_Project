@@ -491,42 +491,49 @@ public class MenuManager : MonoBehaviour
         GameObject l_FadeController = new GameObject();
         l_FadeController.AddComponent<ObjectFadeController>();
         l_FadeController.name = "Fade Controller";
-
+        
         GameObject l_RaceManager = new GameObject();
         l_RaceManager.AddComponent<RaceManager>();
         l_RaceManager.GetComponent<RaceManager>().SetFadeController(l_FadeController.GetComponent<ObjectFadeController>());
         l_RaceManager.GetComponent<RaceManager>().SetTrackInfo(l_TrackInfo.GetComponent<TrackInfo>());
         l_RaceManager.name = "Race Manager";
+        l_RaceManager.GetComponent<RaceManager>().SetupCanvas();
+        l_RaceManager.GetComponent<RaceManager>().ConfigureMinimap();
 
-        foreach (GameObject l_PlayerObject in Players)
+        for (int i = 0; i < Players.Count; i++)
         {
-            PlayerController l_Player = l_PlayerObject.GetComponent<PlayerController>();
+            PlayerController l_Player = Players[i].GetComponent<PlayerController>();
 
-            l_Player.Kart.transform.SetParent(l_PlayerObject.transform);
-            l_Player.Character.transform.SetParent(l_PlayerObject.transform);
+            l_Player.Kart.transform.SetParent(Players[i].transform);
+            l_Player.Character.transform.SetParent(Players[i].transform);
+            l_Player.InCarCharacter.transform.SetParent(Players[i].transform);
+
+            l_Player.CharacterIcon = CharacterSelectors[i].GetComponent<CharacterSelectionController>().GetSelectedCharacterIcon();
 
             int l_KartMaterialIndex = l_Player.Kart.GetComponent<KartController>().GetMaterialSkinIndex();
 
-            l_RaceManager.GetComponent<RaceManager>().AddPlayer(l_Player, m_KartCameraPrefab, l_KartMaterialIndex, 0);            
+            l_RaceManager.GetComponent<RaceManager>().AddPlayer(Players[i], m_KartCameraPrefab);
         }
 
         for (int i = 0; i < m_AIRacers; i++)
         {
             GameObject l_AIRacerObject = new GameObject();
-            l_AIRacerObject.AddComponent<AIController>();
-
-            AIController l_AIRacer = l_AIRacerObject.GetComponent<AIController>();
+            AIController l_AIRacer = l_AIRacerObject.AddComponent<AIController>();
+            l_AIRacerObject.name = "AI Driver " + i;
 
             int KartIndex = Random.Range(0, 4);
 
-            Debug.Log("Kart Index: " + KartIndex);
+            l_AIRacer.Kart = Instantiate(m_KartPlatforms[KartIndex].GetComponent<PlatformController>().Kart);
+            l_AIRacer.Character = Instantiate(m_KartPlatforms[KartIndex].GetComponent<PlatformController>().Character);
+            l_AIRacer.InCarCharacter = Instantiate(m_KartPlatforms[KartIndex].GetComponent<PlatformController>().InCarCharacter);
 
-            l_AIRacer.Kart = m_KartPlatforms[KartIndex].GetComponent<PlatformController>().Kart;
-            l_AIRacer.Character = m_KartPlatforms[KartIndex].GetComponent<PlatformController>().Character;
-            l_AIRacer.InCarCharacter = m_KartPlatforms[KartIndex].GetComponent<PlatformController>().InCarCharacter;
+            l_AIRacer.Kart.transform.SetParent(l_AIRacerObject.transform);
+            l_AIRacer.Character.transform.SetParent(l_AIRacerObject.transform);
+            l_AIRacer.InCarCharacter.transform.SetParent(l_AIRacerObject.transform);
 
-            l_RaceManager.GetComponent<RaceManager>().AddAI(l_AIRacer, Random.Range(0, 3), Random.Range(0, 3));
+            l_AIRacer.CharacterIcon = m_KartPlatforms[KartIndex].GetComponent<PlatformController>().CharacterIcon;
 
+            l_RaceManager.GetComponent<RaceManager>().AddAI(l_AIRacerObject);
         }
 
         DontDestroyOnLoad(l_TrackInfo);

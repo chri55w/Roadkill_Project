@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class PlatformController : MonoBehaviour
 {
-    public Material CharacterIcon;
+    public Sprite CharacterIcon;
     
     public GameObject Kart;
     public GameObject Character;
