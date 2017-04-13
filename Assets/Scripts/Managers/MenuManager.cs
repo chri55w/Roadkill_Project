@@ -12,6 +12,7 @@ public class MenuManager : MonoBehaviour
     public Dropdown ScreenResolutionsDropdown;
     public UnityEngine.EventSystems.EventSystem UIEventSystem;
     public List<Image> PlayerIconPlaceholders;
+    public List<Image> PlayerIconGlowImages;
 
     public GameObject TrackButtonsPanel;
     public Image SelectedTrackLargeImage;
@@ -25,6 +26,8 @@ public class MenuManager : MonoBehaviour
     private int m_SelectedDifficultyIndex = 1;
     public GameObject LapsSetting;
     private int m_LapCount = 3;
+
+    public GameObject PlayerHUDPrefab;
 
     public GameObject CharacterSelectionPrefab;
 
@@ -67,11 +70,11 @@ public class MenuManager : MonoBehaviour
 
         Resolution[] l_Resolutions = Screen.resolutions;
 
-        ScreenResolutionsDropdown.options = new List<UnityEngine.UI.Dropdown.OptionData>();
+        ScreenResolutionsDropdown.options = new List<Dropdown.OptionData>();
 
         for (int i = 0; i < l_Resolutions.Length; i++)
         {
-            ScreenResolutionsDropdown.options.Add(new UnityEngine.UI.Dropdown.OptionData());
+            ScreenResolutionsDropdown.options.Add(new Dropdown.OptionData());
 
             ScreenResolutionsDropdown.options[i].text = l_Resolutions[i].width + " x " + l_Resolutions[i].height;
 
@@ -79,6 +82,27 @@ public class MenuManager : MonoBehaviour
         }
 
         ScreenResolutionsDropdown.RefreshShownValue();
+
+        for (int i = 0; i < 4; i++)
+        {
+            CharacterSelectors.Add(Instantiate(CharacterSelectionPrefab));
+
+            CharacterSelectors[CharacterSelectors.Count - 1].transform.Translate(Vector3.up * 10 * (CharacterSelectors.Count - 1));
+
+            CharacterSelectors[CharacterSelectors.Count - 1].GetComponent<CharacterSelectionController>().enabled = false;
+        }
+
+        float l_WidthEdgePergentage = 100f / Screen.width;
+        float l_HeightEdgePergentage = 100f / Screen.height;
+        float l_CameraAreaWidthPercentage = 1.0f - l_WidthEdgePergentage;
+        float l_HalfCameraAreaWidthPercentage = (1.0f - l_WidthEdgePergentage) / 2f;
+        float l_CameraAreaHeightPercentage = 1.0f - l_HeightEdgePergentage;
+        float l_HalfCameraAreaHeightPercentage = (1.0f - l_HeightEdgePergentage) / 2f;
+
+        CharacterSelectors[0].GetComponentInChildren<CameraTools>().SetCameraScreenSize(new Rect(0f, l_HalfCameraAreaHeightPercentage + l_HeightEdgePergentage, l_HalfCameraAreaWidthPercentage, l_HalfCameraAreaHeightPercentage));
+        CharacterSelectors[1].GetComponentInChildren<CameraTools>().SetCameraScreenSize(new Rect(l_HalfCameraAreaWidthPercentage, l_HalfCameraAreaHeightPercentage + l_HeightEdgePergentage, l_HalfCameraAreaWidthPercentage, l_HalfCameraAreaHeightPercentage));
+        CharacterSelectors[2].GetComponentInChildren<CameraTools>().SetCameraScreenSize(new Rect(0f, l_HeightEdgePergentage, l_HalfCameraAreaWidthPercentage, l_HalfCameraAreaHeightPercentage));
+        CharacterSelectors[3].GetComponentInChildren<CameraTools>().SetCameraScreenSize(new Rect(l_HalfCameraAreaWidthPercentage, l_HeightEdgePergentage, l_HalfCameraAreaWidthPercentage, l_HalfCameraAreaHeightPercentage));
     }
 
     public void Update()
@@ -107,17 +131,29 @@ public class MenuManager : MonoBehaviour
 
             case "CharacterSelection":
                 if (Screen.width != ScreenDimensions.x || Screen.height != ScreenDimensions.y)
+                {
+                    ScreenDimensions = new Vector2(Screen.width, Screen.height);
+
                     SetCharacterSelectCameras();
+                }
 
                 ListenForPlayerDropIn();
 
-                foreach (GameObject l_GameObject in CharacterSelectors)
+                for (int i = 0; i < CharacterSelectors.Count; i++)
                 {
-                    if (!l_GameObject.GetComponent<CharacterSelectionController>().PlayerReady)
+                    if (!CharacterSelectors[i].GetComponent<CharacterSelectionController>().PlayerReady)
+                        PlayerIconGlowImages[i].enabled = false;
+                    else
+                        PlayerIconGlowImages[i].enabled = true;
+                }
+                
+                for (int i = 0; i < Players.Count; i++)
+                {
+                    if (!CharacterSelectors[i].GetComponent<CharacterSelectionController>().PlayerReady)
                         return;
                 }
 
-                ChangeMenuPanel("TrackSelection");
+                    ChangeMenuPanel("TrackSelection");
                 break;
 
             case "TrackSelection":
@@ -129,7 +165,7 @@ public class MenuManager : MonoBehaviour
                 if (l_TrackInfo != null)
                     m_SelectedTrackObject = UIEventSystem.currentSelectedGameObject;
                 
-                SelectedTrackLargeImage.material = m_SelectedTrackObject.GetComponent<Image>().material;
+                SelectedTrackLargeImage.sprite = m_SelectedTrackObject.GetComponent<Image>().sprite;
                 SelectedTrackName.text = m_SelectedTrackObject.GetComponent<TrackInfo>().TrackName;
                 break;
 
@@ -139,7 +175,7 @@ public class MenuManager : MonoBehaviour
                     if (Input.GetAxis(PrimaryInputPrefix + "MenuHorizontal") > 0.8f)
                     {
                         if (UIEventSystem.currentSelectedGameObject == AIRacersSetting)
-                            m_AIRacers = Mathf.Clamp(m_AIRacers + 1, 0, (12 - Players.Count));
+                            m_AIRacers = Mathf.Clamp(m_AIRacers + 1, (4 - Players.Count), (12 - Players.Count));
                         else if (UIEventSystem.currentSelectedGameObject == DifficultySetting)
                             m_SelectedDifficultyIndex = Mathf.Clamp(m_SelectedDifficultyIndex + 1, 0, 2);
                         else if (UIEventSystem.currentSelectedGameObject == LapsSetting)
@@ -154,7 +190,7 @@ public class MenuManager : MonoBehaviour
                     else if (Input.GetAxis(PrimaryInputPrefix + "MenuHorizontal") < -0.8f)
                     {
                         if (UIEventSystem.currentSelectedGameObject == AIRacersSetting)
-                            m_AIRacers = Mathf.Clamp(m_AIRacers - 1, 0, (12 - Players.Count));
+                            m_AIRacers = Mathf.Clamp(m_AIRacers - 1, (4 - Players.Count), (12 - Players.Count));
                         else if (UIEventSystem.currentSelectedGameObject == DifficultySetting)
                             m_SelectedDifficultyIndex = Mathf.Clamp(m_SelectedDifficultyIndex - 1, 0, 2);
                         else if (UIEventSystem.currentSelectedGameObject == LapsSetting)
@@ -214,7 +250,6 @@ public class MenuManager : MonoBehaviour
                 {
                     Players[i].GetComponent<PlayerController>().Kart = CharacterSelectors[i].GetComponent<CharacterSelectionController>().GetSelectedKart();
                     Players[i].GetComponent<PlayerController>().Character = CharacterSelectors[i].GetComponent<CharacterSelectionController>().GetSelectedCharacter();
-                    Players[i].GetComponent<PlayerController>().InCarCharacter = CharacterSelectors[i].GetComponent<CharacterSelectionController>().GetSelectedInCarCharacter();
                 }
 
                 break;
@@ -278,9 +313,9 @@ public class MenuManager : MonoBehaviour
 
     private void EnableCharacterSelectionControllers()
     {
-        foreach (GameObject l_GameObject in CharacterSelectors)
+        for (int i = 0; i < Players.Count; i++)
         {
-            CharacterSelectionController l_CharacterSelectionController = l_GameObject.GetComponent<CharacterSelectionController>();
+            CharacterSelectionController l_CharacterSelectionController = CharacterSelectors[i].GetComponent<CharacterSelectionController>();
 
             l_CharacterSelectionController.ResetSelectedPlatformKartSkin();
             l_CharacterSelectionController.ResetSelectedPlatformRacesuitSkin();
@@ -291,8 +326,6 @@ public class MenuManager : MonoBehaviour
 
     private void UpdateVisibleTrackButtons()
     {
-        Debug.Log("Refreshing");
-
         foreach (Transform child in TrackButtonsPanel.transform)
             Destroy(child.gameObject);
 
@@ -431,14 +464,6 @@ public class MenuManager : MonoBehaviour
         PlayerController l_Player = l_PlayerObject.GetComponent<PlayerController>();
         l_Player.ControllerID = p_ControllerID;
         l_Player.Name = "Player " + Players.Count;
-        
-        CharacterSelectors.Add(Instantiate(CharacterSelectionPrefab));
-
-        CharacterSelectors[CharacterSelectors.Count - 1].transform.Translate(Vector3.up * 10 * (CharacterSelectors.Count - 1));
-
-        CharacterSelectors[CharacterSelectors.Count - 1].GetComponent<CharacterSelectionController>().PlayerInputPrefix = p_ControllerID;
-
-        CharacterSelectors[CharacterSelectors.Count - 1].GetComponent<CharacterSelectionController>().CharacterIconImage = PlayerIconPlaceholders[CharacterSelectors.Count - 1];
 
         l_Player.Active = false;
 
@@ -449,6 +474,8 @@ public class MenuManager : MonoBehaviour
         l_CharacterSelectionController.ResetSelectedPlatformKartSkin();
         l_CharacterSelectionController.ResetSelectedPlatformRacesuitSkin();
         l_CharacterSelectionController.enabled = true;
+        l_CharacterSelectionController.PlayerInputPrefix = p_ControllerID;
+        l_CharacterSelectionController.CharacterIconImage = PlayerIconPlaceholders[Players.Count - 1];
     }
 
     private void SetCharacterSelectCameras()
@@ -460,28 +487,38 @@ public class MenuManager : MonoBehaviour
         switch (Players.Count)
         {
             case 0:
+                CharacterSelectors[0].GetComponentInChildren<CameraTools>().CameraComponent.enabled = false;
+                CharacterSelectors[1].GetComponentInChildren<CameraTools>().CameraComponent.enabled = false;
+                CharacterSelectors[2].GetComponentInChildren<CameraTools>().CameraComponent.enabled = false;
+                CharacterSelectors[3].GetComponentInChildren<CameraTools>().CameraComponent.enabled = false;
                 break;
             case 1:
-                CharacterSelectors[0].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0f, l_CameraAreaWidthPercentage, 1f));
+                CharacterSelectors[0].GetComponentInChildren<CameraTools>().CameraComponent.enabled = true;
+                CharacterSelectors[1].GetComponentInChildren<CameraTools>().CameraComponent.enabled = false;
+                CharacterSelectors[2].GetComponentInChildren<CameraTools>().CameraComponent.enabled = false;
+                CharacterSelectors[3].GetComponentInChildren<CameraTools>().CameraComponent.enabled = false;
                 break;
             case 2:
-                CharacterSelectors[0].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, l_CameraAreaWidthPercentage, 0.5f));
-                CharacterSelectors[1].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0f, l_CameraAreaWidthPercentage, 0.5f));
+                CharacterSelectors[0].GetComponentInChildren<CameraTools>().CameraComponent.enabled = true;
+                CharacterSelectors[1].GetComponentInChildren<CameraTools>().CameraComponent.enabled = true;
+                CharacterSelectors[2].GetComponentInChildren<CameraTools>().CameraComponent.enabled = false;
+                CharacterSelectors[3].GetComponentInChildren<CameraTools>().CameraComponent.enabled = false;
                 break;
             case 3:
-                CharacterSelectors[0].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, l_HalfCameraAreaWidthPercentage, 0.5f));
-                CharacterSelectors[1].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(l_HalfCameraAreaWidthPercentage, 0.5f, l_HalfCameraAreaWidthPercentage, 0.5f));
-                CharacterSelectors[2].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0f, l_HalfCameraAreaWidthPercentage, 0.5f));
+                CharacterSelectors[0].GetComponentInChildren<CameraTools>().CameraComponent.enabled = true;
+                CharacterSelectors[1].GetComponentInChildren<CameraTools>().CameraComponent.enabled = true;
+                CharacterSelectors[2].GetComponentInChildren<CameraTools>().CameraComponent.enabled = true;
+                CharacterSelectors[3].GetComponentInChildren<CameraTools>().CameraComponent.enabled = false;
                 break;
             case 4:
-                CharacterSelectors[0].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, l_HalfCameraAreaWidthPercentage, 0.5f));
-                CharacterSelectors[1].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(l_HalfCameraAreaWidthPercentage, 0.5f, l_HalfCameraAreaWidthPercentage, 0.5f));
-                CharacterSelectors[2].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0f, l_HalfCameraAreaWidthPercentage, 0.5f));
-                CharacterSelectors[3].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(l_HalfCameraAreaWidthPercentage, 0f, l_HalfCameraAreaWidthPercentage, 0.5f));
+                CharacterSelectors[0].GetComponentInChildren<CameraTools>().CameraComponent.enabled = true;
+                CharacterSelectors[1].GetComponentInChildren<CameraTools>().CameraComponent.enabled = true;
+                CharacterSelectors[2].GetComponentInChildren<CameraTools>().CameraComponent.enabled = true;
+                CharacterSelectors[3].GetComponentInChildren<CameraTools>().CameraComponent.enabled = true;
                 break;
         }
     }
-
+    
     public void LoadRace()
     {
         GameObject l_TrackInfo = Instantiate(m_SelectedTrackObject);
@@ -499,20 +536,23 @@ public class MenuManager : MonoBehaviour
         l_RaceManager.name = "Race Manager";
         l_RaceManager.GetComponent<RaceManager>().SetupCanvas();
         l_RaceManager.GetComponent<RaceManager>().ConfigureMinimap();
+        l_RaceManager.GetComponent<RaceManager>().RaceLaps = m_LapCount;
 
         for (int i = 0; i < Players.Count; i++)
         {
             PlayerController l_Player = Players[i].GetComponent<PlayerController>();
 
             l_Player.Kart.transform.SetParent(Players[i].transform);
-            l_Player.Character.transform.SetParent(Players[i].transform);
-            l_Player.InCarCharacter.transform.SetParent(Players[i].transform);
+            l_Player.Character.transform.SetParent(l_Player.Kart.transform);
+            l_Player.Character.transform.localPosition = l_Player.Kart.transform.Find("Character Position").localPosition;
+            l_Player.Character.transform.localRotation = l_Player.Kart.transform.Find("Character Position").localRotation;
+            l_Player.Character.GetComponent<Character>().ChangeState(CharacterState.DRIVING);
 
             l_Player.CharacterIcon = CharacterSelectors[i].GetComponent<CharacterSelectionController>().GetSelectedCharacterIcon();
 
             int l_KartMaterialIndex = l_Player.Kart.GetComponent<KartController>().GetMaterialSkinIndex();
 
-            l_RaceManager.GetComponent<RaceManager>().AddPlayer(Players[i], m_KartCameraPrefab);
+            l_RaceManager.GetComponent<RaceManager>().AddPlayer(Players[i], m_KartCameraPrefab, PlayerHUDPrefab);
         }
 
         for (int i = 0; i < m_AIRacers; i++)
@@ -525,16 +565,23 @@ public class MenuManager : MonoBehaviour
 
             l_AIRacer.Kart = Instantiate(m_KartPlatforms[KartIndex].GetComponent<PlatformController>().Kart);
             l_AIRacer.Character = Instantiate(m_KartPlatforms[KartIndex].GetComponent<PlatformController>().Character);
-            l_AIRacer.InCarCharacter = Instantiate(m_KartPlatforms[KartIndex].GetComponent<PlatformController>().InCarCharacter);
+
+            l_AIRacer.Kart.GetComponent<KartController>().SetRandomKartSkin();
+            l_AIRacer.Character.GetComponent<Character>().SetRandomCharacterSkin();
 
             l_AIRacer.Kart.transform.SetParent(l_AIRacerObject.transform);
-            l_AIRacer.Character.transform.SetParent(l_AIRacerObject.transform);
-            l_AIRacer.InCarCharacter.transform.SetParent(l_AIRacerObject.transform);
+            l_AIRacer.Character.transform.SetParent(l_AIRacer.Kart.transform);
+            l_AIRacer.Character.transform.localPosition = l_AIRacer.Kart.transform.Find("Character Position").localPosition;
+            l_AIRacer.Character.transform.localRotation = l_AIRacer.Kart.transform.Find("Character Position").localRotation;
+            l_AIRacer.Character.GetComponent<Character>().SetupCharacter();
+            l_AIRacer.Character.GetComponent<Character>().ChangeState(CharacterState.DRIVING);
 
             l_AIRacer.CharacterIcon = m_KartPlatforms[KartIndex].GetComponent<PlatformController>().CharacterIcon;
 
             l_RaceManager.GetComponent<RaceManager>().AddAI(l_AIRacerObject);
         }
+
+        l_RaceManager.GetComponent<RaceManager>().BeginOpeningCinematic();
 
         DontDestroyOnLoad(l_TrackInfo);
         DontDestroyOnLoad(l_FadeController);

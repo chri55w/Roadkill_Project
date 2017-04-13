@@ -9,6 +9,7 @@ namespace Objects
         public float ThrowSpeed = 100f;
         public float Lifetime = 5f;
         public float RotateSpeed = 20f;
+        public float power = 10.0f;
 
         public Vector3 ThrowDirection;
         public Transform PivotPoint;
@@ -30,7 +31,7 @@ namespace Objects
             //Gather/set any variables
             m_Rigidbody = GetComponent<Rigidbody>();
             //Need to grab both boxcolliders
-            m_BoxCollider = GetComponent<BoxCollider>();
+            m_TriggerCollider = GetComponent<BoxCollider>();
             
             //ThrowDirection = transform.forward;
             
@@ -104,7 +105,6 @@ namespace Objects
                 }
                 else
                 {
-                    Debug.Log("Attacking target");
                     Vector3 l_NewDirection = l_NearestKartPosition - transform.position;
                     m_Rigidbody.AddForce((l_NewDirection.normalized * ThrowSpeed), ForceMode.Acceleration);
                 }
@@ -129,8 +129,9 @@ namespace Objects
             string l_ObjectName = p_OtherCollider.transform.root.name;
             if (l_ObjectName.Contains("Driver") && !l_ObjectName.Equals(m_ParentName))
             {
-                Debug.Log("Hit");
                 p_OtherCollider.transform.GetComponentInParent<Driver>().TakeDamage(damage);
+                p_OtherCollider.GetComponentInParent<Rigidbody>().velocity = Vector3.zero;
+                p_OtherCollider.GetComponentInParent<Rigidbody>().AddForce(Vector3.up * power, ForceMode.VelocityChange);
                 Destroy(gameObject);
             }
         }

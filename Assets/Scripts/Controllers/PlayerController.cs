@@ -9,13 +9,18 @@ namespace Controllers
     public class PlayerController : Driver
     {
         public string ControllerID;
-        public Texture2D NoPickupIcon;
-        public Texture2D Position;
-        
+        public Camera KartCamera;
+
+        public float MaxExpectedSpeed = 36.0f;
+
+        private HUDController m_HUD;
+        private Sprite m_NoPickupIcon;
+
         new void Start()
         {
             base.Start();
-            NoPickupIcon = Resources.Load<Texture2D>("GUI/No Weapon");
+
+            m_NoPickupIcon = Resources.Load<Sprite>("GUI/No Weapon");
         }
 
         void FixedUpdate()
@@ -25,12 +30,19 @@ namespace Controllers
 
         void Update()
         {
-            if (!Active)
+            RefreshHUD();
+
+            if (!Active || IsFinished)
                 return;
 
             if (DeathCheck() == false)
             {
-                Kart.GetComponent<KartController>().Move(Input.GetAxis(ControllerID + "Vertical"), Input.GetAxis(ControllerID + "Horizontal"));
+                float l_HorizontalInput = Input.GetAxis(ControllerID + "Horizontal");
+                float l_VerticalInput = Input.GetAxis(ControllerID + "Vertical");
+
+                Kart.GetComponent<KartController>().Move(l_VerticalInput, l_HorizontalInput);
+
+                Character.GetComponent<Character>().UpdateHorizontalInput(l_HorizontalInput);
 
                 if (Input.GetButtonDown(ControllerID + "CameraAction"))
                     GetComponentInChildren<CameraController>().FlipCamera();
@@ -50,35 +62,45 @@ namespace Controllers
                 }
                 if (Input.GetButtonDown(ControllerID + "MenuCycleButtonTwo"))
                 {
-                    // Reset
-                    Kart.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                    Vector3 l_RespawnPoint = GetPointBehind(1);
-                    l_RespawnPoint.y += 0.5f;
-                    //Move Kart to respawn point - may need to add facing correct direction on respawn
-                    // Change to Lerp? - wont pass through waypoints otherwise
-                    Kart.transform.position = l_RespawnPoint;
-                    FaceForwards(l_RespawnPoint);
+                    ResetPosition();
                 }
             }
         }
 
-        void OnGUI()
+        private void RefreshHUD()
         {
-            GUI.backgroundColor = Color.black;
-            
-            if (m_RaceManager != null && m_RaceManager.RaceStarted)
+            if (m_HUD != null)
             {
                 if (CurrentPickup != null)
-                {
-                    GUI.DrawTexture(new Rect(Screen.width - 60, 10, 50, 50), CurrentPickup.GetComponent<Pickup>().GetCurrentIcon());
-                }
+                    m_HUD.UpdatePickupIcon(CurrentPickup.GetComponent<Pickup>().GetCurrentIcon());
                 else
-                {
-                    GUI.DrawTexture(new Rect(Screen.width - 60, 10, 50, 50), NoPickupIcon);
-                }
+                    m_HUD.UpdatePickupIcon(m_NoPickupIcon);
 
-                GUI.DrawTexture(new Rect(60, 10, 50, 50), Position);
+                float l_SpeedPercentage = Kart.GetComponent<Rigidbody>().velocity.magnitude / MaxExpectedSpeed;
+
+                m_HUD.UpdateSpeedometer(l_SpeedPercentage);
             }
+        }
+
+        public void SetupCanvas(HUDController p_HUDController)
+        {
+            m_HUD = p_HUDController;
+
+            Canvas l_Canvas = m_HUD.GetComponent<Canvas>();
+            l_Canvas.worldCamera = KartCamera;
+            l_Canvas.planeDistance = 1.0f;
+
+            m_HUD.CharacterIcon.sprite = CharacterIcon;
+        }
+
+        public void SetPositionSprite(Sprite p_PositionSprite)
+        {
+            m_HUD.UpdatePlayerPosition(p_PositionSprite);
+        }
+
+        public void SetLapSprite(Sprite p_LapSprite)
+        {
+            m_HUD.UpdateLapNumber(p_LapSprite);
         }
 
     }

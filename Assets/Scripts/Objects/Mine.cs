@@ -57,12 +57,13 @@ namespace Objects
                     if (l_hit.name.Contains("Driver"))
                     {
                         l_HitObject = l_hit.transform.root.gameObject;
-                        if (l_HitObject.GetComponent<Driver>().IsShielded)
-                            continue;
 
-                        l_HitObject.GetComponent<Driver>().TakeDamage(damage);
-                        l_HitObject.GetComponentInChildren<Rigidbody>().velocity = Vector3.zero;
-                        l_HitObject.GetComponentInChildren<Rigidbody>().AddForce(Vector3.up * power, ForceMode.VelocityChange);
+                        if (!l_HitObject.GetComponent<Driver>().IsShielded)
+                        {
+                            l_HitObject.GetComponent<Driver>().TakeDamage(damage);
+                            l_HitObject.GetComponentInChildren<Rigidbody>().AddForce(Vector3.up * power, ForceMode.VelocityChange);
+                        }
+
                         m_Triggered = true;
                     }
                 }

@@ -22,6 +22,9 @@ namespace Controllers
         public float TurnForce;
         public Bezier AccelerationCurve = new Bezier(new Vector2(0, 1), new Vector2(0.7f, 1), new Vector2(1, 0.9f), new Vector2(1, 0));
 
+        public ParticleSystem BloodSpray;
+        public ParticleSystem BloodBurst;
+
         //Force Application Transforms
         public Transform CenterOfGravity;
         public Transform PointOfAcceleration;
@@ -173,6 +176,27 @@ namespace Controllers
             }
         }
 
+        public void EmitBloodBurst()
+        {
+            BloodBurst.Play();
+        }
+
+        public void UpdateBloodSpray(int p_Health)
+        {
+            var l_Emission = BloodSpray.emission;
+
+            if (p_Health == 3)
+                l_Emission.rate = 0;
+            else if (p_Health == 2)
+                l_Emission.rate = 15;
+            else if (p_Health == 1)
+                l_Emission.rate = 35;
+            else if (p_Health == 0)
+                l_Emission.rate = 80;
+
+            BloodSpray.Play();
+        }
+
         public void ChangeKartSkin()
         {
             foreach (SkinnableObject l_Object in SkinnableKartPeices)
@@ -196,11 +220,19 @@ namespace Controllers
 
         public void SetKartSkin(int p_MaterialIndex)
         {
-
             foreach (SkinnableObject l_Object in SkinnableKartPeices)
             {
                 l_Object.SetSkin(p_MaterialIndex);
             }
+        }
+
+        public void SetRandomKartSkin( )
+        {
+            int l_MaterialCount = SkinnableKartPeices[0].Materials.Count;
+
+            int l_Random = Random.Range(0, l_MaterialCount);
+
+            SetKartSkin(l_Random);
         }
     }
 }

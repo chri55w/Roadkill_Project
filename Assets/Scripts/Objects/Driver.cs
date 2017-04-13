@@ -13,13 +13,12 @@ namespace Objects
 
         public GameObject Kart;
         public GameObject Character;
-        public GameObject InCarCharacter;
         public GameObject CurrentPickup;
         public Sprite CharacterIcon;
         public string Name;
         public bool Active = false;
         public bool IsShielded = false;
-        
+                
         //Respawn variables
         public float RespawnDistanceModifier = 5;
         public BezierSpline CurrentSpline;
@@ -43,6 +42,8 @@ namespace Objects
         protected List<GameObject> m_KartParts = new List<GameObject>();
         protected e_RespawnState m_RespawnState;
 
+        public bool IsFinished = false;
+
         public void SetupDriver(string p_Name, GameObject p_Kart, GameObject p_Character, Sprite p_CharacterIcon, RaceManager p_RaceManager, ObjectFadeController p_ObjectFadeController)
         {
             Name = p_Name;
@@ -61,9 +62,6 @@ namespace Objects
             {
                 m_KartParts.Add(Kart.transform.GetChild(0).GetChild(i).gameObject);
                 Material m_KartPartMaterial = m_KartParts[i].GetComponent<MeshRenderer>().material;
-                // 0f - opacity, 1f - cutout, 2f - fade, 3f - transparent
-                //m_KartPartMaterial.SetFloat("_Mode", 3f);
-                //m_KartMaterialColours.Add(m_KartMaterials[i].GetColor("_Color"));
 
                 //May need to do elsewhere  
                 m_KartPartMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
@@ -159,12 +157,15 @@ namespace Objects
 
         public void TakeDamage(int p_damage)
         {
-            if (IsShielded)
+            if (!IsShielded && ! IsFinished)
             {
                 m_KartHealth -= p_damage;
 
                 if (m_KartHealth <= 0)
                     m_RespawnState = e_RespawnState.DYING;
+
+                Kart.GetComponent<KartController>().EmitBloodBurst();
+                Kart.GetComponent<KartController>().UpdateBloodSpray(m_KartHealth);
             }
         }
 
@@ -214,8 +215,7 @@ namespace Objects
             // if all fade indexes are true then object is faded
             if (FadedCount == FadeIndex.Length)
                 l_FadedBack = true;
-
-
+            
             //Restore health
             if (l_FadedBack == false)
                 yield return null;
@@ -223,7 +223,32 @@ namespace Objects
             m_KartHealth = 3;
             m_Respawning = false;
             Faded = !l_FadedBack;
+
+            Kart.GetComponent<KartController>().UpdateBloodSpray(m_KartHealth);
+
             yield return null;
+        }
+        public void ResetPosition()
+        {
+            // Reset
+            Kart.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            Vector3 l_RespawnPoint = GetPointBehind(1);
+            l_RespawnPoint.y += 0.5f;
+            //Move Kart to respawn point - may need to add facing correct direction on respawn
+            // Change to Lerp? - wont pass through waypoints otherwise
+            Kart.transform.position = l_RespawnPoint;
+            FaceForwards(l_RespawnPoint);
+        }
+
+        public void ResetPosition(Vector3 p_ResetPositon, Quaternion p_ResetRotation)
+        {
+            // Reset
+            Kart.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            p_ResetPositon.y += 0.2f;
+            //Move Kart to respawn point - may need to add facing correct direction on respawn
+            // Change to Lerp? - wont pass through waypoints otherwise
+            Kart.transform.position = p_ResetPositon;
+            Kart.transform.rotation = p_ResetRotation;
         }
 
         protected Vector3 GetPointAhead(float p_Distance)

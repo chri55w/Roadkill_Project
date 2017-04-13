@@ -5,6 +5,8 @@ using Controllers;
 using Objects;
 using Events;
 
+using System.Linq;
+
 namespace Managers
 {
     public class RaceManager : MonoBehaviour
@@ -17,10 +19,26 @@ namespace Managers
         private Dictionary<string, int> m_DriverLapCount = new Dictionary<string, int>();
         private Canvas m_Canvas;
         private Dictionary<GameObject, float> m_DriverPositions = new Dictionary<GameObject, float>();
-        public Texture2D[] m_Positiontextures = new Texture2D[12]; 
+        private List<GameObject> m_DriverFinishingPositions = new List<GameObject>();
+        public Sprite[] m_PositionTextures = new Sprite[12]; 
+        public Sprite[] m_LapTextures = new Sprite[12];
 
-        float RaceStartDelayTime = 8.0f;
+        public GameObject CinematicCamera;
+        private bool m_CinematicEnabled;
+
+        float RaceStartDelay = 5.0f;
         public bool RaceStarted = false;
+        float RaceEndDelay = 5.0f;
+        public bool RaceFinishing = false;
+        public bool RaceFinished = false;
+
+        public int RaceLaps = 1;
+
+        public void Awake()
+        {
+            CinematicCamera = Instantiate(Resources.Load<GameObject>("Cameras/CinematicCamera"));
+            DontDestroyOnLoad(CinematicCamera);
+        }
 
         public void Start()
         {
@@ -30,45 +48,90 @@ namespace Managers
                     m_Drivers[i].GetComponent<AIController>().SetupTrack(m_SelectedTrackInfo.StartPositions[i], m_SelectedTrackInfo.StartingSpline, m_SelectedTrackInfo.LapSpline);
                 else if (m_Drivers[i].GetComponent<PlayerController>())
                     m_Drivers[i].GetComponent<PlayerController>().SetupTrack(m_SelectedTrackInfo.StartPositions[i], m_SelectedTrackInfo.StartingSpline, m_SelectedTrackInfo.LapSpline);
-
             }
-            
+
             SetHUDLayout();
             SetCameras();
 
             LoadPositionTextures();
+            LoadLapTextures();
         }
 
         public void Update()
         {
-            if (!RaceStarted)
+            if (m_CinematicEnabled)
             {
-                RaceStartDelayTime -= Time.deltaTime;
+                if (!RaceFinished && CinematicCamera.GetComponent<SimpleCinematicCamera>().IsFinished())
+                {
+                    m_CinematicEnabled = false;
 
-                if (RaceStartDelayTime < 0.0f)
+                    SetCameras();
+                }
+                else if (RaceFinished)
+                {
+                    if (Input.GetButtonDown(m_Drivers[0].GetComponent<PlayerController>().ControllerID + "Action"))
+                    {
+                        DestroyScene();
+
+                        UnityEngine.SceneManagement.SceneManager.LoadScene("MenuScene");
+                    }
+                }
+            }
+            else if (!RaceStarted)
+            {
+                RaceStartDelay -= Time.deltaTime;
+
+                if (RaceStartDelay < 0.0f)
                 {
                     StartRace();
                     RaceStarted = true;
                 }
             }
+            else if (RaceFinishing)
+            {
+                RaceEndDelay -= Time.deltaTime;
 
+                if (RaceEndDelay < 0.0f)
+                {
+                    EndRace();
+                    RaceFinishing = false;
+                    RaceFinished = true;
+                }
+            }
+            
             UpdatePositions();
         }
-
+        
         private void LoadPositionTextures()
         {
-            m_Positiontextures[0] = Resources.Load<Texture2D>("Gui/Positions/1st Position");
-            m_Positiontextures[1] = Resources.Load<Texture2D>("Gui/Positions/2nd Position");
-            m_Positiontextures[2] = Resources.Load<Texture2D>("Gui/Positions/3rd Position");
-            m_Positiontextures[3] = Resources.Load<Texture2D>("Gui/Positions/4th Position");
-            m_Positiontextures[4] = Resources.Load<Texture2D>("Gui/Positions/5th Position");
-            m_Positiontextures[5] = Resources.Load<Texture2D>("Gui/Positions/6th Position");
-            m_Positiontextures[6] = Resources.Load<Texture2D>("Gui/Positions/7th Position"); 
-            m_Positiontextures[7] = Resources.Load<Texture2D>("Gui/Positions/8th Position");
-            m_Positiontextures[8] = Resources.Load<Texture2D>("Gui/Positions/9th Position");
-            m_Positiontextures[9] = Resources.Load<Texture2D>("Gui/Positions/10th Position");
-            m_Positiontextures[10] = Resources.Load<Texture2D>("Gui/Positions/11th Position");
-            m_Positiontextures[11] = Resources.Load<Texture2D>("Gui/Positions/12th Position");
+            m_PositionTextures[0] = Resources.Load<Sprite>("Gui/Positions/1st Position");
+            m_PositionTextures[1] = Resources.Load<Sprite>("Gui/Positions/2nd Position");
+            m_PositionTextures[2] = Resources.Load<Sprite>("Gui/Positions/3rd Position");
+            m_PositionTextures[3] = Resources.Load<Sprite>("Gui/Positions/4th Position");
+            m_PositionTextures[4] = Resources.Load<Sprite>("Gui/Positions/5th Position");
+            m_PositionTextures[5] = Resources.Load<Sprite>("Gui/Positions/6th Position");
+            m_PositionTextures[6] = Resources.Load<Sprite>("Gui/Positions/7th Position");
+            m_PositionTextures[7] = Resources.Load<Sprite>("Gui/Positions/8th Position");
+            m_PositionTextures[8] = Resources.Load<Sprite>("Gui/Positions/9th Position");
+            m_PositionTextures[9] = Resources.Load<Sprite>("Gui/Positions/10th Position");
+            m_PositionTextures[10] = Resources.Load<Sprite>("Gui/Positions/11th Position");
+            m_PositionTextures[11] = Resources.Load<Sprite>("Gui/Positions/12th Position");
+        }
+
+        private void LoadLapTextures()
+        {
+            m_LapTextures[0] = Resources.Load<Sprite>("Gui/Laps/1st Lap");
+            m_LapTextures[1] = Resources.Load<Sprite>("Gui/Laps/2nd Lap");
+            m_LapTextures[2] = Resources.Load<Sprite>("Gui/Laps/3rd Lap");
+            m_LapTextures[3] = Resources.Load<Sprite>("Gui/Laps/4th Lap");
+            m_LapTextures[4] = Resources.Load<Sprite>("Gui/Laps/5th Lap");
+            m_LapTextures[5] = Resources.Load<Sprite>("Gui/Laps/6th Lap");
+            m_LapTextures[6] = Resources.Load<Sprite>("Gui/Laps/7th Lap");
+            m_LapTextures[7] = Resources.Load<Sprite>("Gui/Laps/8th Lap");
+            m_LapTextures[8] = Resources.Load<Sprite>("Gui/Laps/9th Lap");
+            m_LapTextures[9] = Resources.Load<Sprite>("Gui/Laps/10th Lap");
+            m_LapTextures[10] = Resources.Load<Sprite>("Gui/Laps/11th Lap");
+            m_LapTextures[11] = Resources.Load<Sprite>("Gui/Laps/12th Lap");
         }
 
         private void StartRace()
@@ -152,7 +215,11 @@ namespace Managers
 
                 if (l_Player != null)
                 {
-                    l_Player.Position = m_Positiontextures[l_Position - 1];
+                    l_Player.SetPositionSprite(m_PositionTextures[l_Position - 1]);
+
+                    int l_LapCountIndex = m_DriverLapCount[l_Player.name] > 0 ? (m_DriverLapCount[l_Player.name] - 1) : 0;
+
+                    l_Player.SetLapSprite(m_LapTextures[l_LapCountIndex]);
                 }
             }
         }
@@ -184,7 +251,11 @@ namespace Managers
                 {
                     if (m_DriverLapCount[l_DriverName] == 0 || m_SelectedTrackInfo.ConfirmLap(m_DriverTrackedWaypoints[l_DriverName]))
                     {
-                        m_DriverLapCount[l_DriverName] += 1;
+                        //Check if Driver has finished the Race
+                        if (m_DriverLapCount[l_DriverName] == RaceLaps)
+                            FinishRaceForDriver(e_EventArgs.e_Driver);
+                        else 
+                            m_DriverLapCount[l_DriverName] += 1;
                     }
 
                     if (e_EventArgs.e_Waypoint != l_LastTrackedWaypoint)
@@ -222,6 +293,99 @@ namespace Managers
             catch { }
         }
 
+        private void FinishRaceForDriver(Driver p_Driver)
+        {
+            Debug.Log(p_Driver.name + " Finished");
+
+            m_DriverFinishingPositions.Add(p_Driver.gameObject);
+
+            p_Driver.IsFinished = true;
+
+            if (p_Driver.GetType() == typeof(PlayerController))
+            {
+                PlayerController l_PlayerController = p_Driver as PlayerController;
+
+                if (AllPlayersHaveFinished())
+                {
+                    List<GameObject> l_NonFinishedDrivers = m_Drivers.Where(d => !d.GetComponent<Driver>().IsFinished).ToList();
+
+                    List<GameObject> l_SortedNonFinishedDrivers = l_NonFinishedDrivers.OrderByDescending(d => (d.GetComponent<Driver>().GetPosition() + (m_DriverLapCount[d.GetComponent<Driver>().Name] + 1))).ToList();
+
+                    foreach (GameObject l_NonFinishedDriver in l_SortedNonFinishedDrivers)
+                    {
+                        m_DriverFinishingPositions.Add(l_NonFinishedDriver);
+                    }
+
+                    RaceFinishing = true;
+                    RaceEndDelay = 5.0f;
+                }
+            }
+            else if (p_Driver.GetType() == typeof(AIController))
+            {
+                AIController l_AIController = p_Driver as AIController;
+            }
+        }
+
+        private void EndRace()
+        {
+            CinematicCamera.GetComponent<SimpleCinematicCamera>().MovementSpline = m_SelectedTrackInfo.PodiumCinematicSpline;
+            CinematicCamera.GetComponent<SimpleCinematicCamera>().CameraTarget = m_SelectedTrackInfo.PodiumCinematicTarget;
+            CinematicCamera.GetComponent<SimpleCinematicCamera>().ResetTime();
+            
+            for (int i = 0; i < 3; i++)
+            {
+                GameObject l_DriverObject = m_DriverFinishingPositions[i];
+
+                Driver l_Driver = l_DriverObject.GetComponent<Driver>();
+
+                l_Driver.Kart.transform.position = m_SelectedTrackInfo.PodiumKartPositions[i].transform.position;
+                l_Driver.Kart.transform.rotation = m_SelectedTrackInfo.PodiumKartPositions[i].transform.rotation;
+
+                l_Driver.Character.transform.position = m_SelectedTrackInfo.PodiumCharacterPositions[i].transform.position;
+                l_Driver.Character.transform.rotation = m_SelectedTrackInfo.PodiumCharacterPositions[i].transform.rotation;
+
+                l_Driver.Kart.GetComponent<KartController>().UpdateBloodSpray(3);
+
+                l_Driver.Character.GetComponent<Character>().SetCharacterPodiumAnimation(i+1);
+                m_SelectedTrackInfo.PodiumAssets.SetActive(true);
+
+                l_Driver.Kart.GetComponent<Rigidbody>().isKinematic = true;
+            }
+                        
+            m_CinematicEnabled = true;
+
+            SetCameras();
+        }
+
+        private void DestroyScene()
+        {
+            Destroy(m_FadeController);
+            Destroy(CinematicCamera);
+            Destroy(m_Canvas.gameObject);
+            foreach (GameObject l_GameObject in m_Drivers)
+                Destroy(l_GameObject);
+            Destroy(m_SelectedTrackInfo.gameObject);
+            foreach (GameObject l_GameObject in GameObject.FindObjectsOfType(typeof(GameObject)))
+                Destroy(l_GameObject);
+
+            Destroy(this.gameObject);
+        }
+
+        private bool AllPlayersHaveFinished()
+        {
+            List<GameObject> l_NonFinishedDrivers = m_Drivers.Where(d => !d.GetComponent<Driver>().IsFinished).ToList();
+
+            foreach (GameObject l_GameObject in l_NonFinishedDrivers)
+            {
+                Driver l_Driver = l_GameObject.GetComponent<Driver>();
+
+                if (l_Driver.GetType() == typeof(PlayerController))
+                    return false;
+            }
+
+            return true;
+        }
+
         public void SetupCanvas()
         {
             GameObject l_CanvasObject = new GameObject();
@@ -252,14 +416,14 @@ namespace Managers
             DontDestroyOnLoad(m_Canvas);
         }
 
-        public void AddAI(GameObject p_AIDriver)// AIController p_AIController, int p_KartMaterialIndex, int p_CharacterMaterialIndex)
+        public void AddAI(GameObject p_AIDriver)
         {
             AddDriver(p_AIDriver);
             
             p_AIDriver.GetComponent<AIController>().CenterPath = m_SelectedTrackInfo.StartingSpline;
         }
 
-        public void AddPlayer(GameObject p_PlayerDriver, GameObject p_CameraPrefab)
+        public void AddPlayer(GameObject p_PlayerDriver, GameObject p_CameraPrefab, GameObject p_HUDPrefab)
         {
             Driver l_Driver = p_PlayerDriver.GetComponent<Driver>();
 
@@ -269,6 +433,14 @@ namespace Managers
             l_NewCamera.transform.SetParent(p_PlayerDriver.transform);
             l_NewCamera.GetComponent<CameraController>().DriverFollowing = l_Driver.Kart.gameObject;
 
+            GameObject l_CanvasObject = Instantiate(p_HUDPrefab);
+            l_CanvasObject.name = l_Driver.name + " Canvas";
+
+            PlayerController l_PlayerController = p_PlayerDriver.GetComponent<PlayerController>();
+            l_PlayerController.KartCamera = l_NewCamera.GetComponent<Camera>();
+            l_PlayerController.SetupCanvas(l_CanvasObject.GetComponent<HUDController>());
+            l_CanvasObject.transform.SetParent(p_PlayerDriver.transform);
+            
             SetCameras();
         }
 
@@ -292,8 +464,47 @@ namespace Managers
             DontDestroyOnLoad(p_DriverObject);
         }
 
+        private void DisableDriverCameras()
+        {
+            foreach (GameObject l_Driver in m_Drivers)
+            {
+                PlayerController l_Player = l_Driver.GetComponent<PlayerController>();
+
+                if (l_Player != null)
+                    l_Player.GetComponentInChildren<Camera>().enabled = false;
+            }
+        }
+
+        private void EnableDriverCameras()
+        {
+            foreach (GameObject l_Driver in m_Drivers)
+            {
+                PlayerController l_Player = l_Driver.GetComponent<PlayerController>();
+
+                if (l_Player != null)
+                    l_Player.GetComponentInChildren<Camera>().enabled = true;
+            }
+        }
+
         private void SetCameras()
         {
+            if (m_CinematicEnabled)
+            {
+                CinematicCamera.GetComponent<CameraTools>().SetCameraScreenSize(new Rect(0f, 0f, 1f, 1f));
+
+                DisableDriverCameras();
+
+                CinematicCamera.GetComponent<Camera>().enabled = true;
+
+                return;
+            }
+            else
+            {
+                CinematicCamera.GetComponent<Camera>().enabled = false;
+
+                EnableDriverCameras();
+            }
+
             int l_HumanPlayers = 0;
             foreach(GameObject l_Driver in m_Drivers)
             {
@@ -308,34 +519,32 @@ namespace Managers
                 case 0:
                     break;
                 case 1:
-                    m_Drivers[0].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 1f, 1f));
+                    m_Drivers[0].GetComponentInChildren<CameraTools>().SetCameraScreenSize(new Rect(0f, 0f, 1f, 1f));
                     break;
                 case 2:
-                    m_Drivers[0].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, 1f, 0.5f));
-                    m_Drivers[1].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 1f, 0.5f));
+                    m_Drivers[0].GetComponentInChildren<CameraTools>().SetCameraScreenSize(new Rect(0f, 0.5f, 1f, 0.5f));
+                    m_Drivers[1].GetComponentInChildren<CameraTools>().SetCameraScreenSize(new Rect(0f, 0f, 1f, 0.5f));
                     break;
                 case 3:
-                    m_Drivers[0].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, 0.5f, 0.5f));
-                    m_Drivers[1].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0.5f, 0.5f, 0.5f, 0.5f));
-                    m_Drivers[2].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 0.5f, 0.5f));
+                    m_Drivers[0].GetComponentInChildren<CameraTools>().SetCameraScreenSize(new Rect(0f, 0.5f, 0.5f, 0.5f));
+                    m_Drivers[1].GetComponentInChildren<CameraTools>().SetCameraScreenSize(new Rect(0.5f, 0.5f, 0.5f, 0.5f));
+                    m_Drivers[2].GetComponentInChildren<CameraTools>().SetCameraScreenSize(new Rect(0f, 0f, 0.5f, 0.5f));
                     break;
                 case 4:
-                    m_Drivers[0].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0.5f, 0.5f, 0.5f));
-                    m_Drivers[1].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0.5f, 0.5f, 0.5f, 0.5f));
-                    m_Drivers[2].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0f, 0f, 0.5f, 0.5f));
-                    m_Drivers[3].GetComponentInChildren<CameraController>().SetCameraScreenSize(new Rect(0.5f, 0f, 0.5f, 0.5f));
+                    m_Drivers[0].GetComponentInChildren<CameraTools>().SetCameraScreenSize(new Rect(0f, 0.5f, 0.5f, 0.5f));
+                    m_Drivers[1].GetComponentInChildren<CameraTools>().SetCameraScreenSize(new Rect(0.5f, 0.5f, 0.5f, 0.5f));
+                    m_Drivers[2].GetComponentInChildren<CameraTools>().SetCameraScreenSize(new Rect(0f, 0f, 0.5f, 0.5f));
+                    m_Drivers[3].GetComponentInChildren<CameraTools>().SetCameraScreenSize(new Rect(0.5f, 0f, 0.5f, 0.5f));
                     break;
             }
         }
 
-        //public WaypointController GetDriversNextWaypoint(string p_DriverName)
-        //{
-        //    int l_DriversLastTrackedWaypointIndex = m_DriverTrackedWaypoints[p_DriverName].Count - 1;
+        public void BeginOpeningCinematic()
+        {
+            m_CinematicEnabled = true;
 
-        //    if (l_DriversLastTrackedWaypointIndex < 0)
-        //        return SelectedTrackInfo.StartFinishWaypoint;
-
-        //    return m_DriverTrackedWaypoints[p_DriverName][l_DriversLastTrackedWaypointIndex].NextWaypoints[0];
-        //}
+            CinematicCamera.GetComponent<SimpleCinematicCamera>().MovementSpline = m_SelectedTrackInfo.OpeningCinematicSpline;
+            CinematicCamera.GetComponent<SimpleCinematicCamera>().CameraTarget = m_SelectedTrackInfo.OpeningCinematicTarget;
+        }
     }
 }

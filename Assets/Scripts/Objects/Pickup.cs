@@ -13,11 +13,11 @@ namespace Objects
         public e_PickupID PickupID;
         //Pickup Image for GUI
         [SerializeField]
-        protected Texture2D Level1Icon;
+        protected Sprite Level1Icon;
         [SerializeField]
-        protected Texture2D Level2Icon;
+        protected Sprite Level2Icon;
         [SerializeField]
-        protected Texture2D Level3Icon;
+        protected Sprite Level3Icon;
 
         public void UsePickup(GameObject p_Driver)
         {
@@ -34,7 +34,7 @@ namespace Objects
             PickupUses--;
         }
 
-        public Texture2D GetCurrentIcon()
+        public Sprite GetCurrentIcon()
         {
             switch(PickupLevel)
             {

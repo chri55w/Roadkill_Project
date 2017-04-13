@@ -55,7 +55,7 @@ MonoBehaviour:
   PickupUses: 1
   PickupDamage: 0
   PickupID: 0
-  Level1Icon: {fileID: 2800000, guid: 813980983f782074abb09eb87d7f1056, type: 3}
-  Level2Icon: {fileID: 2800000, guid: 6240457af4a33de4aa6dce7124572b52, type: 3}
-  Level3Icon: {fileID: 2800000, guid: be0dbeef22964954daf43acc6de71225, type: 3}
+  Level1Icon: {fileID: 21300000, guid: 813980983f782074abb09eb87d7f1056, type: 3}
+  Level2Icon: {fileID: 21300000, guid: 6240457af4a33de4aa6dce7124572b52, type: 3}
+  Level3Icon: {fileID: 21300000, guid: be0dbeef22964954daf43acc6de71225, type: 3}
   BoostForce: 25000

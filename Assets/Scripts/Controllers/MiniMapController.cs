@@ -31,8 +31,6 @@ public class MiniMapController : MonoBehaviour
             float l_ScaledPositionX = (m_Drivers[i].Kart.transform.position.x / m_PositionScalingFactor.x) + m_CharacterOffset.x;
             float l_ScaledPositionY = (m_Drivers[i].Kart.transform.position.z / m_PositionScalingFactor.y) + m_CharacterOffset.y;
 
-            Debug.Log(l_ScaledPositionX + " | " + l_ScaledPositionY);
-
             m_CharacterIcons[i].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, l_ScaledPositionY, m_CharacterIconSize.y);
             m_CharacterIcons[i].GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, l_ScaledPositionX, m_CharacterIconSize.x);
         }

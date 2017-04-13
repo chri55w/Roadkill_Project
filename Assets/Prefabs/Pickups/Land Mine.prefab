@@ -208,7 +208,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011547222678}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -3.1516209, y: 4.539983, z: 158.90378}
   m_LocalScale: {x: 1, y: 0.1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -271,7 +271,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 8cf85e5d66aebd74c82e0cc3ba2f9741, type: 2}
+  - {fileID: 2100000, guid: d30ee25076d23534aba61e60bbdc4ba8, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -300,7 +300,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 8cf85e5d66aebd74c82e0cc3ba2f9741, type: 2}
+  - {fileID: 2100000, guid: d30ee25076d23534aba61e60bbdc4ba8, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -329,7 +329,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 8cf85e5d66aebd74c82e0cc3ba2f9741, type: 2}
+  - {fileID: 2100000, guid: d30ee25076d23534aba61e60bbdc4ba8, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -415,9 +415,9 @@ MonoBehaviour:
   PickupUses: 1
   PickupDamage: 0
   PickupID: 1
-  Level1Icon: {fileID: 2800000, guid: f4c508629a5ee2541a03a29cfbeeea0e, type: 3}
-  Level2Icon: {fileID: 2800000, guid: a2e5c35496b2f384f88a9460c4029306, type: 3}
-  Level3Icon: {fileID: 2800000, guid: 6d879c7924c8efd41b7ac30677f665b4, type: 3}
+  Level1Icon: {fileID: 21300000, guid: ddaf941005aab1f41ab614a8addf59ae, type: 3}
+  Level2Icon: {fileID: 21300000, guid: 6ce83f193aa27714685b272219adc89e, type: 3}
+  Level3Icon: {fileID: 21300000, guid: b7e2ec464cc934c47b02a54c336a8235, type: 3}
 --- !u!135 &135000011758158848
 SphereCollider:
   m_ObjectHideFlags: 1

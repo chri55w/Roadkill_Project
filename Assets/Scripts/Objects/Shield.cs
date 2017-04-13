@@ -5,7 +5,7 @@ namespace Objects
 {
     public class Shield : MonoBehaviour
     {
-        public CapsuleCollider ShieldCollider;
+        public GameObject ShieldCollider;
         public ParticleSystem ShieldEffect;
         public GameObject Driver;
         public float lifetime;
@@ -14,24 +14,21 @@ namespace Objects
         {
             Transform Shield = transform.GetComponentInParent<Driver>().Kart.transform.Find("VFX/Shield");
             ShieldEffect = Shield.gameObject.GetComponent<ParticleSystem>();
-            ShieldCollider = GetComponent<CapsuleCollider>();
             transform.GetComponentInParent<Driver>().IsShielded = true;
-            ShieldCollider.enabled = true;
+            ShieldCollider.SetActive(true);
             ShieldEffect.Play(true);
             gameObject.SetActive(true);
         }
-
-
+        
         void Update()
         {
             if (lifetime <= 0)
             {
                 ShieldEffect.Stop();
-                ShieldCollider.enabled = false;
+                ShieldCollider.SetActive(false);
                 Driver.GetComponent<Driver>().IsShielded = false;
                 enabled = false;
-            }
-                      
+            }                      
         }
         
         void FixedUpdate()
@@ -43,7 +40,6 @@ namespace Objects
         void OnTriggerEnter(Collider p_OtherCollider)
         {
             Transform l_Root = p_OtherCollider.transform.root;
-            Debug.Log(l_Root.gameObject);
             if (l_Root != null)
             {
                 if (l_Root.name.Contains("Driver"))
@@ -58,7 +54,6 @@ namespace Objects
             }
             else
             {
-                Debug.Log("Block");
                 Destroy(p_OtherCollider.gameObject);
             }
         }

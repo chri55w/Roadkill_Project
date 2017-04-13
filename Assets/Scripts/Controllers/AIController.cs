@@ -12,7 +12,7 @@ namespace Controllers
         float ClosestTimePointOnSpline = 0f;
 
         private float m_PickupTimer;
-        private Transform m_AimRaycastOrigin;
+        public Transform m_AimRaycastOrigin;
 
         public bool m_CheckingIfStuck = false;
 
@@ -24,13 +24,13 @@ namespace Controllers
 
         void Update()
         {
-            if (m_CheckingIfStuck == false && m_RaceManager.RaceStarted == true)
+            if (m_CheckingIfStuck == false && m_RaceManager.RaceStarted == true && m_RaceManager.RaceFinished == false)
                 StartCoroutine(StuckCheck());
         }
 
         void FixedUpdate()
         {
-            if (!Active)
+            if (!Active || IsFinished)
                 return;
 
             int l_SplineDetail = CenterPath.MeshDetailLevel;
@@ -59,6 +59,8 @@ namespace Controllers
             float l_ForwardDot = Vector3.Dot(heading.normalized, Kart.transform.forward);
 
             float l_TurningDot = Vector3.Dot(heading.normalized, Kart.transform.right);
+
+            Character.GetComponent<Character>().UpdateHorizontalInput(l_TurningDot);
 
             Kart.GetComponent<KartController>().Move(l_ForwardDot, l_TurningDot);
 
@@ -102,7 +104,8 @@ namespace Controllers
                                     l_LocalPickup.UsePickup(gameObject);                     
                             break;
                         case Pickup.e_PickupID.SHIELD:
-                            // Is something incoming
+                            //TODO: Is something incoming
+                            l_LocalPickup.UsePickup(gameObject);
                             break;
                         case Pickup.e_PickupID.BLOOD_SLICK:
                             // Kart must be considered on the ground to be used

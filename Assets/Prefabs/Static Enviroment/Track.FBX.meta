@@ -1,0 +1,162 @@
+fileFormatVersion: 2
+guid: 6d94278320c004a4cae10437c3f45432
+timeCreated: 1484416877
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: '''s'' track (uv done)'
+    100002: Bridge_Asset001
+    100004: Bridge_Asset002
+    100006: cave001 (uv done)
+    100008: cave002 (uv done)
+    100010: Dam_Asset
+    100012: into cave jump (uv done)
+    100014: jump002 (uv done)
+    100016: lead up to dam (uv done)
+    100018: main cave (uvdone)
+    100020: main cave track (uv done)
+    100022: out of cave (uv done)
+    100024: Particle View 001
+    100026: s jump (uv done)
+    100028: s shortcut (uv done)
+    100030: shortcut 2 part 1 (uv done)
+    100032: shortcut 2 part 2 (uv done)
+    100034: straight (uv done)
+    100036: //RootNode
+    400000: '''s'' track (uv done)'
+    400002: Bridge_Asset001
+    400004: Bridge_Asset002
+    400006: cave001 (uv done)
+    400008: cave002 (uv done)
+    400010: Dam_Asset
+    400012: into cave jump (uv done)
+    400014: jump002 (uv done)
+    400016: lead up to dam (uv done)
+    400018: main cave (uvdone)
+    400020: main cave track (uv done)
+    400022: out of cave (uv done)
+    400024: Particle View 001
+    400026: s jump (uv done)
+    400028: s shortcut (uv done)
+    400030: shortcut 2 part 1 (uv done)
+    400032: shortcut 2 part 2 (uv done)
+    400034: straight (uv done)
+    400036: //RootNode
+    2300000: '''s'' track (uv done)'
+    2300002: Bridge_Asset001
+    2300004: Bridge_Asset002
+    2300006: cave001 (uv done)
+    2300008: cave002 (uv done)
+    2300010: Dam_Asset
+    2300012: into cave jump (uv done)
+    2300014: jump002 (uv done)
+    2300016: lead up to dam (uv done)
+    2300018: main cave (uvdone)
+    2300020: main cave track (uv done)
+    2300022: out of cave (uv done)
+    2300024: s jump (uv done)
+    2300026: s shortcut (uv done)
+    2300028: shortcut 2 part 1 (uv done)
+    2300030: shortcut 2 part 2 (uv done)
+    2300032: straight (uv done)
+    3300000: '''s'' track (uv done)'
+    3300002: Bridge_Asset001
+    3300004: Bridge_Asset002
+    3300006: cave001 (uv done)
+    3300008: cave002 (uv done)
+    3300010: Dam_Asset
+    3300012: into cave jump (uv done)
+    3300014: jump002 (uv done)
+    3300016: lead up to dam (uv done)
+    3300018: main cave (uvdone)
+    3300020: main cave track (uv done)
+    3300022: out of cave (uv done)
+    3300024: s jump (uv done)
+    3300026: s shortcut (uv done)
+    3300028: shortcut 2 part 1 (uv done)
+    3300030: shortcut 2 part 2 (uv done)
+    3300032: straight (uv done)
+    4300000: s shortcut (uv done)
+    4300002: shortcut 2 part 1 (uv done)
+    4300004: main cave track (uv done)
+    4300006: shortcut 2 part 2 (uv done)
+    4300008: main cave (uvdone)
+    4300010: s jump (uv done)
+    4300012: Bridge_Asset001
+    4300014: straight (uv done)
+    4300016: jump002 (uv done)
+    4300018: '''s'' track (uv done)'
+    4300020: out of cave (uv done)
+    4300022: into cave jump (uv done)
+    4300024: lead up to dam (uv done)
+    4300026: Bridge_Asset002
+    4300028: Dam_Asset
+    4300030: cave001 (uv done)
+    4300032: cave002 (uv done)
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

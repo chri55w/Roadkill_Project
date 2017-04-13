@@ -22,7 +22,7 @@ namespace Objects
             // Throwable is using parents velocity in OnEnable
  
             //Sets the throwable position above the center kart (temporary, should go from charcter position
-            Transform l_SpawnLocation = p_Driver.transform.GetChild(0).Find("Raycast Points/Kart Front");
+            Transform l_SpawnLocation = p_Driver.transform.GetChild(0).Find("Raycast Points").Find("Kart Front");
             transform.position = l_SpawnLocation.position;
             //transform.position = new Vector3(l_SpawnLocation.position.x, l_SpawnLocation.position.y + 0.5f, l_SpawnLocation.position.z);
             //transform.rotation = Quaternion.Euler(0, l_SpawnLocation.rotation.eulerAngles.y, 0);

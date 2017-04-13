@@ -18,6 +18,8 @@ namespace Objects
         private BoxCollider m_BoxCollider;
         private MeshRenderer m_MeshRender;
 
+        private Vector3 m_SpinRotation = Vector3.up * 50f;
+
         // Use this for initialization
         void Start()
         {
@@ -28,14 +30,13 @@ namespace Objects
         // Update is called once per frame
         void Update()
         {
-
             if (m_CooldownTimer > 0)
                 m_CooldownTimer -= Time.deltaTime;
 
             m_BoxCollider.enabled = m_CooldownTimer > 0 ? false : true;
             m_MeshRender.enabled = m_CooldownTimer > 0 ? false : true;
 
-            transform.Rotate(Vector3.up);
+            transform.Rotate(m_SpinRotation * Time.deltaTime);
         }
 
         void OnTriggerEnter(Collider p_OtherCollider)
@@ -49,14 +50,12 @@ namespace Objects
                     //This will be for when multipickups exist
                     GameObject l_Pickup = Instantiate(Pickups[Random.Range(0, Pickups.Count)]);
                     l_Pickup.transform.parent = l_OtherGameObject.transform;
-                    //GameObject l_Pickup = Instantiate(Pickups);
                     l_OtherGameObject.GetComponent<Driver>().CurrentPickup = l_Pickup;
 
                     m_CooldownTimer = CooldownTimerLimit;
                 }
                 else if(l_OtherGameObject.GetComponent<Driver>().CurrentPickup.GetComponent<Pickup>().PickupLevel < 3)
                 {
-                    //l_OtherGameObject.GetComponent<Driver>().CurrentPickup.GetComponent<Pickup>().PickupLevel += 1;
                     l_OtherGameObject.GetComponent<Driver>().CurrentPickup.GetComponent<Pickup>().LevelUp(l_OtherGameObject);
                     m_CooldownTimer = CooldownTimerLimit;
                 }

@@ -31,16 +31,19 @@ namespace Controllers
 
         void Start()
         {
-            // Early out if we don't have a target
-            ForwardTarget = DriverFollowing.transform.FindChild("CameraObjects/ForwardFacingFocalPoint").transform;
-            RearTarget = DriverFollowing.transform.FindChild("CameraObjects/BackwardFacingFocalPoint").transform;
+            if (DriverFollowing != null)
+            {
+                // Early out if we don't have a target
+                ForwardTarget = DriverFollowing.transform.FindChild("CameraObjects/ForwardFacingFocalPoint").transform;
+                RearTarget = DriverFollowing.transform.FindChild("CameraObjects/BackwardFacingFocalPoint").transform;
 
-            // Early out if we can't find both front and rear targets
-            if (!ForwardTarget || !RearTarget)
-                return;
+                // Early out if we can't find both front and rear targets
+                if (!ForwardTarget || !RearTarget)
+                    return;
 
-            CurrentTarget = ForwardTarget.gameObject;
-            CameraComponent = GetComponent<Camera>();
+                CurrentTarget = ForwardTarget.gameObject;
+                CameraComponent = GetComponent<Camera>();
+            }
         }
 
         // Update is called once per frame
@@ -72,13 +75,6 @@ namespace Controllers
             transform.position = new Vector3(transform.position.x, l_CurrentHeight, transform.position.z);
             // Always look at the target
             transform.LookAt(CurrentTarget.transform);
-        }
-
-        public void SetCameraScreenSize(Rect p_ScreenSize)
-        {
-            if (CameraComponent == null)
-                CameraComponent = GetComponent<Camera>();
-            CameraComponent.rect = p_ScreenSize;
         }
 
         public void FlipCamera()

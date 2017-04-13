@@ -17,6 +17,16 @@ public class TrackInfo : MonoBehaviour {
     public Vector2 MiniMapCharacterOffset;
     public BezierSpline LapSpline;
 
+    public BezierSpline OpeningCinematicSpline;
+    public GameObject OpeningCinematicTarget;
+
+    public BezierSpline PodiumCinematicSpline;
+    public GameObject PodiumCinematicTarget;
+
+    public List<GameObject> PodiumKartPositions;
+    public List<GameObject> PodiumCharacterPositions;
+    public GameObject PodiumAssets;
+
     // Use this for initialization
     void Start ()
     {

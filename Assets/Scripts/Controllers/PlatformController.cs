@@ -8,7 +8,6 @@ public class PlatformController : MonoBehaviour
     
     public GameObject Kart;
     public GameObject Character;
-    public GameObject InCarCharacter;
 
     void Start ()
     {
@@ -25,10 +24,9 @@ public class PlatformController : MonoBehaviour
         Kart.GetComponent<Controllers.KartController>().ChangeKartSkin();
     }
 
-    public void ChangeRacesuitSkin()
+    public void ChangeCharacterSkin()
     {
-        Character.GetComponent<CharacterController>().ChangeRacesuitSkin();
-        InCarCharacter.GetComponent<CharacterController>().ChangeRacesuitSkin();
+        Character.GetComponent<Character>().ChangeSkin();
     }
 
     public void ResetKartSkin()
@@ -36,9 +34,8 @@ public class PlatformController : MonoBehaviour
         Kart.GetComponent<Controllers.KartController>().ResetKartSkin();
     }
 
-    public void ResetRacesuitSkin()
+    public void ResetCharacterSkin()
     {
-        Character.GetComponent<CharacterController>().ResetRacesuitSkin();
-        InCarCharacter.GetComponent<CharacterController>().ResetRacesuitSkin();
+        Character.GetComponent<Character>().ResetSkin();
     }
 }

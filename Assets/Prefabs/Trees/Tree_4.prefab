@@ -11,6 +11,22 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1000012929417040}
   m_IsPrefabParent: 1
+--- !u!1 &1000010076505922
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000010933953702}
+  - 136: {fileID: 136000010511194428}
+  m_Layer: 0
+  m_Name: Trunk Main
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1000012929417040
 GameObject:
   m_ObjectHideFlags: 0
@@ -68,14 +84,28 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012929417040}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.4985857, y: 0.35465097, z: -4.3805714}
-  m_LocalScale: {x: 1.533294, y: 1.533294, z: 1.533294}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000011486776594}
   - {fileID: 4000012808343394}
+  - {fileID: 4000010933953702}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!4 &4000010933953702
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010076505922}
+  m_LocalRotation: {x: -0.027682915, y: 0.00086123514, z: -0.030911779, w: 0.99913836}
+  m_LocalPosition: {x: 0.103, y: 1.746, z: -0.059}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: -3.1380002, y: 0.19100001, z: -3.4470003}
+  m_Children: []
+  m_Father: {fileID: 4000010283125922}
+  m_RootOrder: 2
 --- !u!4 &4000011486776594
 Transform:
   m_ObjectHideFlags: 1
@@ -191,3 +221,16 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!136 &136000010511194428
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010076505922}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.2
+  m_Height: 4
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}

@@ -12,5 +12,11 @@ namespace Objects
             p_Driver.GetComponentInChildren<Controllers.KartController>().Boost(BoostForce * PickupLevel);            
             base.Effect(p_Driver);
         }
+
+        public override void DeletePickup(GameObject p_Driver)
+        {
+            base.DeletePickup(p_Driver);
+            Destroy(gameObject);
+        }
     }
 }

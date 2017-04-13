@@ -24,6 +24,7 @@ GameObject:
   - 92: {fileID: 92000010420746506}
   - 81: {fileID: 81000012969627402}
   - 114: {fileID: 114000010195768188}
+  - 114: {fileID: 114000011787953842}
   m_Layer: 0
   m_Name: KartCamera
   m_TagString: MainCamera
@@ -37,10 +38,10 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013853783376}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: 0.6156681, z: -0, w: 0.78800565}
+  m_LocalPosition: {x: 147.5, y: 10.9, z: 185.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 76.304, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -110,6 +111,17 @@ MonoBehaviour:
   Height: 5
   RotationDamping: 3.5
   HeightDamping: 5
+--- !u!114 &114000011787953842
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013853783376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e73afe788276a434f88395d02e3b6970, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!124 &124000012385170100
 Behaviour:
   m_ObjectHideFlags: 1
